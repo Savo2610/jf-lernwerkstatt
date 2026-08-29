@@ -1,0 +1,16 @@
+{
+  "name": "jf-lernwerkstatt",
+  "private": true,
+  "description": "Lernwerkstatt der Jugendfeuerwehr Harheim - Startseite und das FwDV-3-Lernspiel Einsatzbereit",
+  "type": "module",
+  "scripts": {
+    "build": "node hub/build.mjs",
+    "dev": "node hub/server.mjs",
+    "dev:spiel": "node server.mjs",
+    "vorschau": "node hub/build.mjs --artifact",
+    "deploy": "node hub/build.mjs && wrangler deploy --config hub/wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "^4.127.1"
+  }
+}

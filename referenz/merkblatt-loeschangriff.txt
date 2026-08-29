@@ -1,0 +1,70 @@
+                                                         FWDV 3
+Taktische Einheiten                                          Aufgabenverteilung Löschangriff Offenes Gewässer:
+
+     -     Selbstständiger Trupp (3 Personen)                Einheitsführer:
+     -     Staffel (6 Personen)                                  -     Erkundet
+     -     Gruppe (9 Personen)                                   -     Erteilt Befehle
+     -     Zug (22 Personen)                                     -     Ist für die Mannschaft und den Einsatzerfolg
+                                                                       verantwortlich
+
+Staffel:                                                     Maschinist:
+     -     Einheitsführer                                        -    Fährt das Fahrzeug
+     -     Maschinist                                            -    Sichert die Einsatzstelle mit Blaulicht,
+     -     Angriffstrupp (2 Personen)                                 Warnblinklicht und Abblendlicht ab
+     -     Wassertrupp (2 Personen)                              -    Bedient Pumpe und Aggregate
+                                                                 -    Legt Kupplungsschlüssel, Saugkorb,
+                                                                      Saugschutzkorb, Leinen bereit
+Gruppe (taktische Grundeinheit)                                  -    Kuppelt die Saugleitung an die Pumpe
+    -    Einheitsführer
+    -    Maschinist                                          Melder:
+    -    Melder                                                  -   Wird auf Befehl des Einheitsführers tätig
+    -    Angriffstrupp (2 Personen)
+    -    Wassertrupp (2 Personen)                            Angriffstrupp:
+    -    Schlauchtrupp (2 Personen)                              -     Rettet
+                                                                 -     Setzt den Verteiler
+                                                                 -     Legt das 1. Rohr
+Aufgabenverteilung Löschangriff Unterflurhydrant:                -     Legt die Wasserversorgung von der Pumpe zum
+                                                                       Verteiler (wenn noch nicht durch den
+Einheitsführer:                                                        Wassertrupp erfolgt ist)
+    -     Erkundet                                               -     Übernimmt das 1. Rohr
+    -     Erteilt Befehle
+    -     Ist für die Mannschaft und den Einsatzerfolg       Wassertrupp:
+          verantwortlich                                         -   Rettet
+                                                                 -   Wassertruppführer befiehlt die Anzahl der
+Maschinist:                                                          Saugschläuche
+    -    Fährt das Fahrzeug                                      -   Kuppelt die Saugschläuche
+    -    Sichert die Einsatzstelle mit Blaulicht,                -   Bringt die Ventilleine und Halteleine an
+         Warnblinklicht und Abblendlicht ab                      -   Verlegt die Leitung von der Pumpe zum Verteiler
+    -    Bedient Pumpe und Aggregate                                 (wenn noch nicht durch den Angriffstrupp erfolgt
+    -    Unterstützt beim Entnehmen der Geräte                       ist)
+                                                                 -   Übernimmt auf Befehl das 2. Rohr
+Melder:
+    -   Wird auf Befehl des Einheitsführers tätig            Schlauchtrupp:
+                                                                  -   Rettet
+Angriffstrupp:                                                    -   Unterstützt den Wassertrupp beim Aufbau der
+    -     Rettet                                                      Wasserversorgung
+    -     Setzt den Verteiler (Wenn der Schlauch bereits          -   Legt ausreichend Schlauchmaterial am Verteiler
+          am Verteiler angekuppelt ist, legt er diesen mit            bereit
+          (TLF 20/40 SL))                                         -   Legt das 2. und 3. Rohr
+    -     Legt seinen Schlauch und übernimmt das erste            -   Übernimmt auf Befehl das 3. Rohr
+          Rohr
+                                                             Spruch des Einheitsführers:
+Wassertrupp:                                                       -     Wasserentnahmestelle
+    -   Rettet                                                     -     Lage des Verteilers
+    -   Legt die Wasserversorgung vom Fahrzeug zum                 -     Einheit
+        Verteiler (wenn noch nicht vom Angriffstrupp               -     Auftrag
+        gelegt)                                                    -     Mittel
+    -   Legt die Wasserversorgung vom Unterflurhydrant             -     Ziel
+        zum Fahrzeug                                               -     Weg
+    -   Übernimmt auf Befehl das 2. Rohr                           -     Vor!
+
+Schlauchtrupp:                                               Beispiel:
+                                                                   -     Wasserentnahmestelle: Unterflurhydrant
+     -   Rettet                                                    -     Lage des Verteilers: 1 B-Leitung von der Pumpe
+     -   Legt ausreichend Schlauchmaterial am Verteiler            -     Angriffstrupp
+         bereit                                                    -     Zur Brandbekämpfung
+                                                                   -     Mit 1. C-Rohr
+     -   Legt das 2. und 3. Rohr                                   -     Zu dem brennenden Fahrzeug
+     -   Übernimmt auf Befehl das 3. Rohr                          -     Über die Straße
+                                                                   -     Vor !!
+

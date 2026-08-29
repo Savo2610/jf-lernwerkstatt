@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hub",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["hub/server.mjs"],
+      "port": 8413
+    },
+    {
+      "name": "fwdv3",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.mjs"],
+      "port": 8412
+    }
+  ]
+}

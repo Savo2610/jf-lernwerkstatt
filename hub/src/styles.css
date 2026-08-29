@@ -1,0 +1,397 @@
+/* ============================================================================
+   Lernwerkstatt der Jugendfeuerwehr – Startseite
+   Bild: eine Straße durch den Ort, von der Seite gesehen. Scrollen fährt.
+   Hell = Tag, dunkel = Nachteinsatz (dann leuchten Fenster und Blaulicht).
+   Schrift und Rot sind dieselben wie im Spiel „Einsatzbereit".
+   ========================================================================== */
+
+:root{
+  /* --- Kulisse bei Tag --- */
+  --himmel-o:#a9d8ef; --himmel-m:#cfe9f3; --himmel-u:#eaf3ec;
+  --gestirn:#ffd98a; --gestirn-hof:rgba(255,217,138,.45);
+  --wolke:#ffffff; --wolke-a:.82;
+  --fern:#a8c6c4; --fern2:#87aeae;
+  --wald:#6d9f74;
+  --stadt:#c3cfd6;
+  --gras:#82bb63; --gras-d:#63a04d; --gras-v:#6fae54;
+  --weg:#565c69; --weg-h:#666d7c; --weg-linie:#f2f0e6;
+  --gehweg:#d7d3c8; --bord:#bdb9ae;
+  --haus:#f4eee3; --haus2:#e2d9c9; --dach:#9a4f3f; --dach2:#7d3f33;
+  --fenster:#9fd0ec; --fenster-r:#ffffff;
+  --tor:#c73a2b; --metall:#b9bec7; --stein:#a9a49a;
+  --stamm:#7a5a41; --laub:#5ea45a; --laub2:#4d8c4c;
+  --schild:#22303f; --schild-txt:#ffffff;
+  --lichtkegel:rgba(255,235,180,0);   /* am Tag sieht man den Kegel nicht */
+
+  /* --- Marke --- */
+  --rot:#d92d20; --rot-t:#96150c; --gelb:#f5b301; --blau:#1e7fd4;
+  --flamme1:#ffb302; --flamme2:#ff6a13;
+
+  /* --- Oberflaeche --- */
+  --grund:#eef2f1;
+  --txt:#1b2029; --txt2:#5b6472; --txt3:#8b94a2;
+  --karte:rgba(255,253,248,.94); --karte-linie:rgba(27,32,41,.12);
+  --karte-schatten:0 24px 60px rgba(24,40,60,.22);
+  --chip:rgba(27,32,41,.06);
+
+  --display:'Archivo Black','Outfit',system-ui,sans-serif;
+  --text:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r:18px; --r-l:26px;
+}
+
+/* Nacht: dieselbe Strasse, nur spaeter. Nur Werte werden getauscht, keine
+   Regeln – sonst faellt der Seitenbesucher ohne gesetztes Theme durchs Netz. */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --himmel-o:#070b1a; --himmel-m:#101a34; --himmel-u:#1d2a45;
+    --gestirn:#e7edff; --gestirn-hof:rgba(190,210,255,.22);
+    --wolke:#2a3550; --wolke-a:.18;
+    --fern:#182338; --fern2:#111a2c;
+    --wald:#132a20;
+    --stadt:#141d31;
+    --gras:#204029; --gras-d:#17301f; --gras-v:#1b3624;
+    --weg:#141926; --weg-h:#1e2434; --weg-linie:#5a6076;
+    --gehweg:#2a3145; --bord:#39415a;
+    --haus:#222b42; --haus2:#1a2236; --dach:#4a2b2b; --dach2:#3a2222;
+    --fenster:#ffd88a; --fenster-r:#ffe9bd;
+    --tor:#8f2b21; --metall:#4b556e; --stein:#3a4157;
+    --stamm:#3e2f24; --laub:#1e4030; --laub2:#173226;
+    --schild:#0d1424; --schild-txt:#dfe7ff;
+    --lichtkegel:rgba(255,226,160,.16);
+
+    --grund:#080b14;
+    --txt:#eaf0ff; --txt2:#a3b0cf; --txt3:#6f7d9e;
+    --karte:rgba(20,28,48,.9); --karte-linie:rgba(255,255,255,.11);
+    --karte-schatten:0 24px 60px rgba(0,0,0,.6);
+    --chip:rgba(255,255,255,.08);
+  }
+}
+:root[data-theme="dark"]{
+  --himmel-o:#070b1a; --himmel-m:#101a34; --himmel-u:#1d2a45;
+  --gestirn:#e7edff; --gestirn-hof:rgba(190,210,255,.22);
+  --wolke:#2a3550; --wolke-a:.18;
+  --fern:#182338; --fern2:#111a2c;
+  --wald:#132a20;
+  --stadt:#141d31;
+  --gras:#204029; --gras-d:#17301f; --gras-v:#1b3624;
+  --weg:#141926; --weg-h:#1e2434; --weg-linie:#5a6076;
+  --gehweg:#2a3145; --bord:#39415a;
+  --haus:#222b42; --haus2:#1a2236; --dach:#4a2b2b; --dach2:#3a2222;
+  --fenster:#ffd88a; --fenster-r:#ffe9bd;
+  --tor:#8f2b21; --metall:#4b556e; --stein:#3a4157;
+  --stamm:#3e2f24; --laub:#1e4030; --laub2:#173226;
+  --schild:#0d1424; --schild-txt:#dfe7ff;
+  --lichtkegel:rgba(255,226,160,.16);
+  --grund:#080b14;
+  --txt:#eaf0ff; --txt2:#a3b0cf; --txt3:#6f7d9e;
+  --karte:rgba(20,28,48,.9); --karte-linie:rgba(255,255,255,.11);
+  --karte-schatten:0 24px 60px rgba(0,0,0,.6);
+  --chip:rgba(255,255,255,.08);
+}
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--grund); color:var(--txt);
+  font-family:var(--text); font-size:clamp(15px,1.05vw + 11px,18px); line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+h1,h2,h3{margin:0; font-family:var(--display); font-weight:400; letter-spacing:-.02em; line-height:1.05; text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blau); outline-offset:3px; border-radius:10px}
+
+/* ---------- Strecke & Buehne ---------------------------------------------- */
+#strecke{position:relative}
+#buehne{
+  position:sticky; top:0; height:100vh; height:100svh;
+  overflow:hidden; isolation:isolate;
+}
+#szene{position:absolute; inset:0; width:100%; height:100%; display:block;
+  transition:filter .8s ease-out, transform 1s ease-out}
+.szene-unschaerfe{filter:blur(1.1px)}
+
+/* ---------- Kopfzeile ------------------------------------------------------ */
+.kopf{
+  position:absolute; z-index:3; top:0; left:0; right:0;
+  display:flex; align-items:center; gap:12px;
+  padding:clamp(14px,2.2vw,26px);
+  font-size:.82em; letter-spacing:.12em; text-transform:uppercase; font-weight:800;
+}
+.marke-titel{margin:0; font:inherit; letter-spacing:inherit}
+.marke{display:flex; align-items:center; gap:.6em; color:var(--txt); text-decoration:none}
+.marke .helm{width:1.55em; height:1.55em; flex:none}
+.marke b{font-family:var(--display); font-weight:400; letter-spacing:.04em}
+.marke span{color:var(--txt2); font-weight:600; letter-spacing:.12em}
+
+/* ---------- Streckenplan --------------------------------------------------- */
+.plan{
+  position:absolute; z-index:3; left:50%; transform:translateX(-50%);
+  bottom:clamp(14px,2.4vw,26px);
+  display:flex; align-items:center; gap:0;
+  padding:8px 14px; border-radius:999px;
+  background:var(--karte); border:1px solid var(--karte-linie);
+  box-shadow:0 10px 30px rgba(20,30,50,.14);
+  backdrop-filter:blur(10px);
+}
+.plan-halt{
+  display:flex; align-items:center; gap:.55em;
+  padding:.3em .7em; border:0; background:none; cursor:pointer;
+  font:inherit; font-size:.8em; font-weight:700; color:var(--txt2);
+  border-radius:999px; transition:color .2s, background .2s;
+}
+.plan-halt:hover{background:var(--chip); color:var(--txt)}
+.plan-halt i{
+  width:11px; height:11px; border-radius:50%; flex:none;
+  background:var(--txt3); opacity:.5; transition:all .3s var(--ease);
+}
+.plan-halt[aria-current="true"]{color:var(--txt)}
+.plan-halt[aria-current="true"] i{background:var(--rot); opacity:1; transform:scale(1.35);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--rot) 22%,transparent)}
+.plan-strich{width:clamp(14px,3vw,34px); height:2px; background:var(--txt3); opacity:.34; flex:none}
+
+/* ---------- Karten --------------------------------------------------------- */
+.karten{
+  position:absolute; z-index:2; display:grid; pointer-events:none;
+  right:clamp(16px,4.5vw,72px); top:50%; transform:translateY(-50%);
+  width:min(430px,40vw);
+}
+.karte{
+  grid-area:1/1; align-self:center;
+  background:var(--karte); border:1px solid var(--karte-linie);
+  border-radius:var(--r-l); box-shadow:var(--karte-schatten);
+  backdrop-filter:blur(14px);
+  padding:clamp(20px,2.2vw,30px);
+  opacity:0; pointer-events:none;
+  will-change:transform,opacity;
+}
+.karte.aktiv{pointer-events:auto}
+.karte-ober{
+  font-size:.74em; letter-spacing:.16em; text-transform:uppercase;
+  font-weight:800; color:var(--rot); margin-bottom:.7em;
+  display:flex; align-items:center; gap:.7em;
+}
+.karte h2{font-size:clamp(1.6rem,2.7vw,2.4rem)}
+.karte .zeile{margin-top:.7em; color:var(--txt2); font-size:.97em}
+.karte ul{margin:1.1em 0 0; padding:0; list-style:none; display:grid; gap:.5em}
+.karte li{
+  position:relative; padding-left:1.7em; font-size:.9em; color:var(--txt2);
+}
+.karte li::before{
+  content:''; position:absolute; left:.2em; top:.52em;
+  width:.5em; height:.5em; border-radius:2px; background:var(--gelb); transform:rotate(45deg);
+}
+.chip{
+  display:inline-flex; align-items:center; gap:.45em;
+  padding:.28em .7em; border-radius:999px; background:var(--chip);
+  font-size:.9em; letter-spacing:.08em; color:var(--txt2);
+}
+.chip.bald{background:color-mix(in srgb,var(--gelb) 22%,transparent); color:var(--txt)}
+
+.knopf{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  margin-top:1.3em; padding:.8em 1.6em; border-radius:999px;
+  font-weight:800; font-size:1.02em; text-decoration:none; border:0; cursor:pointer;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--rot) 86%,#fff 14%),var(--rot));
+  color:#fff; box-shadow:0 5px 0 var(--rot-t),0 14px 26px rgba(150,21,12,.3);
+  transition:transform .13s var(--ease), box-shadow .13s var(--ease), filter .18s;
+  font-family:var(--text);
+}
+.knopf:hover{filter:brightness(1.07)}
+.knopf:active{transform:translateY(4px); box-shadow:0 1px 0 var(--rot-t),0 7px 14px rgba(150,21,12,.28)}
+.knopf.still{
+  background:none; color:var(--txt2); box-shadow:inset 0 0 0 2px var(--karte-linie);
+  cursor:default;
+}
+.knopf.still:active{transform:none; box-shadow:inset 0 0 0 2px var(--karte-linie)}
+.knopf.geist{
+  background:none; color:var(--txt); box-shadow:inset 0 0 0 2px var(--karte-linie);
+}
+.knopf.geist:active{transform:translateY(2px); box-shadow:inset 0 0 0 2px var(--karte-linie)}
+
+/* ---------- Kleingedrucktes auf der Buehne ---------------------------------- */
+/* sitzt in der Kopfzeile ganz rechts – klein, aber immer da */
+.credit{
+  margin:0 0 0 auto; font-size:.72em; letter-spacing:.1em; font-weight:700;
+  text-transform:uppercase; color:var(--txt3); text-align:right;
+}
+.credit a{color:var(--txt2); text-decoration:none; border-bottom:1px solid var(--karte-linie)}
+.credit a:hover{color:var(--rot); border-color:var(--rot)}
+
+/* ---------- Scrollhinweis --------------------------------------------------- */
+.hinweis{
+  position:absolute; z-index:3; left:50%; transform:translateX(-50%);
+  bottom:clamp(66px,7.5vw,94px);
+  display:flex; align-items:center; gap:.6em;
+  padding:.42em 1em; border-radius:999px;
+  background:var(--karte); border:1px solid var(--karte-linie);
+  box-shadow:0 8px 22px rgba(20,30,50,.12); backdrop-filter:blur(8px);
+  font-size:.78em; letter-spacing:.14em; text-transform:uppercase; font-weight:800;
+  color:var(--txt2); transition:opacity .5s; white-space:nowrap; pointer-events:none;
+}
+.hinweis svg{animation:tupf 1.8s var(--ease) infinite}
+@keyframes tupf{0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)}}
+
+/* ---------- Schmaler Bildschirm: Karte wird zur Schublade ------------------- */
+@media (max-width:900px){
+  .karten{
+    right:0; left:0; top:auto; bottom:0; transform:none;
+    width:auto; padding:0 10px 10px;
+  }
+  .karte{
+    align-self:end; border-radius:22px;
+    padding:clamp(16px,4.5vw,24px);
+    max-height:46svh; overflow:auto; overscroll-behavior:contain;
+  }
+  .karte li{font-size:.86em}
+  .karte ul{gap:.35em}
+  .karte h2{font-size:clamp(1.5rem,6vw,2rem)}
+  .plan{bottom:auto; top:clamp(52px,11vw,70px)}
+  .plan-halt span{display:none; white-space:nowrap}
+  .plan-halt[aria-current="true"] span{display:inline}
+  /* Auf dem Handy bleibt in der Karte nur das Noetige – die Stichpunkte
+     stehen unten im Fuss, wo genug Platz ist. */
+  .karte ul{display:none}
+  .hinweis{bottom:clamp(26px,7vw,54px)}
+  .marke span{display:none}
+  .credit{display:none}
+}
+
+/* ---------- Fuss ------------------------------------------------------------ */
+.fuss{
+  position:relative; z-index:1; background:var(--grund);
+  padding:clamp(40px,7vw,90px) clamp(18px,5vw,60px) clamp(30px,5vw,60px);
+  border-top:1px solid var(--karte-linie);
+}
+.fuss-innen{max-width:900px; margin:0 auto; display:grid; gap:clamp(24px,4vw,44px)}
+.fuss h2{font-size:clamp(1.4rem,3vw,2rem)}
+.fuss-liste{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); margin:0; padding:0; list-style:none}
+.fuss-liste a, .fuss-liste div{
+  display:block; text-decoration:none; height:100%;
+  padding:18px 20px; border-radius:var(--r); border:1px solid var(--karte-linie);
+  background:var(--karte); transition:transform .18s var(--ease), border-color .18s;
+}
+.fuss-liste a:hover{transform:translateY(-3px); border-color:var(--rot)}
+.fuss-liste b{display:block; font-family:var(--display); font-weight:400; font-size:1.15em; letter-spacing:-.01em}
+.fuss-liste ul{margin:.7em 0 0; padding:0; list-style:none; display:grid; gap:.3em}
+.fuss-liste ul li{position:relative; padding-left:1.3em; font-size:.85em; color:var(--txt2)}
+.fuss-liste ul li::before{content:''; position:absolute; left:.15em; top:.5em; width:.4em; height:.4em; border-radius:2px; background:var(--gelb); transform:rotate(45deg)}
+.fuss-liste small{display:block; margin-top:.35em; color:var(--txt2); font-size:.88em; line-height:1.45}
+/* Der einzige Weg von hier nach draussen: das Team Zukunft auf Instagram. */
+.fuss-insta{margin:0}
+.fuss-insta a{
+  display:inline-flex; align-items:center; gap:.65em; max-width:100%;
+  padding:12px 18px; border-radius:999px; text-decoration:none;
+  border:1px solid var(--karte-linie); background:var(--karte); color:var(--txt2);
+  transition:transform .18s var(--ease), border-color .18s, color .18s;
+}
+.fuss-insta a:hover{transform:translateY(-2px); border-color:var(--rot); color:var(--txt)}
+.fuss-insta svg{flex:none; color:var(--rot)}
+.fuss-insta b{font-weight:600; color:var(--txt)}
+
+.fuss-fein{color:var(--txt3); font-size:.85em}
+.fuss-fein a{color:var(--txt2)}
+
+/* ---------- Bewegung aus ---------------------------------------------------- */
+/* Wer keine Bewegung will, bekommt die Kulisse als ruhiges Bild und die Themen
+   als schlichte Liste – ohne Fahrt, ohne Scrollentfuehrung.                    */
+body.ruhig #strecke{height:auto !important}
+body.ruhig #buehne{position:relative; height:clamp(230px,46svh,400px)}
+body.ruhig .karten{display:none}
+body.ruhig .plan{display:none}
+body.ruhig .hinweis{display:none}
+body.ruhig .credit{display:none}
+body.ruhig .fuss{padding-top:clamp(26px,4vw,44px)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hinweis svg{animation:none}
+}
+
+/* ---------- Schrift und Leben in der Kulisse -------------------------------- */
+.t-display{font-family:var(--display); font-weight:400}
+.t-text{font-family:var(--text); font-weight:800}
+
+/* Blaulicht: zwei Balkenhaelften im Wechsel */
+@keyframes bl-a{0%,42%{opacity:1}43%,100%{opacity:.07}}
+@keyframes bl-b{0%,42%{opacity:.07}43%,100%{opacity:1}}
+.bl-a{animation:bl-a .78s steps(1,end) infinite}
+.bl-b{animation:bl-b .78s steps(1,end) infinite}
+
+/* Flammen am Lagerfeuer */
+@keyframes flacker{
+  0%,100%{transform:scaleY(1) translateY(0); opacity:.95}
+  50%{transform:scaleY(1.22) translateY(-3px); opacity:1}
+}
+/* transform-box: sonst bezieht sich transform-origin auf die ganze Zeichenflaeche
+   und die Flamme wandert beim Flackern quer durchs Bild. */
+.flamme{transform-box:fill-box; transform-origin:center bottom; animation:flacker 1.1s ease-in-out infinite}
+.flamme.b{animation-duration:.78s; animation-delay:-.35s}
+.flamme.c{animation-duration:1.5s; animation-delay:-.7s}
+
+/* Turmspitze der Wache */
+@keyframes blinzeln{0%,88%{opacity:.25}92%,100%{opacity:1}}
+.blinker{animation:blinzeln 2.6s ease-in-out infinite}
+
+/* Wolken ziehen langsam */
+@keyframes ziehen{from{transform:translateX(0)} to{transform:translateX(-140px)}}
+.wolkenzug{animation:ziehen 90s linear infinite alternate}
+
+@media (prefers-reduced-motion:reduce){
+  .bl-a,.bl-b,.flamme,.blinker,.wolkenzug{animation:none}
+  .bl-b{opacity:1}
+}
+
+/* ---------- Ausruecken ------------------------------------------------------
+   Wer „Losfahren" drueckt, faehrt auch los: die Bedienelemente verschwinden,
+   die Welt rauscht vorbei, das Fahrzeug zieht nach rechts aus dem Bild, und
+   das Bild schliesst sich auf den Nachthimmel, mit dem das Spiel aufmacht.
+   -------------------------------------------------------------------------- */
+body.ausrueckt{ overflow:hidden }
+body.ausrueckt .karten,
+body.ausrueckt .plan,
+body.ausrueckt .hinweis,
+body.ausrueckt .kopf{ opacity:0; transition:opacity .22s ease-in; pointer-events:none }
+body.ausrueckt #szene{ filter:blur(1.6px) saturate(1.06); transform:scale(1.035);
+  transition:filter .7s ease-in, transform .9s ease-in }
+/* Einfahrt: unscharf beginnen und in die Schaerfe ausrollen. Ohne Uebergang
+   gesetzt, damit erst das Entfernen der Klasse animiert. */
+body.faehrt-ein #szene{ filter:blur(1.8px); transform:scale(1.04); transition:none }
+/* Blaulicht schaltet auf Einsatzfahrt */
+body.ausrueckt .bl-a, body.ausrueckt .bl-b{ animation-duration:.3s }
+
+.fahrtwind{ position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0;
+  transition:opacity .25s }
+.fahrtwind.an{ opacity:1 }
+.fahrtwind i{ position:absolute; height:3px; border-radius:2px; display:block;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:wisch .42s linear infinite }
+.fahrtwind i:nth-child(1){ top:46%; width:24vw; animation-delay:-.05s }
+.fahrtwind i:nth-child(2){ top:53%; width:38vw; animation-delay:-.22s }
+.fahrtwind i:nth-child(3){ top:59%; width:18vw; animation-delay:-.11s }
+.fahrtwind i:nth-child(4){ top:65%; width:44vw; animation-delay:-.31s }
+.fahrtwind i:nth-child(5){ top:72%; width:28vw; animation-delay:-.17s }
+.fahrtwind i:nth-child(6){ top:79%; width:34vw; animation-delay:-.27s; opacity:.6 }
+.fahrtwind i:nth-child(7){ top:38%; width:20vw; animation-delay:-.36s; opacity:.5 }
+@keyframes wisch{ from{ transform:translateX(105vw) } to{ transform:translateX(-115vw) } }
+
+.blende{ position:fixed; inset:0; z-index:30; pointer-events:none;
+  background:#080b14; opacity:0; transition:opacity .5s ease-out;
+  display:grid; place-items:center }
+.blende.an{ opacity:1; transition:opacity .38s ease-in }
+/* beim Ankommen liegt die Blende vom ersten Bild an dunkel ueber der Seite */
+.blende.sofort{ transition:none }
+.blende-innen{ display:flex; align-items:center; gap:.7em; opacity:0;
+  transform:translateY(8px); transition:opacity .3s .18s, transform .4s .18s var(--ease) }
+.blende.an .blende-innen{ opacity:1; transform:none }
+/* Beim Ankommen verlaesst man das Spiel gerade – dann muss sein Name
+   auf der Blende nicht noch einmal stehen. */
+body.faehrt-ein .blende-innen{ display:none }
+.blende-innen svg{ width:2.1em; height:2.1em }
+.blende-innen b{ font-family:var(--display); font-weight:400; font-size:1.5em;
+  letter-spacing:-.02em; color:#eaf0ff }
+
+@media (prefers-reduced-motion:reduce){
+  .fahrtwind{ display:none }
+  .blende{ display:none }
+}

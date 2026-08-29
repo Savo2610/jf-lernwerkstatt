@@ -1,0 +1,14 @@
+# Gebautes – entsteht aus src/ und hub/src/ mit `node hub/build.mjs`.
+# Bewusst nicht im Repo: sonst haette jeder Commit eine 1-MB-Datei dabei,
+# und der Autodeploy baut ohnehin selbst.
+dist/
+hub/dist/
+hub/vorschau/
+
+# Werkzeug
+node_modules/
+.wrangler/
+.dev.vars
+
+# macOS
+.DS_Store

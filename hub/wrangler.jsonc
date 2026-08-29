@@ -1,0 +1,29 @@
+{
+  // Ein Worker fuer alles:
+  //   jf.veerka.mp/         Startseite (hub/dist/index.html)
+  //   jf.veerka.mp/fwdv3/   das Spiel  (hub/dist/fwdv3/index.html)
+  //   fwdv3.veerka.mp/*     alte Adresse, leitet dauerhaft um
+  //
+  // Beide Seiten liegen damit auf derselben Domain – nur so teilen sie sich
+  // den Browserspeicher, und ein gemeinsamer Fortschritt ueber mehrere Themen
+  // hinweg ist ueberhaupt moeglich.
+  //
+  // jf.veerka.mp haengt an einer Custom Domain (den DNS-Eintrag hat Cloudflare
+  // selbst angelegt), fwdv3.veerka.mp an einer Worker-Route: dort steht noch
+  // der alte, proxied Eintrag aus der GitHub-Pages-Zeit. Der muss orange
+  // bleiben, sonst greift die Route nicht.
+  "name": "jf",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-08-01",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    { "pattern": "jf.veerka.mp", "custom_domain": true },
+    { "pattern": "fwdv3.veerka.mp/*", "zone_name": "veerka.mp" }
+  ]
+}
