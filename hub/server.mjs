@@ -1,6 +1,6 @@
 // Kleiner Dateiserver fuer hub/dist – zeigt lokal dieselbe Struktur wie der
-// Worker: / ist die Startseite, /fwdv3/ das Spiel, alles Unbekannte landet
-// wieder auf der Startseite.
+// Worker: / ist die Startseite, darunter liegen die Spiele (/fwdv3/ und
+// /brennen-loeschen/), alles Unbekannte landet wieder auf der Startseite.
 import { createServer } from 'node:http';
 import { readFileSync, statSync } from 'node:fs';
 import { join, dirname, normalize } from 'node:path';

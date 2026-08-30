@@ -32,16 +32,11 @@
   </div>
 </div>
 
-<!-- Beim Ausruecken zieht sich das Bild auf den Nachthimmel des Spiels zu -->
+<!-- Beim Ausruecken zieht sich das Bild auf den Grundton des Ziels zu.
+     Welcher das ist, steht in themen.js (`uebergang`) und wird beim Klick
+     eingesetzt – leer bleibt die Blende nur, bis jemand losfaehrt. -->
 <div class="blende" id="blende" aria-hidden="true">
-  <div class="blende-innen">
-    <svg viewBox="0 0 32 32" aria-hidden="true">
-      <path d="M4 22c0-7.2 5.4-13 12-13s12 5.8 12 13z" fill="#d92d20"/>
-      <path d="M14 9.3V4.6h4v4.7z" fill="#f5b301"/>
-      <rect x="2" y="21" width="28" height="4.4" rx="2.2" fill="#96150c"/>
-    </svg>
-    <b>Einsatzbereit</b>
-  </div>
+  <div class="blende-innen"></div>
 </div>
 
 <footer class="fuss" id="fuss">

@@ -1,6 +1,11 @@
 /* ---------- 3D-Buehne ------------------------------------------------------
    Ein einziger Renderer fuer die ganze App. Level haengen ihre Welt in
    Stage.welt und melden eine Update-Funktion an.
+
+   Gemeinsame Grundlage beider Seiten. Himmel, Nebel und Grundlicht kommen
+   aus SPIEL.licht – „Einsatzbereit" spielt nachts an der Einsatzstelle,
+   „Brennen & Loeschen" mittags auf dem Uebungsplatz. Alles andere hier ist
+   von der Tageszeit unabhaengig.
    -------------------------------------------------------------------------*/
 const Stage = {
   renderer: null, scene: null, camera: null, welt: null,
@@ -12,13 +17,13 @@ const Stage = {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.32;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+    const L = SPIEL.licht;
     this.scene = new THREE.Scene();
     this.scene.background = himmelTextur();
-    this.scene.fog = new THREE.Fog(0x1a2440, 38, 112);
+    this.scene.fog = new THREE.Fog(L.nebel, L.nebelNah, L.nebelFern);
 
     this.camera = new THREE.PerspectiveCamera(46, 1, 0.1, 220);
     this.camera.position.set(0, 6, 15);
@@ -32,19 +37,20 @@ const Stage = {
     window.addEventListener('resize', () => this.groesseAnpassen());
     window.addEventListener('orientationchange', () => setTimeout(() => this.groesseAnpassen(), 120));
 
-    // Grundlicht, das immer da ist
-    this.himmelslicht = new THREE.HemisphereLight(0x6d8cc4, 0x2a3145, 1.45);
+    // Grundlicht, das immer da ist. `hauptlicht` ist der Mond oder die Sonne,
+    // je nach Spiel – wer eine Szene baut, muss das nicht wissen.
+    this.renderer.toneMappingExposure = L.belichtung;
+    this.himmelslicht = new THREE.HemisphereLight(L.himmelOben, L.himmelUnten, L.himmelStaerke);
     this.scene.add(this.himmelslicht);
-    this.mondlicht = new THREE.DirectionalLight(0xbccdf0, 1.55);
-    this.mondlicht.position.set(-9, 15, 8);
-    this.mondlicht.castShadow = true;
-    this.mondlicht.shadow.mapSize.set(1024, 1024);
-    const c = this.mondlicht.shadow.camera;
+    this.hauptlicht = new THREE.DirectionalLight(L.hauptFarbe, L.hauptStaerke);
+    this.hauptlicht.position.set(L.hauptPos[0], L.hauptPos[1], L.hauptPos[2]);
+    this.hauptlicht.castShadow = true;
+    const c = this.hauptlicht.shadow.camera;
     c.left = -20; c.right = 20; c.top = 20; c.bottom = -20; c.near = 1; c.far = 55;
-    this.mondlicht.shadow.bias = -0.0004;
-    this.mondlicht.shadow.normalBias = 0.055;   // verhindert Schattenflimmern auf grossen Flaechen
-    this.mondlicht.shadow.mapSize.set(2048, 2048);
-    this.scene.add(this.mondlicht);
+    this.hauptlicht.shadow.bias = -0.0004;
+    this.hauptlicht.shadow.normalBias = 0.055;   // verhindert Schattenflimmern auf grossen Flaechen
+    this.hauptlicht.shadow.mapSize.set(2048, 2048);
+    this.scene.add(this.hauptlicht);
 
     this.start();
   },
@@ -56,7 +62,11 @@ const Stage = {
      (0 = kein Versatz, .45 = Inhalt sitzt im oberen Bilddrittel) */
   versatz: 0, versatzX: 0,
   /* oben: schiebt den Inhalt nach oben (Bedienfeld unten)
-     rechts: schiebt den Inhalt nach links (Bedienfeld rechts) */
+     rechts: schiebt den Inhalt nach links (Bedienfeld rechts)
+     Beide duerfen negativ sein – dann geht es andersherum. Ein negatives
+     `oben` schiebt den Inhalt nach unten und macht oben Platz; das braucht
+     jeder Bildschirm, dessen Auftragstext ueber der Buehne steht statt
+     daneben. */
   bildVersatz(oben, rechts) {
     this.versatz = oben || 0;
     this.versatzX = rechts || 0;
@@ -77,8 +87,17 @@ const Stage = {
       this.camera.fov = this.basisFov;
     }
     const ky = this.versatz, kx = this.versatzX;
-    if (ky > 0 || kx > 0) {
-      this.camera.setViewOffset(w * (1 + kx), h * (1 + ky), w * kx, h * ky, w, h);
+    if (ky || kx) {
+      // Das Bild wird groesser gerechnet als das Fenster, und das Fenster
+      // liegt darin verschoben. Bei positivem Wert sitzt es am unteren bzw.
+      // rechten Rand (Inhalt rutscht nach oben/links), bei negativem am
+      // oberen bzw. linken (Inhalt rutscht nach unten/rechts).
+      const ay = Math.abs(ky), ax = Math.abs(kx);
+      this.camera.setViewOffset(
+        w * (1 + ax), h * (1 + ay),
+        kx > 0 ? w * ax : 0,
+        ky > 0 ? h * ay : 0,
+        w, h);
     } else {
       this.camera.clearViewOffset();
     }
@@ -290,7 +309,9 @@ const Stage = {
   },
 };
 
-/* Daemmerungshimmel: tiefes Blau oben, warmer Horizont unten */
+/* Himmel als senkrechter Farbverlauf, von oben nach unten. Die Stopps stehen
+   in SPIEL.licht.himmel – nachts tiefes Blau mit warmem Horizont, tagsueber
+   umgekehrt: kraeftiges Blau oben, heller Dunst unten.                      */
 let _himmel = null;
 function himmelTextur() {
   if (_himmel) return _himmel;
@@ -298,11 +319,7 @@ function himmelTextur() {
   c.width = 8; c.height = 256;
   const g = c.getContext('2d');
   const grad = g.createLinearGradient(0, 0, 0, 256);
-  grad.addColorStop(0.00, '#060a16');
-  grad.addColorStop(0.42, '#101a34');
-  grad.addColorStop(0.72, '#22304f');
-  grad.addColorStop(0.90, '#3b4260');
-  grad.addColorStop(1.00, '#55483f');
+  SPIEL.licht.himmel.forEach(([pos, farbe]) => grad.addColorStop(pos, farbe));
   g.fillStyle = grad; g.fillRect(0, 0, 8, 256);
   _himmel = new THREE.CanvasTexture(c);
   _himmel.colorSpace = THREE.SRGBColorSpace;

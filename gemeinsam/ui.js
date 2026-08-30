@@ -1,4 +1,7 @@
-/* ---------- Oberflaeche: Bildschirme, HUD, Toasts, Ziehen ----------------- */
+/* ---------- Oberflaeche: Bildschirme, HUD, Toasts, Ziehen -----------------
+   Gemeinsame Grundlage beider Seiten. Alles hier ist inhaltsfrei: die Texte,
+   Abzeichen und Raenge kommen aus dem jeweiligen Spiel.
+   -------------------------------------------------------------------------*/
 const UI = {
   wurzel: null, hud: null,
   aktuell: null,          // { id, node, aufraeumen }
@@ -127,8 +130,11 @@ const UI = {
       State.levelFertig(opt.levelId, g);
       xpInfo = State.xpFuerLevel(opt.levelId, opt.xp || 0);
       (opt.abzeichen || []).forEach(k => { if (State.abzeichenGeben(k)) setTimeout(() => UI.abzeichenToast(k), 700); });
-      // Meisterabzeichen: drei Sterne in jeder einzelnen Aufgabe
-      if (State.alleDreiSterne() && State.abzeichenGeben('meister')) setTimeout(() => UI.abzeichenToast('meister'), 1500);
+      // Meisterabzeichen: drei Sterne in jeder einzelnen Aufgabe. Welches
+      // Abzeichen das ist, weiss nur das jeweilige Spiel – SPIEL.meister.
+      if (SPIEL.meister && State.alleDreiSterne() && State.abzeichenGeben(SPIEL.meister)) {
+        setTimeout(() => UI.abzeichenToast(SPIEL.meister), 1500);
+      }
     }
 
     UI.sperreSetzen('__ergebnis');
@@ -420,15 +426,22 @@ function motivEinpassen(punkte, panel, opt) {
   // Lieber klein und sichtbar als gross und hinter dem Panel – ausgewichen
   // wird nur, wenn wirklich keine brauchbare Flaeche uebrig bleibt (das
   // passiert, wenn der Bildschirm schon abgeraeumt ist).
-  const frei = freieFlaeche(panel, o.randPx == null ? 28 : o.randPx, o.anteil || .86);
-  Stage.einpassen(ecken, (frei.w < 120 || frei.h < 80) ? freieFlaeche(null, 28, .86) : frei);
+  const rand = { unten: o.panelUnten, obenNode: o.obenNode };
+  const frei = freieFlaeche(panel, o.randPx == null ? 28 : o.randPx, o.anteil || .86, rand);
+  Stage.einpassen(ecken, (frei.w < 120 || frei.h < 80) ? freieFlaeche(null, 28, .86, rand) : frei);
 }
 
 /* Dasselbe, aber laufend nachgefuehrt: Fenstergroesse und Bedienfeld aendern
    sich noch, nachdem der Bildschirm gebaut wurde. Gibt die Abmeldefunktion
-   zurueck. Waehrend einer Kamerafahrt haelt sich die Wache heraus.          */
+   zurueck. Waehrend einer Kamerafahrt haelt sich die Wache heraus.
+
+   opt.sofort bricht eine laufende Fahrt ab und passt einmal direkt ein. Das
+   braucht jeder Bildschirm, der auf einen Einstieg mit Kamerafahrt folgt:
+   Sonst wartet die Wache das Ende der Fahrt ab und die Kamera springt
+   mittendrin um.                                                            */
 function motivWache(punkte, panel, opt) {
   let letzte = '';
+  if (opt && opt.sofort) motivEinpassen(punkte, panel, opt);
   const fn = Stage.anmelden(() => {
     if (Stage.kameraZiel) return;          // laufende Kamerafahrt nicht stoeren
     // Bildschirm schon abgeraeumt? Dann hat diese Wache hier nichts mehr zu
@@ -441,16 +454,26 @@ function motivWache(punkte, panel, opt) {
   return () => Stage.abmelden(fn);
 }
 
-/* freie Bildflaeche neben bzw. ueber dem Bedienfeld – Ziel fuer Stage.einpassen */
-function freieFlaeche(panelNode, rand, anteil) {
+/* freie Bildflaeche neben bzw. ueber dem Bedienfeld – Ziel fuer Stage.einpassen
+   opt.unten:    Bedienfeld liegt unter der Buehne, auch auf breiten Schirmen.
+                 Ohne das entscheidet die Bildschirmbreite, und ein unten
+                 liegendes Antwortfeld wuerde auf dem Beamer als „rechts"
+                 gelesen – dann sitzt das Motiv links daneben statt darueber.
+   opt.obenNode: Element, das oben ueber der Buehne liegt (Auftragskarte).
+                 Seine Unterkante wird zur Oberkante der freien Flaeche.     */
+function freieFlaeche(panelNode, rand, anteil, opt) {
+  const o = opt || {};
   const r = rand == null ? 26 : rand;
   const hud = $('#hud');
-  const oben = (hud && !hud.hidden ? hud.getBoundingClientRect().height : 0) + r;
+  let oben = (hud && !hud.hidden ? hud.getBoundingClientRect().height : 0) + r;
+  if (o.obenNode && o.obenNode.isConnected) {
+    oben = Math.max(oben, o.obenNode.getBoundingClientRect().bottom + r);
+  }
   let f;
   if (!panelNode) f = { x: r, y: oben, w: innerWidth - 2 * r, h: innerHeight - oben - r };
   else {
     const p = panelNode.getBoundingClientRect();
-    f = BREIT()
+    f = (BREIT() && !o.unten)
       ? { x: r, y: oben, w: Math.max(120, p.left - 2 * r), h: Math.max(120, innerHeight - oben - r) }
       : { x: r, y: oben, w: innerWidth - 2 * r, h: Math.max(120, p.top - oben - r) };
   }

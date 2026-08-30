@@ -57,12 +57,19 @@ console.log(`hub/${ziel} geschrieben – ${(html.length / 1024).toFixed(0)} KB`)
 // jf.veerka.mp/fwdv3/), damit sie sich den Browserspeicher teilen. Deshalb
 // baut dieses Skript das Spiel gleich mit und legt es daneben – sonst wuerde
 // man versehentlich einen alten Stand veroeffentlichen.
+// Ein Spiel bauen und neben die Startseite legen. `quelle` ist das Bauskript,
+// `dist` sein Ergebnis, `unter` der Ordner unter hub/dist/.
+async function spielUebernehmen(quelle, dist, unter) {
+  await import(pathToFileURL(join(ROOT, quelle)).href);
+  const datei = join(ROOT, dist);
+  if (!existsSync(datei)) throw new Error(`${dist} fehlt – Spiel nicht gebaut?`);
+  mkdirSync(join(ROOT, 'dist', unter), { recursive: true });
+  const inhalt = readFileSync(datei);
+  writeFileSync(join(ROOT, 'dist', unter, 'index.html'), inhalt);
+  console.log(`hub/dist/${unter}/index.html übernommen – ${(inhalt.length / 1024).toFixed(0)} KB`);
+}
+
 if (!alsArtifact) {
-  await import(pathToFileURL(join(ROOT, '../build.mjs')).href);
-  const spiel = join(ROOT, '../dist/index.html');
-  if (!existsSync(spiel)) throw new Error('dist/index.html fehlt – Spiel nicht gebaut?');
-  mkdirSync(join(ROOT, 'dist/fwdv3'), { recursive: true });
-  const inhalt = readFileSync(spiel);
-  writeFileSync(join(ROOT, 'dist/fwdv3/index.html'), inhalt);
-  console.log(`hub/dist/fwdv3/index.html übernommen – ${(inhalt.length / 1024).toFixed(0)} KB`);
+  await spielUebernehmen('../build.mjs', '../dist/index.html', 'fwdv3');
+  await spielUebernehmen('../brennen/build.mjs', '../brennen/dist/index.html', 'brennen-loeschen');
 }

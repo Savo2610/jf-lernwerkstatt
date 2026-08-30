@@ -1,8 +1,14 @@
 /* ---------- Spielstand ----------------------------------------------------
    Solo-Modus speichert Fortschritt lokal im Browser. Beamer-Modus haelt nur
    die Teampunkte des aktuellen Abends.
+
+   Gemeinsame Grundlage beider Seiten. Was sich von Spiel zu Spiel
+   unterscheidet, steht in SPIEL (spiel.js) – vor allem der Speicherschluessel:
+   Startseite und Spiele liegen auf einer Domain und teilen sich damit den
+   Browserspeicher. Zwei Spiele mit demselben Schluessel wuerden sich
+   gegenseitig den Fortschritt ueberschreiben.
    -------------------------------------------------------------------------*/
-const SAVE_KEY = 'fwdv3-einsatzbereit-v1';
+const SAVE_KEY = SPIEL.speicher;
 
 const State = {
   modus: null,              // 'solo' | 'beamer'

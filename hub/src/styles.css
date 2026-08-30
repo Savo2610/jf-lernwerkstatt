@@ -375,8 +375,12 @@ body.ausrueckt .bl-a, body.ausrueckt .bl-b{ animation-duration:.3s }
 .fahrtwind i:nth-child(7){ top:38%; width:20vw; animation-delay:-.36s; opacity:.5 }
 @keyframes wisch{ from{ transform:translateX(105vw) } to{ transform:translateX(-115vw) } }
 
+/* Grundton und Schriftfarbe setzt main.js pro Ziel – siehe `uebergang` in
+   themen.js. Die Werte hier sind die Rueckfallebene, falls ein Thema keinen
+   Uebergang beschreibt. */
 .blende{ position:fixed; inset:0; z-index:30; pointer-events:none;
-  background:#080b14; opacity:0; transition:opacity .5s ease-out;
+  --blende-grund:#080b14; --blende-schrift:#eaf0ff;
+  background:var(--blende-grund); opacity:0; transition:opacity .5s ease-out;
   display:grid; place-items:center }
 .blende.an{ opacity:1; transition:opacity .38s ease-in }
 /* beim Ankommen liegt die Blende vom ersten Bild an dunkel ueber der Seite */
@@ -389,7 +393,7 @@ body.ausrueckt .bl-a, body.ausrueckt .bl-b{ animation-duration:.3s }
 body.faehrt-ein .blende-innen{ display:none }
 .blende-innen svg{ width:2.1em; height:2.1em }
 .blende-innen b{ font-family:var(--display); font-weight:400; font-size:1.5em;
-  letter-spacing:-.02em; color:#eaf0ff }
+  letter-spacing:-.02em; color:var(--blende-schrift) }
 
 @media (prefers-reduced-motion:reduce){
   .fahrtwind{ display:none }

@@ -1,21 +1,25 @@
 # Prüfen, ohne sich durchzuklicken
 
-Beide Seiten haben Haken für die Konsole. Wer sie nicht kennt, klickt sich für
-jede Kleinigkeit durch acht Level oder scrollt eine halbe Seite weit — und
+Alle drei Seiten haben Haken für die Konsole. Wer sie nicht kennt, klickt sich
+für jede Kleinigkeit durch acht Level oder scrollt eine halbe Seite weit — und
 gibt dann irgendwann auf und prüft gar nicht mehr.
 
 ## Loslegen
 
 ```bash
-npm run dev       # Startseite + Spiel unter /fwdv3/, wie im Netz, Port 8413
-npm run dev:spiel # nur das Spiel, Port 8412
+npm run dev         # alles wie im Netz, Port 8413
+npm run dev:spiel   # nur Einsatzbereit, Port 8412
+npm run dev:brennen # nur Brennen & Löschen, Port 8414
 ```
 
-Nach jeder Änderung an `src/` oder `hub/src/` muss **neu gebaut** werden
-(`npm run build`) — die Server liefern die gebaute Datei aus, nicht die
-Quellen. Kein Hot Reload.
+Nach jeder Änderung an `src/`, `brennen/src/`, `gemeinsam/` oder `hub/src/` muss
+**neu gebaut** werden (`npm run build`) — die Server liefern die gebaute Datei
+aus, nicht die Quellen. Kein Hot Reload.
 
-## Im Spiel
+Wer an `gemeinsam/` etwas ändert, muss **beide** Spiele ansehen. Der Bau merkt
+nicht, dass die eine Seite noch geht und die andere nicht mehr.
+
+## In Einsatzbereit
 
 Über die Adresszeile:
 
@@ -43,6 +47,67 @@ praktisch, im Zweifel nachsehen zu können.
 **`__eb.Fehlerliste` ist der wichtigste Wert.** Sie sammelt, was im Spiel
 schiefgegangen ist, ohne dass es jemand sieht. Vor jedem Veröffentlichen einmal
 hineinschauen.
+
+## In Brennen & Löschen
+
+Über die Adresszeile:
+
+- `?level=<id>` springt direkt in ein Level und umgeht auch die Sternsperre
+  des Boss-Levels. Die Kennungen: `dreieck`, `brandklassen`, `sauerstoff`,
+  `zuendung`, `loeschverfahren`, `loeschmittel`, `feuerloescher`, `ernstfall`.
+- `?modus=beamer` startet den Gruppenabend mit der Feuerwand.
+
+In der Konsole liegt derselbe Satz Haken unter `__bl`, dazu die Inhalte und
+die Bausteine, aus denen die Level gebaut sind:
+
+```js
+__bl.State                    // Spielstand, Ränge, XP, Abzeichen
+__bl.Stage                    // Renderer, Kamera, Szene
+__bl.Fehlerliste              // muss leer sein
+__bl.VORAUSSETZUNGEN          // drei Ecken plus die Mitte des Dreiecks
+__bl.BRANDKLASSEN             // A bis F
+__bl.LOESCHMITTEL             // Wasser, Schaum, Pulver, CO2, Fettbrandlöscher
+__bl.LOESCHVERFAHREN          // welches Verfahren wo angreift (`nimmt`)
+__bl.LOESCHFAMILIEN           // Abkühlen / Ersticken / Hemmen
+__bl.BRANDLAGEN               // die fünf Brände aus Aufgabe 6
+__bl.STRAHLARTEN              // Vollstrahl und Sprühstrahl
+__bl.LOESCHERREGELN           // die sieben Regeln aus Aufgabe 7
+__bl.EINSAETZE                // die vier Boss-Einsätze
+__bl.KATEGORIEN               // die vier Spalten der Feuerwand
+__bl.QUIZ                     // Wandfragen (kat+wert) und Blitzfragen
+__bl.Teams                    // Mannschaften am Beamer
+__bl.Beamer                   // Gruppenabend: Beamer.wandStart() usw.
+__bl.bausteine.baueFeuer      // Flamme bauen
+__bl.bausteine.feuerStaerke   // Feuer hoch- und runterfahren
+__bl.bausteine.motivEinpassen // Kamera auf Weltpunkte einpassen
+__bl.bausteine.regler         // Schieberegler mit Zonen
+__bl.bausteine.unterbau       // Bedienfeld mit Rückmeldung darüber
+__bl.bausteine.baueStrahl     // Wasserstrahl, `fein` schaltet auf Sprühstrahl
+__bl.bausteine.strahlAn       // Strahl auf- und zudrehen
+__bl.bausteine.baueSchaumdecke// Schaumdecke, dazu schaumFuellen(0..1)
+__bl.bausteine.baueGasfackel  // Propanflasche mit Fackel und Handrad
+```
+
+Die Bausteine sind da, um eine Kameraeinstellung oder eine Flamme direkt in der
+Konsole auszuprobieren, statt für jeden Versuch neu zu bauen. Beispiel:
+
+```js
+__bl.bausteine.motivEinpassen(
+  [[-2.7,0,-2.7],[2.7,0,-2.7],[2.7,0,2.7],[-2.7,0,2.7],[0,1.4,0]],
+  null, { hoch:.5, weit:.9, anteil:.94, rand:.45 });
+```
+
+### Wenn die Vorschau versteckt ist
+
+In einer versteckten oder gedrosselten Vorschau läuft `requestAnimationFrame`
+kaum — eine Kamerafahrt scheint dann zu hängen, obwohl sie nur wartet. Die
+Bühne lässt sich von Hand weiterrechnen:
+
+```js
+for (let t = 0; t < 3; t += .05) __bl.Stage.updates.forEach(f => f(.05, t));
+```
+
+Dasselbe in Grün wie `szene.bild()` auf veerka.mp weiter unten.
 
 ## Auf der Startseite
 
@@ -82,9 +147,12 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
 
 ## Was vor dem Veröffentlichen dran ist
 
-1. `npm run build` läuft ohne Fehler
-2. `__eb.Fehlerliste` ist leer, Browserkonsole ohne Fehler
-3. Ein Level und die Startseite einmal auf schmalem Bildschirm (375 px)
+1. `npm run build` läuft ohne Fehler — er baut Startseite und beide Spiele
+2. `__eb.Fehlerliste` und `__bl.Fehlerliste` sind leer, Browserkonsole ohne
+   Fehler
+3. Ein Level je Spiel und die Startseite einmal auf schmalem Bildschirm
+   (375 px). Was an einem 3D-Objekt klebt, stößt dort als erstes an: vier
+   Marken an vier Säulen liegen schnell übereinander
 4. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
    Ersatzweg geben, nicht nur weniger Bewegung
 5. Zurück-Knopf des Browsers, wenn du an einem Übergang warst

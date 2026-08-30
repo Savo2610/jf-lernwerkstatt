@@ -4,14 +4,26 @@
     {
       "name": "hub",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["hub/server.mjs"],
+      "runtimeArgs": [
+        "hub/server.mjs"
+      ],
       "port": 8413
     },
     {
       "name": "fwdv3",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["server.mjs"],
+      "runtimeArgs": [
+        "server.mjs"
+      ],
       "port": 8412
+    },
+    {
+      "name": "brennen",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "brennen/server.mjs"
+      ],
+      "port": 8414
     }
   ]
 }

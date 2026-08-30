@@ -137,7 +137,8 @@ const karten = STATIONEN.map((s) => {
   return k;
 });
 
-karten.forEach(k => {
+karten.forEach((k, i) => {
+  const s = STATIONEN[i];
   const a = k && k.querySelector('a.knopf');
   if (!a || RUHIG) return;
   a.addEventListener('pointerenter', () => vorladen(a.href));
@@ -147,7 +148,7 @@ karten.forEach(k => {
     // Klick faehrt die Animation.
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
-    losfahren(a.href);
+    losfahren(a.href, s);
   });
 });
 
@@ -191,6 +192,9 @@ function einfahrtBeenden() {
    das Fahrzeug rollt vor der Wache aus. */
 function einfahrtStarten() {
   const blende = document.getElementById('blende');
+  // Beim Ankommen faehrt die Startseite selbst auf – nicht ein Thema. Also
+  // ihr eigener Grundton, und ohne Zeichen (siehe .faehrt-ein im Stil).
+  blendeEinstellen(null);
   frei = true;
   einfahren = { t0: performance.now() };
   strassePos = ziel = -EINFAHRT_WEG;
@@ -211,9 +215,22 @@ function einfahrtStarten() {
   history.replaceState(null, '', location.pathname);
 }
 
-function losfahren(url) {
+/* Die Blende auf das Ziel einstellen: Grundton, Schriftfarbe, Zeichen und
+   Name. Erst dadurch faehrt man in „Brennen & Loeschen" in einen hellen
+   Vormittag und nicht in dieselbe Nacht wie nebenan. */
+function blendeEinstellen(station) {
+  const blende = document.getElementById('blende');
+  const u = (station && station.uebergang) || null;
+  blende.style.setProperty('--blende-grund', u ? u.grund : '#080b14');
+  blende.style.setProperty('--blende-schrift', u ? u.schrift : '#eaf0ff');
+  blende.querySelector('.blende-innen').innerHTML =
+    (u && u.zeichen ? u.zeichen : '') + (station && station.titel ? `<b>${station.titel}</b>` : '');
+}
+
+function losfahren(url, station) {
   if (ausruecken) return;
   vorladen(url);
+  blendeEinstellen(station);
   frei = true;
   ausruecken = { von: strassePos, t0: performance.now() };
   document.body.classList.add('ausrueckt');

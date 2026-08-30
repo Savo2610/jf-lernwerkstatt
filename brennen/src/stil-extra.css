@@ -1,0 +1,489 @@
+/* ============================================================================
+   Was es nur auf dieser Seite gibt.
+
+   Alles andere kommt aus gemeinsam/stil.css. Hier stehen die Bausteine, die
+   „Brennen & Löschen" eigen sind: die Karten, die man auf Sockel zieht, die
+   Sortierkörbe und die Marken, die im 3D-Bild an Objekten kleben.
+   ========================================================================== */
+
+/* --- Auftragszeile über dem Bild ------------------------------------------
+   Steht oben, damit die Bühne darunter frei bleibt. Der Text ist der Grund,
+   warum die Kamera in diesen Bildschirmen nach unten versetzt wird. */
+.auftrag{
+  width:min(680px,100%); margin-inline:auto; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:var(--glas); backdrop-filter:blur(10px);
+  border:1px solid var(--glas-rand); border-radius:var(--r-l);
+  padding:clamp(10px,1.6vw,18px) clamp(14px,2vw,24px);
+  box-shadow:var(--schatten);
+}
+.auftrag h2{font-size:1.5em}
+.auftrag p{margin:0}
+
+/* --- Kopf des Levelmenüs --------------------------------------------------
+   Dieselbe Glasscheibe wie die Auftragskarte, aus demselben Grund: Text auf
+   der offenen Kulisse ist am Beamer nicht zuverlässig lesbar. */
+.menuekopf{
+  width:min(640px,100%); margin-inline:auto; text-align:center; margin-bottom:4px;
+  background:var(--glas); backdrop-filter:blur(10px);
+  border:1px solid var(--glas-rand); border-radius:var(--r-l);
+  padding:clamp(8px,1.4vw,14px) clamp(14px,2vw,22px);
+  box-shadow:var(--schatten);
+}
+.menuekopf p{margin:0}
+
+/* --- Ziehbare Begriffskarten ---------------------------------------------- */
+.kartenleiste{
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  width:min(940px,100%); margin:auto auto 0; padding-top:10px;
+}
+.brennkarte{
+  display:flex; align-items:center; gap:.55em;
+  padding:.6em 1.05em; border-radius:999px;
+  background:var(--panel); border:2px solid var(--linie);
+  box-shadow:0 3px 0 var(--linie), var(--schatten);
+  font-weight:800; font-size:.98em; white-space:nowrap;
+  transition:transform .14s var(--ease), border-color .14s, box-shadow .14s;
+}
+.brennkarte:hover{transform:translateY(-3px); border-color:var(--linie2)}
+.brennkarte .ic{font-size:1.35em; line-height:1}
+.brennkarte.klein{font-size:.9em; padding:.5em .9em}
+/* Das Gespenst beim Ziehen darf nicht durchsichtig werden – auf hellem Grund
+   verliert man es sonst aus den Augen. */
+.brennkarte.faehrt{background:var(--panel); opacity:1}
+
+/* --- Ablage auf einem Sockel ----------------------------------------------
+   Klebt per HotSpot am Kopf der Säule im 3D-Bild. Deshalb absolut klein
+   gehalten: Sie soll die Säule markieren, nicht verdecken. */
+.sockelziel{
+  min-width:104px; padding:.5em .8em; border-radius:var(--r);
+  background:var(--glas); backdrop-filter:blur(8px);
+  border:2px dashed var(--linie2); text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  font-size:.8em; box-shadow:var(--schatten);
+}
+.sockelziel .fragezeichen{font-family:var(--display); font-size:1.9em; color:var(--txt3); line-height:1}
+.sockelziel .ic{font-size:1.5em; line-height:1.1}
+.sockelziel b{font-size:.94em; line-height:1.2}
+.sockelziel.voll{
+  border-style:solid; border-color:var(--f,var(--glut));
+  background:var(--panel); animation:aufleuchten .55s var(--ease);
+}
+/* ACHTUNG: Was an einem 3D-Objekt klebt, darf sein eigenes `transform` NICHT
+   anfassen. HotSpots schreibt es jedes Bild neu – eine Animation oder ein
+   :hover mit transform reisst die Marke schlagartig in die Bildecke, bis das
+   nächste Bild sie zurückholt. Deshalb leuchtet hier der Rahmen auf, und
+   grösser wird nur das Symbol im Inneren. */
+@keyframes aufleuchten{
+  0%  {box-shadow:0 0 0 0 var(--f,var(--glut))}
+  55% {box-shadow:0 0 0 9px transparent}
+  100%{box-shadow:var(--schatten)}
+}
+.sockelziel.voll .ic{animation:symbolRein .45s var(--ease) both}
+@keyframes symbolRein{
+  0%{transform:scale(.4); opacity:0}
+  60%{transform:scale(1.18); opacity:1}
+  100%{transform:scale(1)}
+}
+
+/* --- Knopf auf einem Sockel („wegnehmen") --------------------------------- */
+.sockelknopf{
+  display:flex; flex-direction:column; align-items:center; gap:1px;
+  padding:.45em .9em; border-radius:999px; cursor:pointer;
+  background:var(--panel); border:2px solid var(--f,var(--linie2));
+  box-shadow:var(--schatten); font-size:.8em; font-weight:800;
+  transition:transform .14s var(--ease), background .14s;
+}
+/* kein transform im :hover – siehe Hinweis bei .sockelziel.voll */
+.sockelknopf:hover{background:var(--panel2); border-width:3px}
+.sockelknopf .ic{font-size:1.5em; line-height:1.1}
+.sockelknopf b{font-size:.95em; line-height:1.15}
+.sockelknopf small{font-size:.8em; color:var(--txt2); font-weight:700}
+
+/* Auf dem Handy stehen die vier Säulen im Bild nur zwei Fingerbreit
+   auseinander – das Bild ist dort hoch und schmal, die Bühne bekommt nur
+   einen Streifen. Marken in voller Größe stoßen dann aneinander und verdecken
+   genau das, was sie beschriften. Also alles eine Nummer kleiner, und den
+   Kartenvorrat gleich mit: Jede eingesparte Zeile unten ist Bildfläche oben. */
+@media (max-width:620px){
+  /* max-width, damit ein langer Name umbricht statt die Nachbarmarke zu
+     überlappen – im Hochformat stehen die Marken dicht beieinander. */
+  .sockelziel{min-width:72px; max-width:118px; padding:.35em .5em; font-size:.7em; gap:0}
+  .sockelziel .fragezeichen{font-size:1.5em}
+  .sockelziel .ic{font-size:1.25em}
+  .sockelknopf{padding:.34em .62em; font-size:.7em}
+  .sockelknopf .ic{font-size:1.2em}
+  .brennkarte{font-size:.86em; padding:.45em .8em}
+  .brennkarte .ic{font-size:1.2em}
+  .kartenleiste{gap:7px}
+  .auftrag{padding:8px 12px; gap:4px}
+  .auftrag h2{font-size:1.25em}
+}
+
+/* --- Sortierkörbe --------------------------------------------------------- */
+.koerbe{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  width:min(760px,100%); margin-inline:auto;
+}
+.korb{
+  padding:.85em 1em; border-radius:var(--r-l); text-align:center;
+  background:var(--glas); backdrop-filter:blur(10px);
+  border:2px dashed var(--f,var(--linie2)); min-height:118px;
+  display:flex; flex-direction:column; gap:4px;
+  box-shadow:var(--schatten);
+}
+.korb > b{font-size:1.05em; color:var(--f,var(--txt))}
+.korb > small{color:var(--txt2); font-size:.82em}
+.korbinhalt{display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-top:4px}
+.korbchip{
+  display:inline-flex; align-items:center; gap:.32em;
+  padding:.24em .62em; border-radius:999px; font-size:.78em; font-weight:700;
+  background:var(--panel); border:1px solid var(--linie);
+  animation:rein .3s var(--ease) both;
+}
+.korbchip i{font-style:normal}
+@media (max-width:620px){
+  .koerbe{grid-template-columns:1fr}
+  .korb{min-height:92px}
+}
+
+/* --- Marke, die im Bild an einem Objekt klebt -----------------------------
+   Für Beschriftungen an 3D-Dingen, die kein Ziel zum Ziehen sind. */
+.weltmarke{
+  padding:.34em .8em; border-radius:999px; font-size:.8em; font-weight:800;
+  background:var(--panel); border:2px solid var(--f,var(--linie2));
+  box-shadow:var(--schatten); white-space:nowrap;
+  display:flex; align-items:center; gap:.4em;
+}
+.weltmarke .ic{font-size:1.15em}
+
+/* --- Toasts nach unten ----------------------------------------------------
+   Oben ist auf dieser Seite kein Platz: Dort stehen die Kopfzeile und die
+   Auftragskarte, beide hell wie der Toast selbst. Unten steht der Toast frei
+   über der Bühne, und auf dem Handy verdeckt ihn der eigene Daumen nicht.
+   Weil er von unten kommt, laufen auch seine beiden Animationen andersherum. */
+#toasts{top:auto; bottom:16px}
+.toast{animation:toastRein-unten .4s var(--ease) both}
+.toast.weg{animation:toastRaus-unten .32s ease-in both}
+@keyframes toastRein-unten{from{opacity:0; transform:translateY(16px) scale(.94)} to{opacity:1; transform:none}}
+@keyframes toastRaus-unten{to{opacity:0; transform:translateY(12px) scale(.96)}}
+
+/* Auf dem Ergebnisbildschirm zurück nach oben: Dort steht keine
+   Auftragskarte im Weg, dafür gehen unten gleich drei Meldungen gleichzeitig
+   auf (Abzeichen, Aufstieg) und würden die Auswertung zudecken.
+   Browser ohne :has() lassen sie unten – lesbar bleibt beides. */
+body:has(.ergebnis) #toasts{top:64px; bottom:auto}
+/* Oben mittig liegen sie allerdings genau auf „Perfekt!" und den Sternen –
+   also, sobald daneben Platz ist, an den rechten Rand. Auf dem Handy gibt es
+   diesen Platz nicht; dort bleiben sie mittig und ziehen nach drei Sekunden
+   von selbst weiter. */
+@media (min-width:900px){
+  body:has(.ergebnis) #toasts{
+    left:auto; right:18px; transform:none; width:min(330px,30vw); align-items:flex-end;
+  }
+}
+body:has(.ergebnis) .toast{animation:toastRein .4s var(--ease) both}
+body:has(.ergebnis) .toast.weg{animation:toastRaus .32s ease-in both}
+
+/* --- Unterbau: Rückmeldung über dem Bedienfeld -----------------------------
+   Siehe `unterbau()` in bausteine.js. Die Leiste hält ihren Platz frei, auch
+   wenn nichts drinsteht: Sonst rutschen die Antwortknöpfe bei jeder Meldung
+   eine Zeile nach unten und wieder zurück, und man tippt daneben. */
+.unterbau{
+  width:min(760px,100%); margin:auto auto 0;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.unterbau > *{width:100%}
+/* Ein Panel, das selbst das Bedienfeld ist: unten am Bild, damit die Bühne
+   darüber frei bleibt. Es ist kein Flex-Container mit Hinweisleiste, sondern
+   nur unten ausgerichtet – deshalb die eigene Regel. */
+.panel.unterbau{display:block; width:min(660px,100%); margin:auto auto 0}
+.hinweisleiste{
+  min-height:2.9em; display:flex; align-items:center; justify-content:center;
+}
+.hinweistext{
+  padding:.55em 1.15em; border-radius:999px; font-weight:800; font-size:.94em;
+  text-align:center; background:var(--toast); border:1px solid var(--linie2);
+  box-shadow:var(--schatten); animation:rein .28s var(--ease) both;
+}
+.hinweistext.gut{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 14%,#fff)}
+.hinweistext.schlecht{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 12%,#fff)}
+.hinweistext.weg{animation:hinweisRaus .3s ease-in both}
+@keyframes hinweisRaus{to{opacity:0; transform:translateY(-6px)}}
+@media (max-width:620px){
+  .hinweisleiste{min-height:2.4em}
+  .hinweistext{font-size:.86em; padding:.45em .9em}
+}
+
+/* --- Regler ----------------------------------------------------------------
+   Siehe `regler()` in bausteine.js. Der Daumen ist bewusst groß: Das hier wird
+   am Gruppenabend mit dem Finger auf einem Tablet bedient, nicht mit der Maus. */
+.regler{width:min(560px,100%); margin-inline:auto; display:flex; flex-direction:column; gap:6px}
+.reglerkopf{
+  display:flex; justify-content:space-between; align-items:baseline; gap:1em;
+  font-weight:800; font-size:.95em;
+}
+.reglerzahl{font-size:1.5em; color:var(--glut)}
+.reglerbahn{position:relative; height:38px; display:flex; align-items:center}
+.reglerschiene{
+  position:absolute; inset:auto 0; height:14px; border-radius:999px;
+  background:var(--panel2); border:1px solid var(--linie); overflow:hidden;
+}
+.reglerzone{position:absolute; top:0; bottom:0}
+/* Der Regler selbst liegt durchsichtig über der Schiene – sichtbar ist nur
+   sein Daumen. So bleibt die Zonenfarbe darunter lesbar. */
+.reglereingabe{
+  position:relative; width:100%; margin:0; background:transparent;
+  -webkit-appearance:none; appearance:none; height:38px; cursor:grab;
+}
+.reglereingabe:active{cursor:grabbing}
+.reglereingabe::-webkit-slider-runnable-track{background:transparent; height:38px}
+.reglereingabe::-moz-range-track{background:transparent; height:38px}
+.reglereingabe::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:30px; height:30px; border-radius:50%; margin-top:4px;
+  background:var(--panel); border:3px solid var(--glut); box-shadow:var(--schatten);
+}
+.reglereingabe::-moz-range-thumb{
+  width:30px; height:30px; border-radius:50%; border:3px solid var(--glut);
+  background:var(--panel); box-shadow:var(--schatten);
+}
+.reglereingabe:focus-visible{outline:none}
+.reglereingabe:focus-visible::-webkit-slider-thumb{border-color:var(--blau); box-shadow:0 0 0 4px var(--glas-rand2)}
+.reglereingabe:focus-visible::-moz-range-thumb{border-color:var(--blau); box-shadow:0 0 0 4px var(--glas-rand2)}
+.regler.zu{opacity:.6}
+.regler.zu .reglereingabe{cursor:default}
+
+/* Zwei Knöpfe nebeneinander unter einem Regler. */
+.knopfreihe{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:.4em}
+.knopfreihe .btn{flex:1 1 auto; min-width:180px}
+
+/* --- Zustandszeile unter dem Regler ----------------------------------------
+   Sagt in Worten, was das Bild gerade zeigt. Feste Mindesthöhe, damit der
+   Knopf darunter nicht bei jedem Reglerschritt hüpft. */
+.zustandszeile{
+  min-height:2.6em; display:flex; align-items:center; justify-content:center;
+  text-align:center; font-weight:700; font-size:.95em; padding:.3em .6em;
+  border-radius:var(--r); color:var(--txt2);
+}
+.zustandszeile.aus{background:color-mix(in srgb,var(--blau) 14%,#fff); color:var(--txt)}
+.zustandszeile.grenze{background:color-mix(in srgb,var(--gelb) 22%,#fff); color:var(--txt)}
+.zustandszeile.hoch{background:color-mix(in srgb,var(--rot) 12%,#fff); color:var(--txt)}
+
+/* --- Knopf über einer Holzprobe -------------------------------------------- */
+.probenknopf{cursor:pointer}
+/* kein transform im :hover – siehe Hinweis bei .sockelziel.voll */
+.probenknopf:hover{background:var(--panel2); border-width:3px}
+.weltmarke.richtig{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 16%,#fff)}
+.weltmarke.falsch{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 14%,#fff)}
+/* abgebrannt: tritt zurück, bleibt aber lesbar */
+.weltmarke.fertig{opacity:.62}
+.weltmarke.fertig small{display:block; font-size:.78em; font-weight:700; color:var(--txt2)}
+
+.kennzahl.gross{font-size:1.5em; color:var(--f,var(--glut))}
+
+/* --- Knopf über einer Tonne ---
+-------------------------------------------- */
+.tonnenknopf{cursor:pointer; padding:.42em .95em; font-size:.92em}
+.tonnenknopf b{font-family:var(--display); font-size:1.25em; letter-spacing:.02em}
+/* kein transform im :hover – siehe Hinweis bei .sockelziel.voll */
+.tonnenknopf:hover{background:var(--panel2); border-width:3px}
+/* Die fünf Tonnen stehen im Bogen. Im Hochformat schrumpft der Bogen auf
+   Handbreite, und fünf Knöpfe nebeneinander liegen dann übereinander statt
+   nebeneinander – kein Buchstabe ist mehr lesbar. Gestapelt ist der Knopf nur
+   halb so breit, und das Klassensymbol bleibt trotzdem sichtbar. */
+@media (max-width:620px){
+  .tonnenknopf{flex-direction:column; gap:0; padding:.3em .45em; font-size:.85em}
+  .tonnenknopf .ic{font-size:1em}
+}
+
+/* --- Zustandsfarben kräftiger als drüben ---------------------------------
+   Eine 17-prozentige Beimischung leuchtet in der Einsatznacht und
+   verschwindet auf hellem Beton fast vollständig. Deshalb hier mit Weiß
+   gemischt statt mit Transparenz: Die Fläche wird dadurch deckend und liegt
+   nicht mehr blass über einer unruhigen 3D-Kulisse. */
+.antwort.richtig{background:color-mix(in srgb,var(--gruen) 20%,#fff)}
+.antwort.falsch{background:color-mix(in srgb,var(--rot) 16%,#fff)}
+.feedback{background:color-mix(in srgb,var(--blau) 12%,#fff)}
+.feedback.gut{background:color-mix(in srgb,var(--gruen) 14%,#fff)}
+.feedback.schlecht{background:color-mix(in srgb,var(--rot) 12%,#fff)}
+
+/* --- Antwortfeld unten am Bild -------------------------------------------
+   Wenn die Antwort etwas mit der Bühne zu tun hat – welche Tonne, welche
+   Erscheinung –, darf sie das Motiv nicht zudecken. Also unten ansetzen und
+   auf zwei Spalten, damit vier Antworten in zwei Zeilen passen. */
+.antworten.unten{
+  margin:auto auto 0; width:min(760px,100%);
+  grid-template-columns:1fr 1fr; gap:10px;
+}
+.antworten.unten .antwort{padding:.72em 1em; font-size:.96em}
+/* Drei Antworten nebeneinander statt in zwei Zeilen. Jede eingesparte Zeile
+   ist Bildfläche für die Bühne – und in dieser Runde ist die Bühne die
+   eigentliche Antwort. */
+.antworten.unten.drei{grid-template-columns:repeat(3,1fr)}
+@media (max-width:640px){
+  .antworten.unten,
+  .antworten.unten.drei{grid-template-columns:1fr; gap:8px}
+  .antworten.unten .antwort{padding:.6em .9em; font-size:.92em}
+}
+
+/* --- Angriffspunkt erobert (Level 5) --------------------------------------
+   Wenn ein Löschverfahren seinen Punkt gefunden hat, wechselt die Marke von
+   der Voraussetzung zum Verfahren. Sie soll dabei nicht bloß umgefärbt
+   aussehen, sondern übernommen: durchgehender Rahmen, kräftiger Grund.
+   Kein `transform` – siehe den Hinweis bei `.sockelziel.voll`. */
+.sockelziel.erobert{
+  border-style:solid; border-width:3px;
+  background:color-mix(in srgb,var(--f,var(--blau)) 16%,#fff);
+}
+/* Die Marke an der Flamme hängt frei in der Luft und hat keinen Sockel unter
+   sich, an dem das Auge sie festmacht. Ein bisschen mehr Rand hilft. */
+.flammenziel{box-shadow:0 0 0 3px var(--glas-rand2), var(--schatten)}
+
+/* --- Die drei Verfahrensfamilien (Level 5) -------------------------------- */
+.familie{
+  display:flex; gap:.7em; align-items:flex-start;
+  padding:.6em .2em; border-top:1px solid var(--linie);
+}
+.familie:first-of-type{border-top:0}
+.familie .ic{font-size:1.6em; line-height:1.1; flex:0 0 auto}
+.familie b{color:var(--f,var(--txt))}
+.spielarten{display:flex; flex-wrap:wrap; gap:5px; margin-top:5px}
+
+/* --- Löschmittel wählen (Level 6) -----------------------------------------
+   Sechs Knöpfe unter dem Bild: fünf Löschmittel und „absperren". Auto-fit
+   statt fester Spaltenzahl – im Querformat stehen sie zu dritt, im Hochformat
+   zu zweit, ohne dass hier eine Zahl geraten werden muss. */
+.mittelwahl{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:9px;
+  width:min(760px,100%); margin:auto auto 0;
+}
+.mittelknopf{
+  display:flex; align-items:center; gap:.5em; cursor:pointer;
+  padding:.6em .9em; border-radius:var(--r); text-align:left;
+  background:var(--panel); border:2px solid var(--linie);
+  box-shadow:0 3px 0 var(--linie), var(--schatten);
+  font-weight:800; font-size:.94em; font-family:inherit; color:var(--txt);
+  transition:transform .14s var(--ease), border-color .14s, background .14s;
+}
+.mittelknopf:hover:enabled{transform:translateY(-2px); border-color:var(--linie2)}
+.mittelknopf .ic{font-size:1.35em; line-height:1}
+.mittelknopf.richtig{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 20%,#fff)}
+.mittelknopf.falsch{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 16%,#fff)}
+@media (max-width:620px){
+  .mittelwahl{grid-template-columns:1fr 1fr; gap:7px}
+  .mittelknopf{padding:.5em .6em; font-size:.86em; gap:.35em}
+  .mittelknopf .ic{font-size:1.15em}
+  .familie .ic{font-size:1.3em}
+}
+
+/* --- Standplatz und Windrichtung (Level 7) --------------------------------
+   Zwei anklickbare Marken links und rechts vom Brand. Sie sind größer als
+   eine normale Weltmarke, weil sie die Aufgabe sind und nicht die
+   Beschriftung – und weil man sie auf dem Handy mit dem Daumen trifft.
+   Kein `transform` im :hover – siehe den Hinweis bei `.sockelziel.voll`. */
+.standplatz{
+  cursor:pointer; font-size:.92em; padding:.5em 1em; border-width:3px;
+  border-color:var(--blau); color:var(--txt); font-family:inherit;
+}
+.standplatz:hover{background:var(--panel2); box-shadow:0 6px 22px rgba(20,26,40,.22)}
+.standplatz .ic{font-size:1.3em}
+/* Die Windmarke ist Anzeige, kein Ziel: Sie tritt farblich zurück, damit
+   niemand versucht, auf den Wind zu tippen. */
+.windmarke{border-style:dashed; border-color:var(--linie2); color:var(--txt2)}
+
+/* --- Vorratsbalken --------------------------------------------------------
+   Der heimliche Lehrer von Level 7. Ein tragbarer Feuerlöscher ist nach
+   wenigen Sekunden leer, und das steht nirgends als Satz – es steht als
+   Balken im Bild, auch in den Runden, in denen er nichts entscheidet. */
+.vorrat{
+  display:flex; align-items:center; gap:.7em; width:min(420px,100%);
+  margin:0 auto .1em; padding:.4em .8em; border-radius:var(--r);
+  background:var(--panel); border:2px solid var(--linie2); box-shadow:var(--schatten);
+}
+.vorrat .ic{font-size:1.4em; line-height:1}
+.vorrat .klein{font-size:.74em; font-weight:700; color:var(--txt2); margin-bottom:.25em}
+.vorratbalken{height:10px; border-radius:999px; background:var(--linie2); overflow:hidden}
+.vorratbalken i{
+  display:block; height:100%; border-radius:999px; background:var(--blau);
+  transition:background .3s var(--ease);
+}
+.vorrat.leer .vorratbalken i{background:var(--rot)}
+@media (prefers-reduced-motion:reduce){ .vorratbalken i{transition:none} }
+
+/* --- Entscheidungskette (Level 8) -----------------------------------------
+   Drei Entscheidungen, und die Auflösung kommt erst danach. Damit man
+   trotzdem weiß, wo man steht, stehen die drei Glieder über den Knöpfen –
+   gefüllte tragen die eigene Antwort, das laufende ist hervorgehoben.
+   Bewusst ohne Farbe für „richtig": Hier wird noch nichts verraten. */
+.kette{
+  display:flex; align-items:stretch; justify-content:center; gap:.4em;
+  flex-wrap:wrap; width:min(680px,100%); margin:0 auto .1em;
+}
+.kettenglied{
+  flex:1 1 0; min-width:96px; padding:.35em .6em; border-radius:var(--r);
+  background:var(--panel); border:2px solid var(--linie2); text-align:center;
+}
+.kettenglied .klein{font-size:.68em; font-weight:700; color:var(--txt3); text-transform:uppercase; letter-spacing:.04em}
+.kettenglied b{display:block; font-size:.86em; line-height:1.2}
+.kettenglied.voll{border-color:var(--linie); background:var(--panel2)}
+.kettenglied.jetzt{border-color:var(--glut); box-shadow:0 0 0 3px var(--glas-rand2)}
+.kettenpfeil{align-self:center; color:var(--txt3); font-weight:800}
+@media (max-width:620px){
+  .kettenpfeil{display:none}
+  .kettenglied{min-width:0; padding:.3em .4em}
+  .kettenglied b{font-size:.78em}
+}
+
+/* --- Feuerwand (Beamer) ---------------------------------------------------
+   Vier Kategorien nebeneinander, darunter je vier brennende Felder. Am
+   Beamer im hellen Raum zählt nur eines: Man muss aus zehn Metern sehen,
+   welche Felder noch brennen. Deshalb kräftige Flächen statt Rahmen.
+
+   Gelöschte Felder bleiben stehen und tragen die Farbe des Teams, das sie
+   geholt hat – eine Lücke wäre schwerer zu lesen als eine Markierung. */
+/* minmax(0,1fr) und nicht 1fr: Sonst darf keine Spalte schmaler werden als
+   ihr laengstes Wort („Loeschverfahren"), und am Handy schiebt sich die
+   vierte Spalte aus dem Bild. */
+.feuerwand{
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px;
+  width:min(1100px,100%);
+}
+.wandspalte{display:flex; flex-direction:column; gap:8px}
+.wandkopf{
+  display:flex; flex-direction:column; align-items:center; gap:.15em;
+  padding:.5em .4em; border-radius:var(--r); text-align:center;
+  background:var(--panel); border:2px solid var(--linie2);
+  font-size:.9em; line-height:1.15; min-height:3.4em; justify-content:center;
+}
+.wandkopf .ic{font-size:1.5em; line-height:1}
+/* weiche Trennzeichen stecken in KATEGORIEN; `anywhere` ist nur die
+   Rueckfallebene fuer Namen ohne eines. */
+.wandkopf b{overflow-wrap:anywhere}
+.wandfeld{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.1em; padding:.55em .3em; border-radius:var(--r); cursor:pointer;
+  border:2px solid transparent; font-family:inherit; color:#fff;
+  background:linear-gradient(180deg,#f0821e,#d93a12);
+  box-shadow:0 3px 0 rgba(120,40,10,.35), var(--schatten);
+  transition:transform .14s var(--ease), filter .14s;
+}
+.wandfeld .ic{font-size:1.4em; line-height:1}
+.wandfeld b{font-family:var(--display); font-size:1.7em; line-height:1; letter-spacing:.01em}
+.wandfeld:hover{transform:translateY(-2px); filter:brightness(1.08)}
+/* gelöscht: tritt zurück, bleibt aber zuordenbar */
+.wandfeld.aus{
+  cursor:default; background:var(--panel2); color:var(--txt3);
+  border-color:var(--f,var(--linie2)); box-shadow:none; padding:.75em .3em;
+}
+.wandfeld.aus span{font-size:1.3em; line-height:1}
+.wandfeld.aus small{font-size:.7em; font-weight:800; color:var(--txt2); text-align:center}
+@media (prefers-reduced-motion:reduce){ .wandfeld{transition:none} .wandfeld:hover{transform:none} }
+@media (max-width:720px){
+  .feuerwand{gap:6px}
+  .wandkopf{font-size:.72em; min-height:3.8em; padding:.4em .2em}
+  .wandkopf .ic{font-size:1.2em}
+  .wandfeld b{font-size:1.2em}
+  .wandfeld .ic{font-size:1.1em}
+  .wandfeld.aus small{font-size:.6em}
+}

@@ -1,0 +1,791 @@
+Lehrgang / Seminar:   F-II
+
+
+Ausbildungseinheit:   Brennen und Löschen
+
+
+Ausgabe:              02/2010
+
+
+Verfasser:            Herr Reitz
+                      Herr Weigang
+                      Herr Sonnborn
+
+
+Literaturhinweis:     Brandlehre, Rempe/Rodewald
+                      Feuerlöschmittel, Alfons Rempe
+                      Verbrennen und Löschen, Rotes Heft Nr. 1,
+                      Chemie, Grundwissen für den Feuerwehrmann,
+                      Rotes Heft Nr. 59
+Brennen und Löschen - Lernunterlage
+
+
+Inhaltsverzeichnis
+1 Löschverfahren ......................................................................................... 4
+
+1.1 Abkühlen.................................................................................................. 4
+
+1.2 Ersticken .................................................................................................. 5
+  1.2.1 Verdünnen ......................................................................................... 5
+  1.2.2 Abmagern .......................................................................................... 5
+  1.2.3 Trennen ............................................................................................. 6
+
+1.3 Hemmen der Reaktion ............................................................................. 6
+
+2 Löschmittel Wasser .................................................................................. 7
+
+2.1 Allgemeine Eigenschaften ....................................................................... 7
+2.2 Löschwirkung ........................................................................................... 7
+
+2.3 Anwendung.............................................................................................. 8
+
+2.4 Anwendungsgrenzen ............................................................................... 9
+
+3 Löschmittel Schaum ............................................................................... 10
+
+3.1 Löschwirkung ......................................................................................... 10
+3.2 Netzmittelanwendung ............................................................................ 10
+
+3.3 Anwendung............................................................................................ 11
+
+3.4 Hinweise zum richtigen Einsatz ............................................................. 11
+
+3.5 Zerstörung von Schaum......................................................................... 12
+
+4 Löschmittel Pulver .................................................................................. 12
+
+4.1 Löschpulverarten ................................................................................... 12
+
+4.2 Löschwirkung ......................................................................................... 12
+
+4.3 Anwendungsgrenzen ............................................................................. 13
+
+5 Löschmittel Kohlendioxid ...................................................................... 14
+
+5.1 Eigenschaften ........................................................................................ 14
+
+5.2 Löschwirkung ......................................................................................... 14
+                                           Leitfaden zur Truppausbildung
+2.3         02/2010
+                                               Lehrgang „Truppführer“
+                                                                                                             -2-
+Brennen und Löschen - Lernunterlage
+
+5.3 Anwendung............................................................................................ 15
+
+6 Fettbrandlöschmittel .............................................................................. 15
+
+6.1 Eigenschaften ........................................................................................ 15
+
+6.2 Löschwirkung ......................................................................................... 16
+
+6.3 Anwendung............................................................................................ 16
+
+6.4 Anwendungsgrenzen ............................................................................. 16
+
+7 Zuordnung Löschmittel - Löschverfahren ............................................ 17
+
+8 Quellenverzeichnis ................................................................................. 17
+
+
+
+
+                                         Leitfaden zur Truppausbildung
+2.3         02/2010
+                                             Lehrgang „Truppführer“
+                                                                                                         -3-
+Brennen und Löschen - Lernunterlage
+
+
+
+
+1 Löschverfahren
+Um einen Brand zu löschen, kommen die folgenden Löschverfahren zur Anwendung:
+
+
+
+
+Abb. 1: Schematischer Überblick-Löschverfahren
+
+
+Die Löschmittel werden aufgrund ihrer Hauptlöschwirkung den Löschverfahren
+zugeordnet.
+
+
+
+1.1 Abkühlen
+„Abkühlen“ ist ein Löschverfahren, bei dem den brennenden Stoffen entweder durch das
+Löschmittel oder durch andere Maßnahmen die zur Aufrechterhaltung der Verbrennung
+erforderliche Wärme entzogen wird.
+Das Entziehen von Energie kann auf zweierlei Arten erfolgen:
+
+       - Erwärmen des Löschmittels
+       - Verdampfen des Löschmittels
+
+Bei der Anwendung des Löschmittels Wasser entzieht das Verdampfen des
+Wassers fünfmal mehr Wärme, als das Erwärmen.
+
+Die kritische Grenztemperatur, die durch Kühlmaßnahmen erreicht werden muss, ist nicht
+die Zündtemperatur, sondern die Mindestverbrennungstemperatur. Es ist allerdings darauf
+zu achten, dass nicht nur die Verbrennungszone entsprechend abgekühlt wird, sondern
+auch alle stark erwärmten Oberflächen. Um Rückzündungen zu vermeiden, müssen diese
+sogar unter die Zündtemperatur der vorhandenen brennbaren Stoffe herunter gekühlt
+werden.
+
+                                       Leitfaden zur Truppausbildung
+2.3        02/2010
+                                           Lehrgang „Truppführer“
+                                                                                    -4-
+Brennen und Löschen - Lernunterlage
+
+1.2 Ersticken
+
+Das Löschverfahren „Ersticken“ ist ein Verfahren, bei dem die Verbrennung durch
+Verändern des Mengenverhältnisses zwischen brennbarem Stoff und Sauerstoff
+unterbunden wird.
+Das Verändern des Mengenverhältnisses wird mit dem Löschverfahren Ersticken durch
+verschiedene Möglichkeiten erreicht:
+
+ − Ersticken durch Verdünnen
+   (Einflussfaktor Sauerstoff)
+
+ − Ersticken durch Abmagern
+   (Einflussfaktor brennbarer Stoff)
+
+ − Ersticken durch Trennen
+   (Einflussfaktor Sauerstoff und brennbarer Stoff)
+
+
+1.2.1 Verdünnen
+
+Beim Verdünnen wird die Luftsauerstoffkonzentration von 21 Vol.-% auf die löschwirksame
+Konzentration von ca. 15 Vol.-%, d. h. unter die zur Aufrechterhaltung der Verbrennung
+benötigte Mindestsauerstoffkonzentration gesenkt.
+
+
+
+
+Abb.2: Ersticken durch Verdünnen
+
+1.2.2 Abmagern
+
+Die Möglichkeit des Löschens durch Abmagern brennbarer Stoffe ist in der praktischen
+Anwendung für die Feuerwehr auf das Löschmittel Wasser beschränkt. Die Löschwirkung
+beruht auf der Abkühlung brennender Flüssigkeiten durch den Einsatz von Sprühstrahl
+unter ihren Flammpunkt. Auch wenn hier der Begriff „Abkühlung“ verwendet wird, besteht
+eine klare Abgrenzung zum Löschverfahren „Abkühlen“, da beim Abmagern in erster Linie
+das Mengenverhältnis zwischen brennbarem Stoff und Sauerstoff verändert wird und nicht
+die Reaktionszone gekühlt wird.
+
+
+
+
+                                          Abb.3: Ersticken durch Abmagern mit Wasser
+                                   Leitfaden zur Truppausbildung
+2.3       02/2010
+                                       Lehrgang „Truppführer“
+                                                                                       -5-
+Brennen und Löschen - Lernunterlage
+
+1.2.3 Trennen
+
+Das Löschverfahren „Ersticken durch Trennen“ beruht auf einer kompletten Trennung der
+beiden Reaktionspartner Sauerstoff und brennbarer Stoff.
+Die mengenmäßigen Voraussetzungen werden somit fast auf null reduziert. Um dieses zu
+erreichen, wird das Löschmittel mechanisch zwischen die beiden Reaktionspartner
+eingebracht.
+
+
+
+
+ Abb.4: Ersticken durch Trennen mit Schaum
+
+
+
+
+1.3 Hemmen der Reaktion
+
+Das reaktionshemmende Löschverfahren beruht auf der Tatsache, dass die zum
+Aufrechterhalten der Verbrennungsreaktion notwendigen reaktionsbeschleunigenden
+Energieträger durch den Aufprall auf eine Wand ihre Energie verlieren.
+In der Praxis wird diese Wand durch die Oberfläche eines Pulverteilchens dargestellt.
+Auch im tatsächlichen Größenvergleich ist ein Pulverteilchen um ein Vielfaches größer als
+einer der Energieträger. Da man zur Erklärung des Löscheffektes diese bildliche
+Darstellung zu Hilfe nimmt, spricht man hierbei auch vom Wandeffekt. Bei der Umsetzung
+des Löschens durch das Hemmen der Reaktion ist es wichtig, dass das Löschmittel im
+gesamten Bereich der Flammenreaktion zur Wirkung kommt.
+
+
+
+
+Abb.5: Hemmen der Reaktion
+
+
+
+
+                                     Leitfaden zur Truppausbildung
+2.3       02/2010
+                                         Lehrgang „Truppführer“
+                                                                                      -6-
+Brennen und Löschen - Lernunterlage
+
+2 Löschmittel Wasser
+
+
+2.1 Allgemeine Eigenschaften
+
+Das Löschmittel Wasser weist folgende charakteristischen Merkmale auf, die für die
+Brandbekämpfung wichtig sein können:
+
+Eigenarten/Erscheinungsform:
+Farb-, geruch- und geschmacklose Flüssigkeit, die chemisch neutral und ungiftig ist.
+
+Chemische Formel: H2O.
+Bei sehr hohen Temperaturen (über 1500°C) wie sie etwa bei Metallbränden erreicht
+werden, zerfällt das Wassermolekül in seine Bestandteile Wasser- und Sauerstoff.
+
+Dichte: 1 kg/l
+Wasser hat seine größte Dichte bei + 4 °C und dehnt sich unterhalb von + 4 °C wieder aus.
+Diese Ausdehnung kann zum Zerstören von Löschgeräten und Armaturen führen.
+
+Gefrierpunkt: 0 °C (273,15 K)
+
+Siedepunkt: 100 °C (373,15 K)
+Bei der Verdampfung von Wasser infolge der Überschreitung des Siedepunktes vergrößert
+sich das Volumen. Aus einem Liter Wasser werden ca. 1700 l Wasserdampf bei Erreichen
+des Siedepunktes.
+
+Elektrische Leitfähigkeit:
+Löschwasser leitet den elektrischen Strom. Nur reines Wasser ist elektrisch nicht leitend.
+
+Mischbarkeit von Wasser:
+Wasser ist nicht mit allen Flüssigkeiten mischbar. Man unterscheidet Stoffe, die mit
+Wasser mischbar sind (polare Stoffe) wie z. B. Alkohole und solche, die nicht mit Wasser
+mischbar sind (unpolare Stoffe) wie z. B. Öl, Fett und Benzin.
+
+Oberflächenspannung
+Die Oberfläche einer Flüssigkeit verhält sich ähnlich einer gespannten, elastischen Folie.
+Dieser Effekt, der als Oberflächenspannung bezeichnet wird, ist zum Beispiel die Ursache
+dafür, dass Wasser Tropfen bildet.
+Wasser hat im Vergleich zu den meisten Flüssigkeiten eine sehr große Oberflächen-
+spannung. Nur die Oberflächenspannung von Quecksilber ist größer.
+
+
+
+2.2 Löschwirkung
+
+Wasser hat durch sein hohes Wärmeaufnahmevermögen/Wärmebindungsvermögen bei
+Temperaturerhöhung und besonders bei Verdampfung eine sehr stark abkühlende
+Wirkung.
+
+
+                                   Leitfaden zur Truppausbildung
+2.3       02/2010
+                                       Lehrgang „Truppführer“
+                                                                                        -7-
+Brennen und Löschen - Lernunterlage
+
+Diese Eigenschaft des Löschmittels Wassers wird vor allem beim Löschen von Bränden
+der Brandklasse A ausgenutzt, wobei die Löschwirkung von der Verteilung abhängt.
+
+2.3 Anwendung
+Das Löschmittel Wasser wird standardmäßig bei Bränden der Brandklasse A eingesetzt.
+Hierbei unterscheidet man die Anwendungsarten Vollstrahl und Sprühstrahl.
+
+
+Vollstrahl
+
+Unter Vollstrahl versteht man die gebündelte (punktuelle) Wasserabgabe auf den
+Brandherd mit folgenden Löschgeräten: Mehrzweckstrahlrohre, Hohlstrahlrohre,
+Wendestrahlrohre, Wasserwerfer u. a.
+
+Der Vollstrahl wird eingesetzt, damit das Löschmittel Wasser die Glut überhaupt erreicht,
+durch die Auftreffwucht die Glut zerteilt und Wasser tief in die Glut eindringen kann.
+Zur Vermeidung unnötiger Wasserschäden ist unbedingt darauf zu achten, das
+Löschmittel Wasser gezielt und dosiert abzugeben.
+
+
+Vorteile der Wasserabgabe mittels Vollstrahl:
+
+              o Große Wurfweite (s. Zusatzinformationen)
+              o Große mechanische Wirkung (Auftreffwucht, Eindringtiefe)
+
+
+Nachteile der Wasserabgabe mittels Vollstrahl:
+
+              o Schlechter Wirkungsgrad hinsichtlich der abkühlenden
+                Wirkung des Löschmittels Wasser, da verhältnismäßig wenig Wasser
+                verdampft.
+              o Gefahr von Wasserschäden
+              o Gefahr der Staubexplosion bei feinst verteilten festen glutbildenden
+                Stoffen
+              o Große Sicherheitsabstände im Bereich elektrischer Anlagen
+
+
+Sprühstrahl
+
+Die Wasserabgabe erfolgt beim Sprühstrahleinsatz in einer flächendeckenden, fein
+verteilten Form mit folgenden Löschgeräten:
+Mehrzweckstrahlrohre, Hohlstrahlrohre, Löschlanzen, ortsfeste Löschanlagen u. a.
+
+Beim Sprühstrahl wird die abkühlende Wirkung besonders gut ausgenutzt, denn durch die
+feine Verteilung (kleine Tröpfchen) ist die Gesamtoberfläche bei gleicher Wassermenge
+und damit die Voraussetzung für das Verdampfen des Wassers wesentlich größer als
+beim Vollstrahl.
+Die Gefahr von Wasserschäden wird hierdurch reduziert.
+
+
+
+
+                                  Leitfaden zur Truppausbildung
+2.3       02/2010
+                                      Lehrgang „Truppführer“
+                                                                                       -8-
+Brennen und Löschen - Lernunterlage
+
+Vorteile der Wasserabgabe mittels Sprühstrahl:
+
+                 o Guter Wirkungsgrad hinsichtlich der abkühlenden Wirkung           des
+                   Löschmittels Wasser, da verhältnismäßig viel verdampft.
+                 o Aufgrund der sauerstoffverdrängenden Wirkung auch begrenzt bei
+                   Flammenbränden einsetzbar.
+                 o Kleinere Sicherheitsabstände bei elektrischen Anlagen.
+                 o Geringere Gefahr der Staubexplosion bei vorsichtiger Anwendung.
+                 o Niederschlagen von Rauch, Dämpfen etc. begrenzt möglich.
+                 o Reduzierte Gefahr von Wasserschäden.
+
+Nachteile der Wasserabgabe mittels Sprühstrahl:
+
+                 o Geringere Wurfweite.
+                 o Geringere Auftreffwucht.
+                 o Gefahr von Verbrühungen durch Wasserdampfbildung in geschlossenen
+                   Räumen.
+
+
+
+2.4 Anwendungsgrenzen
+Bei der Anwendung des Löschmittels Wasser können folgende Gefahren auftreten:
+
+Explosion:
+     bei Fettbränden (Fettexplosion)
+     bei Aufwirbelung von staubförmigen Stoffen (Staubexplosion)
+     bei Metallbränden (Knallgasbildung)
+
+Einsturz:
+      bei saugfähigen Lagergütern, Bauteilen und Baustoffen
+      bei quellfähigen Lagergütern
+      bei Wasserdampfbildung (Kaminbrand)
+
+Heftige Reaktion bei Kontakt mit Chemikalien:
+      unter Wärmefreisetzung (z. B. Säuren, ungelöschter Kalk) oder
+      unter Freisetzung brennbarer Gase (z. B. Natrium, Calciumcarbid)
+
+Ausbreitung:
+     Bei brennbaren, mit Wasser mischbaren Flüssigkeiten durch brennendes
+     Überlaufen.
+
+Elektrizität:
+       Im Bereich elektrischer Anlagen gelten folgende Sicherheitsabstände:
+
+
+                   Niederspannung                Hochspannung
+Strahlrohrart
+                   Sprühstrahl   Vollstrahl      Sprühstrahl          Vollstrahl
+CM-
+                   1m            5m              5m                   10 m
+Strahlrohr
+         Abb.6 Sicherheitsabstände in elektrischen Anlagen
+                                      Leitfaden zur Truppausbildung
+2.3          02/2010
+                                          Lehrgang „Truppführer“
+                                                                                     -9-
+Brennen und Löschen - Lernunterlage
+
+Sonstige Gefahren:
+      Im Winter erhöhte Unfallgefahr durch einfrierendes Löschwaser und Zerstörung von
+      Löschgeräten und Armaturen durch Volumenausdehnung.
+      In geschlossenen Räumen Verletzungsgefahr durch die hohe Wasserdampf-
+      temperatur.
+
+
+
+
+3 Löschmittel Schaum
+
+
+3.1 Löschwirkung
+
+Die Hauptlöschwirkung des Schaums ist abhängig von der Brandklasse, welcher der
+brennende Stoff zugeordnet ist sowie der Art des Schaums.
+Beim Schwerschaum überwiegt bei Bränden der Brandklasse A die Kühlwirkung, wo
+hingegen in der Brandklasse B die Trennwirkung im Vordergrund steht.
+Die Löschwirkung des Mittelschaums entspricht im Wesentlichen der des
+Schwerschaums, wenngleich wegen des geringeren Wassergehalts die Kühlwirkung
+zurückgeht.
+Beim Leichtschaum ist kaum noch eine kühlende Wirkung vorhanden, er löscht durch
+Trennen.
+
+
+3.2 Netzmittelanwendung
+
+Bei einigen Feststoffbränden wie z. B. bei Schüttgut, Waldboden, Dämmmaterialien,
+Stäuben, Textil- oder Strohballen läuft das Wasser über die Oberfläche ab. Durch die
+Zumischung von Schaummittel wird die Oberflächenspannung des Wassers herabgesetzt,
+so dass ein Eindringen in diese Materialien verbessert wird und das Wasser auch im
+Innern dieser Stoffe seine kühlende Wirkung entfalten kann.
+Die Zumischrate für herkömmliches Mehrbereichsschaummittel liegt, abhängig vom
+Brandgut, dem Zumischsystem und den Angaben des Herstellers zwischen 0,5 und 2 %.
+
+
+
+
+ Abb.7: ohne Netzmittelanwendung              Abb.8: mit Netzmittelanwendung
+
+                                   Leitfaden zur Truppausbildung
+2.3       02/2010
+                                       Lehrgang „Truppführer“
+                                                                                   - 10 -
+Brennen und Löschen - Lernunterlage
+
+3.3 Anwendung
+
+ • Löschgeräte:
+
+      - Schaumstrahlrohre
+      - Leichtschaumgeneratoren
+      - tragbare Feuerlöscher
+      - ortsfeste Löschanlagen
+
+ • Anwendungsarten:
+
+      - Schwerschaum
+      - Mittelschaum
+      - Leichtschaum
+
+ • Anwendungsbereiche:
+
+      - Brände der Bandklassen A, B und F
+      - Kühlen von mit Wärmestrahlung beaufschlagten Oberflächen
+      - Abdecken von ausgelaufenen brennbaren Flüssigkeiten
+
+
+3.4 Hinweise zum richtigen Einsatz
+
+Um das Löschmittel Schaum richtig einzusetzen sind folgende Anwendungsregeln zu
+beachten:
+
+ - Den gesamten Schaummittelvorrat am Zumischer bereit stellen und alle Kanister
+   aufschrauben!
+ - Den Schaumstrahl erst dann zur Brandbekämpfung einsetzen, wenn der Schaum die
+   gewünschte Konsistenz hat.
+ - Am Schaumstrahlrohr nur saubere Luft ansaugen!
+ - Schaum ist elektrisch leitfähig nur in spannungsfreien Anlagen einsetzen!
+ - Erstickungsgefahr beim Fluten von Räumen!
+ - Gerätschaften nach dem Einsatz gründlich reinigen!
+ - Einleitung von Schaum in offene Gewässer verhindern!
+ - Schaum wird in der Brandklasse B immer über eine Hilfsfläche aufgetragen!
+
+
+
+
+      Abb.9: richtiger Einsatz des Löschmittels Schaum
+                                        Leitfaden zur Truppausbildung
+2.3        02/2010
+                                            Lehrgang „Truppführer“
+                                                                                   - 11 -
+Brennen und Löschen - Lernunterlage
+
+3.5 Zerstörung von Schaum
+Schaumzerstörung kann durch folgende Einflüsse erfolgen:
+
+
+   • Wärme: Strahlungswärme, erwärmte Oberflächen.
+   • Andere Löschmittel: Pulver, Wasser.
+   • Mechanische Einflüsse: Wind, Einsatzkräfte.
+   • Chemikalien: Gas oder Dampfwolken, verunreinigtes Wasser.
+   • Wasserhalbwertzeit: Das im Schaum gebundene Wasser fließt aus.
+
+
+
+
+4 Löschmittel Pulver
+Das Löschmittel Pulver gibt es für die unterschiedlichen Brandklassen und es ist vor-
+wiegend in tragbaren Feuerlöschern anzufinden. Aber auch in fahrbaren Löschgeräten,
+ortsfesten Anlagen und Löschmittelbehältern der Feuerwehrfahrzeuge kommt es zu
+Einsatz.
+Pulverlöscher werden in den Brandklassen A, B, C und D als ABC-Pulverlöscher, BC-
+Pulverlöscher und D-Pulverlöscher eingesetzt.
+
+
+4.1 Löschpulverarten
+
+ Brandklassen                   Bestandteile                        Bezeichnung
+ Löschpulver                                                        Feuerlöscher
+
+ ABC - Pulver                   Ähnlich Düngemittel                 PG
+                                (Ammoniumphosphat, -sulfat)
+
+ BC - Pulver                    Ähnlich Backpulver                  P
+                                (Natriumhydrogencarbonat u. a.)
+
+ D - Pulver                     Ähnlich Kochsalz                    PM
+                                (Natriumchlorid u. a.)
+
+Abb.10: Löschpulverarten
+
+
+
+4.2 Löschwirkung
+
+Die Löschwirkung bei Flammenbränden (Brandklasse B und C) beruht auf der
+Reaktionshemmung durch den sogenannten Wandeffekt, der den reaktions-
+beschleunigenden Energieträgern ihre Energie entzieht.
+
+
+                                  Leitfaden zur Truppausbildung
+2.3        02/2010
+                                      Lehrgang „Truppführer“
+                                                                                    - 12 -
+Brennen und Löschen - Lernunterlage
+
+Bei Bränden der Brandklasse A und D
+besitzt das Löschpulver eine erstickende
+Wirkung. Bei der Anwendung von
+ABC-Pulver entstehen durch Schmelzen
+bzw. Zersetzen des Löschpulvers ab
+ca. 70 °C Salzschmelzen, die in die Poren
+fester Brennstoffe fließen und so das
+Eindringen von Sauerstoff verhindern.
+
+                                                            Abb.11: Sinterschicht
+
+Beim Einsatz des D Löschpulvers schmelzen hochtemperierte Salze und es kommt.
+zu einer starken Glasur-Krustenbildung, die undurchdringlich für den Luftsauerstoff ist.
+Eine zu frühzeitige Kontrolle, ob ein Löscherfolg erzielt wurde, und damit einhergehend die
+teilweise Zerstörung der Glasur-Kruste muss hierbei unbedingt vermieden werden.
+Bei allen Pulverwolken kommt es auch zu einer erstickenden Wirkung durch Verdünnen
+der Luft, d.h. Verschieben des Mengenverhältnisses von brennbarem Gas/Dampf und
+Luftsauerstoff aus dem reaktionsfähigen Bereich. Dieser Löscheffekt ist aber zweitrangig,
+weshalb man von einem Nebenlöscheffekt spricht.
+
+
+4.3 Anwendungsgrenzen
+
+   •   Löschpulver ist, soweit für die Brandklasse zugelassen, für alle Brände einsetzbar.
+   •   Löscherfolg nur bei einer ausreichend großen Löschpulverwolke.
+   •   Löschmittelvorrat ist meistens begrenzt, so dass bei ausgedehnten Bränden der
+       Löschpulvervorrat nicht ausreicht.
+   •   Geringe Reichweiten beim Einsatz von Löschpulver.
+   •   Die Gefahr der Rückzündung ist aufgrund mangelnder Kühlwirkung zu
+       berücksichtigen.
+   •   Sichtbehinderungen sind zu beachten.
+   •   Folgeschäden an empfindlichen Anlagen durch die Pulverwolke sind zu beachten.
+   •   Pulverlöschmittel sind nicht schaumverträglich, nur die Pulver mit der
+       Zusatzbezeichnung SV sind schaumverträglich.
+   •   Abstände bei elektrischen Anlagen:
+
+       Brandklassen Niederspannung                     Hochspannung
+       Löschpulver  (bis 1000V)                        (bis 380 kV)
+       BC – Pulver  1m                                 5m
+       ABC – Pulver       1m                           Nur in spannungsfreien Anlagen
+       D – Pulver         1m                           Nur in spannungsfreien Anlagen
+
+       Abb.12: Sicherheitsabstände in elektrischen Anlagen
+
+
+
+
+                                       Leitfaden zur Truppausbildung
+2.3       02/2010
+                                           Lehrgang „Truppführer“
+                                                                                        - 13 -
+Brennen und Löschen - Lernunterlage
+
+5 Löschmittel Kohlendioxid
+5.1 Eigenschaften
+
+Beim Löschmittel Kohlendioxid handelt es sich um ein farb- und geruchloses Gas mit der
+chemischen Formel CO2. Es entsteht bei der vollständigen Verbrennung des Kohlenstoffs
+und ist elektrisch nicht leitend.
+
+Kohlendioxid ist in höheren Konzentrationen ein Atemgift mit Wirkung auf Blut, Nerven und
+Zellen. Ab einer Konzentration von 3-4 Vol.-% reagiert der menschliche Körper mit einer
+erkennbaren Steigerung der Atemfrequenz. Wird eine Konzentration von 6-8 Vol.-%
+erreicht, können Ohnmacht, Krämpfe und Atemstillstand eintreten. Konzentrationen wie in
+ortsfesten Löschanlagen angestrebt von 30 Vol.-% und mehr führen innerhalb von
+Sekunden zur Bewusstlosigkeit und nach wenigen Minuten zum Tod.
+
+Kohlendioxid hinterlässt keine Löschmittelrückstände und eignet sich aus diesem Grund
+besonders für Brände in Räumen mit hochwertigen technischen Anlagen.
+
+
+5.2 Löschwirkung
+Bei richtiger Anwendung sowie unter
+Berücksichtigung der richtigen Brandklasse
+ hat Kohlendioxid eine schlagartige Löschwirkung,
+die auf dem Ersticken infolge Verdünnung der
+Sauerstoffkonzentration beruht. Durch Beimischung
+des Kohlendioxids in den Verbrennungsbereich
+(Flamme) dampfbildender oder gasförmiger Stoffe
+ wird der Sauerstoffanteil der Luft unter die für die   Abb.13: Einsatz von Kohlendioxid
+Verbrennung erforderliche Konzentration herabgesetzt.
+Kohlendioxid hat eine Dichte von 1,52 kg/m3,
+ist also ca. 1,5-mal schwerer als Luft und verdrängt
+ so den Sauerstoff der Luft von unten. Bei Temperaturen
+von mehr als 179 °C wird Kohlendioxid allerdings
+leichter als seine Umgebung und entfernt sich
+somit aus der Verbrennungszone. Die Löschwirkung
+ ist daher nur kurzzeitig, wenn nicht bestimmte
+Mindestkonzentrationen an Kohlendioxid im
+Brennstoff/Luft-Gemisch erreicht werden, die             Abb.14: Einsatz von Kohlendioxid
+bei 30 Vol.-% bis 50 Vol.-% liegen. Dies kann technisch
+nur innerhalb von geschlossen Räumen gelingen.
+
+
+
+
+                                                                    Abb.15: Einsatz von Kohlendioxid
+
+
+                                    Leitfaden zur Truppausbildung
+2.3       02/2010
+                                        Lehrgang „Truppführer“
+                                                                                                   - 14 -
+Brennen und Löschen - Lernunterlage
+
+5.3 Anwendung
+
+Löschgeräte: Tragbare Feuerlöscher, fahrbare Löschgeräte,
+             ortsfeste Anlagen
+
+Anwendungsart: Gas, Aerosol (Nebel), Schnee
+
+Anwendungsbereiche:                ▪ Brände der Brandklasse B (CO2 Nebel, CO2 Schnee)
+                                   ▪ Brände der Brandklasse C (CO2 Gas)
+                                   ▪ Nur in geschlossenen Räumen einsetzbar.
+                                   ▪ Besonders geeignet für Bereiche, die nicht verunreinigt
+                                     werden dürfen.
+5.4 Anwendungsgrenzen
+
+   •   Vergiftungsgefahr bei Einsatz in engen geschlossenen Räumen
+                                    Umluftunabhängiger Atemschutz
+   •   Im Freien nicht einsetzbar
+   •   Nicht einsetzbar bei stark Glut bildenden Stoffen und Metallen
+   •   Gefahr von Erfrierungen beim Ansprühen von Personen
+   •   Gefahr der Rückzündung Löschbereit bleiben
+   •   Gefahr von elektrostatischer Aufladung
+   •   Geringe Reichweite
+   •   Sicherheitsabstände im Bereich elektrischer Anlagen:
+
+
+                             Niederspannung                           Hochspannung
+                             (bis 1000 V)                             (bis 380 kV)
+
+            Kohlendioxid 1 m                                          5m
+
+          Abb.16: Sicherheitsabstände in elektrischen Anlagen
+
+
+
+
+6 Fettbrandlöschmittel
+6.1 Eigenschaften
+Beim Löschmittel für Fettbrände handelt es sich um ein schaumiges, flüssiges Löschmittel,
+das je nach Einfärbung eine unterschiedliche Farbe aufweisen kann und vom Geruch her
+spezifisch ist.
+Das Löschmittel ist nicht brennbar und hat keine brandfördernden Eigenschaften.
+
+
+
+                                      Leitfaden zur Truppausbildung
+2.3       02/2010
+                                          Lehrgang „Truppführer“
+                                                                                          - 15 -
+Brennen und Löschen - Lernunterlage
+
+Es ist in Wasser unbegrenzt löslich. Die Fettbrandlöschmittel sind in der Regel
+physiologisch unbedenklich und biologisch gut abbaubar. Bei bestimmungsgemäßer
+Anwendung sind keine gesundheitlichen Bedenken zu erwarten.
+
+6.2 Löschwirkung
+Durch chemische Reaktion des Fettbrandlöschmittels mit den Speiseölen und -fetten
+entsteht eine geschlossene, gasdichte Schaumdecke (Ersticken durch Trennen).
+Ferner wird den Speiseölen und -fetten sowie der umgebenen Einrichtung Wärme
+entzogen. Durch diese abkühlende Wirkung wird die Gefahr von Rückzündungen
+reduziert.
+
+
+6.3 Anwendung
+Fettbrandlöschmittel werden in tragbaren
+Feuerlöschern sowie in ortsfesten
+Löschanlagen eingesetzt.
+
+Das Löschmittel wird flüssig über
+Sprühdüsen fein verteilt auf das
+brennende Speisefett bzw. -öl aufgebracht.
+
+Das Fettbrandlöschmittel ist primär für den
+Einsatz bei Bränden der Brandklasse F
+gedacht, kann aber je nach Herstellerangaben
+auch für Brände der Brandklassen A und B
+genutzt werden.
+
+
+
+
+                                                                  Abb.17: Anwendungshinweise
+
+
+
+6.4 Anwendungsgrenzen
+
+    •   Nicht bei großen Mengen Säuren und Metallbränden einsetzbar
+    •   Geringe Reichweite
+    •   Sicherheitsabstand im Bereich elektrischer Anlagen:
+
+.                                   Niederspannung                Hochspannung
+                                    (bis 1000V)                   (bis 380 kV)
+
+        Fettbrandlöschmittel        1m                            Nur in spannungsfreien Anlagen
+
+        Abb.18: Sicherheitsabstände in elektrischen Anlagen
+
+
+                                        Leitfaden zur Truppausbildung
+2.3        02/2010
+                                            Lehrgang „Truppführer“
+                                                                                                   - 16 -
+Brennen und Löschen - Lernunterlage
+
+
+
+
+7 Zuordnung Löschmittel - Löschverfahren
+
+Ergänzen Sie die bekannte Übersicht der Löschverfahren mit den erläuterten
+Löschmitteln:
+
+
+
+
+Abb.19: Zuordnung Löschmittel-Löschverfahren
+
+
+
+
+8 Quellenverzeichnis
+Hessische Landesfeuerwehrschule                                 Abb. 1 und 2
+                                                                Abb. 6 bis 8
+                                                                Abb. 10 bis 18
+
+Firegrafics GmbH                                                Abb. 3 und 4
+                                                                Abb. 9
+
+
+
+
+                                      Leitfaden zur Truppausbildung
+2.3        02/2010
+                                          Lehrgang „Truppführer“
+                                                                                 - 17 -
+

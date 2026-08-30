@@ -1,10 +1,16 @@
-# Einsatzbereit — FwDV-3-Lernspiel für die Jugendfeuerwehr
+# Lernwerkstatt der Jugendfeuerwehr Harheim
 
-3D-Lernspiel zur Feuerwehr-Dienstvorschrift 3 „Einheiten im Lösch- und
-Hilfeleistungseinsatz" (Stand Februar 2008). Zielgruppe: 10 bis 17 Jahre.
+Startseite und 3D-Lernspiele für die Jugendfeuerwehr, 10 bis 17 Jahre. Alles
+läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit.
 
-**Live:** Startseite https://jf.veerka.mp · Spiel https://jf.veerka.mp/fwdv3/
-(die alte Adresse `fwdv3.veerka.mp` leitet dorthin um)
+| Adresse | Was | Quelle |
+|---|---|---|
+| `jf.veerka.mp/` | Startseite, 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
+| `jf.veerka.mp/fwdv3/` | **Einsatzbereit** — FwDV 3, Ausgabe Februar 2008 | `src/` |
+| `jf.veerka.mp/brennen-loeschen/` | **Brennen & Löschen** — Brandlehre | `brennen/src/` |
+
+Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um.
+
 **Vorschau als Artifact:** Spiel https://claude.ai/code/artifact/89189aa0-35ad-4ee7-a675-6b79d20f5d32 ·
 Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
 
@@ -20,7 +26,7 @@ Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
 
 ---
 
-## Was drin ist
+## Einsatzbereit (FwDV 3)
 
 | # | Level | Inhalt |
 |---|-------|--------|
@@ -35,6 +41,77 @@ Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
 
 Dazu ein **Beamer-Modus**: Quiz-Duell, Blitzrunde, Memory, Hot Seat und eine
 Punktetafel für zwei Teams.
+
+## Brennen & Löschen
+
+Die Brandlehre — warum etwas brennt und warum es aufhört. Anders als
+„Einsatzbereit" spielt sie am hellen Tag auf einem Übungsplatz: heller Himmel,
+Beton, ein Feuer als Hauptdarsteller. Fortschritt, XP, Ränge und Abzeichen
+funktionieren genau wie drüben, alles andere ist eigen.
+
+**Erste Halbzeit — warum es brennt.**
+
+| # | Level | Inhalt |
+|---|-------|--------|
+| 1 | Das Verbrennungsdreieck | Drei Voraussetzungen auf die Ecken, eine in die Mitte. Eine wegnehmen und zusehen, wie das Feuer zusammenfällt. Danach Voraussetzung und Erscheinung auseinanderhalten |
+| 2 | Was brennt denn da? | Acht Brandgüter in die Tonnen A bis F sortieren, die Falle mit der Klasse E, dann Flamme oder Glut je Klasse |
+| 3 | Luft zum Brennen | Die Luft aufteilen (78/21/1), unter einer Glasglocke am Sauerstoff drehen, und viermal dasselbe Holz um die Wette abbrennen lassen |
+| 4 | Ab wann brennt es? | Den Explosionsbereich abfahren, Flammpunkt, Brennpunkt und Zündtemperatur an drei Versuchen auseinanderhalten, Zündquellen von Nicht-Zündquellen trennen |
+
+**Zweite Halbzeit — warum es aufhört.**
+
+| # | Level | Inhalt |
+|---|-------|--------|
+| 5 | Wie löscht man? | Fünf Löschverfahren auf ihre fünf Angriffspunkte im Dreieck ziehen. Danach zweimal Wasser — und trotzdem zwei verschiedene Verfahren |
+| 6 | Womit löschen wir? | Fünf Löschmittel ihrer Hauptlöschwirkung zuordnen, fünf Brände löschen (und sehen, was bei der falschen Wahl passiert), Vollstrahl gegen Sprühstrahl |
+| 7 | Der Feuerlöscher | Von welcher Seite (Wind), mit welcher Technik (Stöße, ein Zug, von oben nach unten), und was nach dem Löschen kommt. Der Vorratsbalken läuft die ganze Zeit mit |
+| 8 | Der Ernstfall (Boss) | Vier Einsätze, je drei Entscheidungen: Was brennt da? Was muss weg? Womit? Die Auflösung kommt erst, wenn alle drei stehen |
+
+Aufgabe 7 bringt alle sieben Regeln aus Kapitel 6.8 unter, aber keine als
+Merksatz — jede steht in einer Lage, in der man sie braucht. Und der Boss fragt
+nichts Neues ab: Er verlangt nur, dass man die Kette in der richtigen
+Reihenfolge durchgeht, und zwar ohne Zwischenrufe.
+
+Der rote Faden ist das **Verbrennungsdreieck**: brennbarer Stoff, Sauerstoff
+und Zündenergie an den Ecken, das richtige Mengenverhältnis in der Mitte.
+Aufgabe 1 stellt es auf, und jede weitere Aufgabe nimmt sich genau eine dieser
+Voraussetzungen vor — Aufgabe 2 den brennbaren Stoff, Aufgabe 3 den Sauerstoff,
+Aufgabe 4 Mischung und Zündenergie. In der zweiten Halbzeit nimmt jedes
+Löschverfahren genau eine davon wieder weg — und zwar an einer eigenen Stelle:
+
+| Verfahren | greift an | in Aufgabe 5 |
+|---|---|---|
+| Abkühlen | Zündenergie | die rechte Säule |
+| Ersticken durch Verdünnen | Sauerstoff | die hintere Säule |
+| Ersticken durch Abmagern | brennbarer Stoff | die linke Säule |
+| Ersticken durch Trennen | beide zugleich | das Feld in der Mitte |
+| Hemmen der Reaktion | gar nichts davon | die Flamme selbst |
+
+Das ist nicht ausgedacht: Der Truppführer-Leitfaden nennt zu jeder Spielart des
+Erstickens den „Einflussfaktor", und genau der steht in `LOESCHVERFAHREN[].nimmt`
+(`brennen/src/data/brandlehre.js`) — bei „Hemmen" als `'reaktion'`, weil es als
+einziges Verfahren keine der vier Voraussetzungen anrührt.
+
+### Dreieck oder Viereck?
+
+Beides, und das ist der Punkt. Die Literatur zeichnet ein **Dreieck** mit drei
+Ecken und dem Mengenverhältnis in der Mitte; die Lernunterlage zählt **vier
+Voraussetzungen**. Das Mengenverhältnis kann keine eigene Ecke haben, weil es
+kein Stoff ist, sondern das Verhältnis *zwischen* zweien der Ecken.
+
+Die Bühne in Aufgabe 1 zeigt genau das — drei Säulen, ein Feld in der Mitte —
+und eine eigene Runde benennt den Unterschied ausdrücklich. Wer nur „drei"
+sagt, lässt das Mengenverhältnis ganz weg, und daran hängt später das halbe
+Löschen: Verdünnen, Abmagern und Trennen ändern nichts anderes als das
+Mengenverhältnis.
+
+Die zweite Stelle, an der das Spiel bewusst gegen den Alltagssprachgebrauch
+steht: Eine **Brandklasse E gibt es nicht**. Sie wurde gestrichen; Brände in
+elektrischen Anlagen sind Brände dessen, was dort brennt. Auch das bekommt in
+Aufgabe 2 eine eigene Runde.
+
+Beides steht so in den Unterlagen der Hessischen Landesfeuerwehrschule, siehe
+[Quellen](#quellen).
 
 ## Startseite (`hub/`)
 
@@ -56,19 +133,33 @@ nichts zu lesen, also soll es schnell losgehen.
 Hin und zurück ist eine Fahrt. Wer auf **Losfahren** drückt, fährt auch los:
 die Bedienelemente blenden aus,
 die Welt rauscht vorbei, das Fahrzeug zieht rechts aus dem Bild, und das Bild
-schließt sich auf den Nachthimmel, mit dem das Spiel aufmacht — 900 ms, in
+schließt sich auf den Grundton, mit dem das Ziel aufmacht — 900 ms, in
 denen im Hintergrund schon das Spiel geladen wird (`prefetch`, ausgelöst schon
 beim Zeigen auf den Knopf). Dauer und Kurve stehen als `AUSRUECKEN_MS` und
 `losfahren()` in `hub/src/main.js`. Bei „Bewegung reduzieren" wird schlicht
 verlinkt, und beim Zurück-Knopf setzt `pageshow` alles zurück — sonst käme die
 Seite mit noch dunkler Blende aus dem Browsercache.
 
+**Der Grundton gehört zum Thema, nicht zur Startseite.** „Einsatzbereit"
+beginnt in der Nacht, „Brennen & Löschen" am hellen Vormittag — die Blende
+fährt jeweils auf den richtigen Ton zu, mit dem Zeichen und dem Namen des
+Ziels darauf. Was sie zeigt, steht als `uebergang: { grund, schrift, zeichen }`
+in `hub/src/themen.js`; `blendeEinstellen()` in `hub/src/main.js` setzt es beim
+Klick ein. Ein neues Thema braucht also keine Zeile im Stil und keine im
+`body.html`.
+
 Umgekehrt genauso: der Knopf oben links im Levelmenü des Spiels
-(`App.zurLernwerkstatt()` in `src/main.js`) zieht das Bild auf denselben
-Grundton zu und ruft `jf.veerka.mp/?einfahrt=1` auf. Die Startseite beginnt
-dann dunkel und lässt das Fahrzeug vor der Wache ausrollen
-(`einfahrtStarten()`); den Parameter nimmt sie danach per `replaceState` wieder
-aus der Adresszeile.
+(`App.zurLernwerkstatt()`) zieht das Bild zu und ruft
+`jf.veerka.mp/?einfahrt=1` auf. Die Startseite beginnt dann dunkel und lässt
+das Fahrzeug vor der Wache ausrollen (`einfahrtStarten()`); den Parameter nimmt
+sie danach per `replaceState` wieder aus der Adresszeile.
+
+Für den Rückweg gilt die Regel andersherum: **Die Startseite fragt nicht,
+woher jemand kommt** — ihre Einfahrt beginnt immer im selben Nachtton. Ein
+helles Spiel muss deshalb auf diesen Ton zufahren und nicht auf seinen eigenen,
+sonst blitzt beim Ankommen die halbe Seite auf. Dafür gibt es `--heimfarbe`
+(gesetzt in `brennen/src/farben.css`, benutzt von `.heimfahrt` in
+`gemeinsam/stil.css`).
 
 Dieselbe Einfahrt spielt auch, wer von **veerka.mp** kommt: dort steht in der
 verschneiten 3D-Szene ein Feuerwehrauto, und das Schild daran führt hierher.
@@ -98,19 +189,37 @@ Die Seite startet immer im Modus **Alleine üben**. Beim ersten Aufruf kommt
 das Profil (Name, Helmfarbe), danach direkt die Levelauswahl. Den Beamer-Modus
 und das Zurücksetzen des Fortschritts findet man im Profil.
 
+Brennen & Löschen fragt nur nach dem Namen: dort steht keine Figur im Bild,
+sondern ein Feuer — eine Helmfarbe wäre nirgends zu sehen.
+
 ## Zwei Modi
 
-- **Alleine üben** — Fortschritt, XP, sieben Ränge, elf Abzeichen. Speichert
-  lokal im Browser (`localStorage`), nichts geht nach außen. Der Boss-Level
-  bleibt verschlossen, bis in den Übungen sieben von 21 möglichen Sternen
-  zusammen sind. Wer in allen acht Aufgaben drei Sterne hat (24 von 24),
-  bekommt das Abzeichen „Ausbildungsmeister".
+Beide Spiele haben beide Modi, und beide funktionieren gleich.
+
+- **Alleine üben** — Fortschritt, XP, sieben Ränge, Abzeichen (elf bei
+  Einsatzbereit, sechzehn bei Brennen & Löschen). Speichert lokal im Browser
+  (`localStorage`), nichts geht nach außen. Der Boss-Level bleibt verschlossen,
+  bis in den Übungen sieben von 21 möglichen Sternen zusammen sind. Wer in
+  allen acht Aufgaben drei Sterne hat (24 von 24), bekommt das Meisterabzeichen.
 - **Gruppenabend am Beamer** — 42 % größere Schrift, Teamwertung, Moderations-
-  knöpfe. Zwei Mannschaften treten gegeneinander an. Im Quiz-Duell ist immer
-  ein Team dran: Der Moderator tippt die gerufene Antwort an, bei einem
-  Treffer bekommt das Team automatisch zehn Punkte, bei einem Fehlgriff darf
-  das andere Team nachziehen und die Punkte abstauben. Von Hand nachjustieren
-  geht trotzdem. Im Beamer-Modus ist der Boss-Level nicht gesperrt.
+  knöpfe. Zwei Mannschaften treten gegeneinander an. Der Moderator tippt die
+  gerufene Antwort an, bei einem Treffer bekommt das Team die Punkte
+  automatisch, bei einem Fehlgriff darf das andere Team nachziehen und sie
+  abstauben. Von Hand nachjustieren geht trotzdem. Im Beamer-Modus ist der
+  Boss-Level nicht gesperrt.
+
+Die Spielarten unterscheiden sich:
+
+| | Einsatzbereit | Brennen & Löschen |
+|---|---|---|
+| Hauptteil | Quiz-Duell, acht Fragen | **Feuerwand**: vier Kategorien mal vier Werte, sechzehn brennende Felder. Das Team, das dran ist, sucht sich aus, was es löschen will |
+| Schnell | Blitzrunde, zehn Fragen | Blitzrunde, zehn Fragen |
+| Dazu | Memory (Begriff und Erklärung) | — |
+| Und | Hot Seat, Punkte von Hand | Hot Seat, Punkte von Hand |
+
+Die Feuerwand ist jeden Abend dieselbe. Das ist Absicht: Wer die Fragen schon
+kennt, kann sie beantworten, und genau darum geht es. Ein Gruppenabend ist
+keine Prüfung.
 
 ### XP nur einmal
 
@@ -118,7 +227,7 @@ XP gibt es je Aufgabe nur bis zur vollen Punktzahl. Wiederholt man eine
 Aufgabe und wird besser, gibt es die Differenz als Nachschlag; wiederholt man
 nur seine Bestleistung, bleibt eine kleine Anerkennung von zehn Prozent.
 Damit lohnt es sich nicht, Aufgabe 1 endlos zu wiederholen. Die Logik steht in
-`State.xpFuerLevel()` in `src/state.js`.
+`State.xpFuerLevel()` in `gemeinsam/state.js`.
 
 ## Technik
 
@@ -127,7 +236,7 @@ Damit lohnt es sich nicht, Aufgabe 1 endlos zu wiederholen. Die Logik steht in
 - Einziger externer Verweis: Google Fonts (Archivo Black + Outfit)
 - Kommandos werden über die eingebaute Sprachausgabe des Browsers gesprochen
   (`speechSynthesis`, deutsche Stimme) — keine Audiodateien.
-  `Audio3.sprechbar()` in `src/audio.js` biegt vorher die Aussprache gerade:
+  `Audio3.sprechbar()` in `gemeinsam/audio.js` biegt vorher die Aussprache gerade:
   Ordnungszahlen werden ausgeschrieben und im richtigen Fall gebeugt
   („mit 1. Rohr" → „mit erstem Rohr"), und an Wortfugen mit s+t setzt es einen
   Bindestrich, damit aus „Angriffstrupp" nicht „Angriffschtrupp" wird. Der
@@ -137,15 +246,19 @@ Damit lohnt es sich nicht, Aufgabe 1 endlos zu wiederholen. Die Logik steht in
 ## Entwickeln
 
 ```bash
-npm run build     # Startseite und Spiel, alles nach hub/dist/
-npm run dev       # beides wie im Netz, http://localhost:8413
-npm run dev:spiel # nur das Spiel, http://localhost:8412
+npm run build       # Startseite und beide Spiele, alles nach hub/dist/
+npm run dev         # alles wie im Netz, http://localhost:8413
+npm run dev:spiel   # nur Einsatzbereit, http://localhost:8412
+npm run dev:brennen # nur Brennen & Löschen, http://localhost:8414
 ```
 
-`npm run build` ist `node hub/build.mjs`; das ruft zuerst `build.mjs` im
-Hauptordner auf, der `src/` und `vendor/three.module.min.js` zu einer einzigen
-Datei `dist/index.html` zusammenbaut. Reihenfolge der Dateien steht in
-`build.mjs`. Nur das Spiel bauen geht mit `node build.mjs`.
+`npm run build` ist `node hub/build.mjs`; das ruft `build.mjs` im Hauptordner
+und `brennen/build.mjs` auf und legt deren Ergebnisse als
+`hub/dist/fwdv3/index.html` und `hub/dist/brennen-loeschen/index.html` neben
+die Startseite. **Ein Befehl baut alles** — so kann man nicht versehentlich
+einen alten Stand eines Spiels veröffentlichen. Einzeln bauen geht mit
+`node build.mjs` bzw. `node brennen/build.mjs`; die Reihenfolge der Quelldateien
+steht jeweils dort.
 
 Die Server liefern das **Gebaute** aus, nicht die Quellen — nach jeder Änderung
 also neu bauen. Kein Hot Reload.
@@ -163,10 +276,9 @@ Von Hand geht es auch:
 npm run deploy
 ```
 
-Ein Befehl für alles: `hub/build.mjs` ruft zuerst `build.mjs` im Hauptordner
-auf, legt das fertige Spiel als `hub/dist/fwdv3/index.html` neben die
-Startseite und veröffentlicht beides zusammen. Der Umweg ist Absicht — so kann
-man nicht versehentlich einen alten Stand des Spiels mit hochladen. Was von
+Ein Befehl für alles: `hub/build.mjs` baut beide Spiele mit und legt sie neben
+die Startseite, veröffentlicht wird alles zusammen. Der Umweg ist Absicht — so
+kann man nicht versehentlich einen alten Stand eines Spiels mit hochladen. Was von
 Hand hochgeladen wurde, überschreibt der nächste Push aus `main` allerdings
 wieder — also hinterher committen.
 
@@ -176,8 +288,13 @@ Ein einziger Cloudflare Worker (`hub/wrangler.jsonc`, Code in
 | Adresse | Ergebnis |
 |---|---|
 | `jf.veerka.mp/` | Startseite |
-| `jf.veerka.mp/fwdv3/` | das Spiel |
+| `jf.veerka.mp/fwdv3/` | Einsatzbereit |
+| `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen |
 | `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query bleibt erhalten |
+
+Ein Spielpfad ohne abschließenden Schrägstrich wird auf die Fassung mit
+Schrägstrich umgeleitet (`SPIELE` in `hub/src/worker.js`) — sonst landet er in
+der Ersatzseite.
 
 `jf.veerka.mp` hängt an einer **Custom Domain** — den DNS-Eintrag hat
 Cloudflare beim ersten Deploy selbst angelegt. `fwdv3.veerka.mp` hängt an einer
@@ -192,35 +309,42 @@ Autodeploy steht ausführlich in [docs/deploy.md](docs/deploy.md).
 
 ### Direktsprung zum Testen
 
-- `?level=<id>` springt direkt in ein Level
-  (`einheit`, `werkstatt`, `staerke`, `sitzordnung`, `aufgaben`, `befehl`,
-  `uebung`, `loeschangriff`) – umgeht auch die Sternsperre des Boss-Levels,
-  praktisch für den Gruppenabend
-- `?modus=beamer` startet den Beamer-Modus
-- `window.__eb` gibt im Browser Zugriff auf Stage, State, UI und die
-  Fehlerliste
+- `?level=<id>` springt direkt in ein Level. Bei Einsatzbereit: `einheit`,
+  `werkstatt`, `staerke`, `sitzordnung`, `aufgaben`, `befehl`, `uebung`,
+  `loeschangriff` – umgeht auch die Sternsperre des Boss-Levels, praktisch für
+  den Gruppenabend. Bei Brennen & Löschen: `dreieck`, `brandklassen`,
+  `sauerstoff`, `zuendung`, `loeschverfahren`, `loeschmittel`,
+  `feuerloescher`, `ernstfall` – auch hier umgeht der Direktsprung die
+  Sternsperre des Boss-Levels
+- `?modus=beamer` startet den Beamer-Modus – gibt es in beiden Spielen
+- `window.__eb` bzw. `window.__bl` gibt im Browser Zugriff auf Stage, State, UI
+  und die Fehlerliste des jeweiligen Spiels
 
 ### Aufbau
 
 ```
 hub/                 Startseite + Auslieferung von allem (jf.veerka.mp)
-  build.mjs          baut Startseite und Spiel, legt beides in hub/dist/
-  wrangler.jsonc     der eine Worker für beide Adressen
+  build.mjs          baut Startseite und beide Spiele nach hub/dist/
+  wrangler.jsonc     der eine Worker für alle Adressen
   src/themen.js      die Lernseiten – hier kommt ein neues Thema rein
   src/szene.js       Fahrzeuge, Gebäude, Bäume als SVG
   src/welt.js        setzt die Strecke aus den Themen zusammen
   src/main.js        Scrollposition -> Fahrt, Karten, Streckenplan
   src/worker.js      Umleitung der alten Adresse, sonst nur Dateien
-src/
-  data/fwdv3.js      alle Inhalte (Einheiten, Aufgaben, Befehl, Quiz, Lagen)
+gemeinsam/           was beide Spiele teilen – siehe unten
+  bauen.mjs          der Bauvorgang: Three einbetten, alles zu einer Datei
   util.js            Helfer + Levelregister
   state.js           Spielstand, Ränge, Teams
   audio.js           WebAudio-Klänge + Sprachausgabe
+  stage.js           Renderer, Kamera, Bildeinpassung, Bewegungen, Laufwege
   ui.js              Bildschirme, Ziehen & Ablegen, Hotspots, Seitenlayout
-  styles.css         Designsystem
+  stil.css           Designsystem, ganz über Farbvariablen
+src/                 Einsatzbereit (jf.veerka.mp/fwdv3/)
+  spiel.js           Name, Speicherschlüssel, Lichtstimmung
+  farben.css         die Nachtpalette
+  data/fwdv3.js      alle Inhalte (Einheiten, Aufgaben, Befehl, Quiz, Lagen)
   body.html          DOM-Gerüst
   three/
-    stage.js         Renderer, Kamera, Bildeinpassung, Bewegungen, Laufwege
     figures.js       Feuerwehrfiguren
     vehicles.js      KLF und LF inklusive Sitz- und Antreteordnung
     fx.js            Feuer, Wasser, Schläuche, Verteiler, Hydrant
@@ -228,7 +352,45 @@ src/
   levels/            ein Level je Datei, trägt sich selbst in LEVELS ein
   beamer.js          Gruppenabend-Modus
   main.js            Start, Menüs, Levelaufruf
+brennen/             Brennen & Löschen (jf.veerka.mp/brennen-loeschen/)
+  build.mjs          eigener Bauvorgang, ruft gemeinsam/bauen.mjs
+  server.mjs         Vorschau auf Port 8414
+  src/spiel.js       Name, Speicherschlüssel, Lichtstimmung (heller Tag)
+  src/farben.css     die helle Palette
+  src/stil-extra.css nur was es hier gibt: Karten, Sockel, Körbe, Weltmarken
+  src/data/brandlehre.js   alle Inhalte (Dreieck, Brandklassen, Löschmittel …)
+  src/welt/feuer.js  Flamme, Glut, Rauch, Dampf, Löschstrahl
+  src/welt/platz.js  Übungsplatz, Tonnen, Brandgut, Feuerschale, Windfahne
+  src/welt/labor.js  Versuchsgerät: Glasglocke, Gaskasten, Heizplatte, Anzeigesäule
+  src/welt/loeschen.js  Wanne, Schaumdecke, Feuerlöscher, Gasfackel
+  src/bausteine.js   Unterbau (Rückmeldung im Fluss) und Regler
+  src/levels/        ein Level je Datei, trägt sich selbst in LEVELS ein
+  src/beamer.js      Gruppenabend-Modus mit der Feuerwand
+  src/main.js        Start, Menüs, Levelaufruf
 ```
+
+### Die gemeinsame Basis (`gemeinsam/`)
+
+Beide Spiele benutzen dieselbe Bühne, denselben Spielstand, dieselben
+Bildschirme. Was ein Spiel für sich behält, sind Inhalte, Welt, Level — und
+zwei kleine Dateien, über die es die Basis einstellt:
+
+- **`src/spiel.js`** definiert `SPIEL`: Kennung, Name, Speicherschlüssel,
+  Name des Meister-Abzeichens und `licht` (Himmelsverlauf, Nebel, Haupt- und
+  Himmelslicht, Belichtung). `gemeinsam/stage.js` baut daraus die Stimmung —
+  deshalb ist die eine Seite Nacht und die andere heller Tag, ohne dass an der
+  Bühne etwas doppelt vorliegt.
+- **`src/farben.css`** setzt die Farbvariablen. `gemeinsam/stil.css` benutzt
+  ausschließlich Variablen, keine festen Farben; eine neue Palette ist damit
+  eine Datei und kein Umbau.
+
+Die Speicherschlüssel sind verschieden (`fwdv3-einsatzbereit-v1` gegen
+`jf-brennen-loeschen-v1`), obwohl beide auf einer Domain liegen und sich den
+Browserspeicher teilen — jedes Spiel hat seinen eigenen Fortschritt. Der
+gemeinsame Speicher ist der Grund, warum das später auch anders gehen kann.
+
+Wer an `gemeinsam/` etwas ändert, ändert **beide** Spiele. Danach beide
+ansehen, nicht nur eines.
 
 ### Etwas ändern
 
@@ -253,7 +415,7 @@ src/
 - **Boss-Sperre:** `BOSS_STERNE` in `src/main.js`.
 - **Rückweg zur Startseite:** `LERNWERKSTATT` in `src/main.js` – der Knopf
   steht oben links im Levelmenü, wo sonst „Zurück" steht.
-- **Aussprache:** `Audio3.ORDNUNG` und `Audio3.FUGEN` in `src/audio.js`.
+- **Aussprache:** `Audio3.ORDNUNG` und `Audio3.FUGEN` in `gemeinsam/audio.js`.
 - **Memory-Karten:** `MEMORY_PAARE` in `src/data/fwdv3.js`. Jeder Text darf
   nur einmal vorkommen, sonst wird geraten statt gelernt.
 - **Verteiler:** `VERTEILER_ABGANG` in `src/three/fx.js`. Links und rechts
@@ -264,16 +426,72 @@ src/
   anfangen (`schlauchreserveLaenge()`) – die Reserve ist die letzte
   Schlauchlänge, nicht ein Extra obendrauf.
 
+In **Brennen & Löschen**:
+
+- **Brandlehre-Inhalte:** `brennen/src/data/brandlehre.js`. Dort steht alles:
+  die vier `VORAUSSETZUNGEN`, die `ERSCHEINUNGEN`, die `BRANDKLASSEN`, die
+  `LOESCHVERFAHREN` mit ihrem Verweis auf die Voraussetzung, die sie wegnehmen,
+  die `LOESCHMITTEL`, `TEMPERATUREN`, `LOESCHERREGELN`, Ränge und Abzeichen.
+  Änderungen dort ändern, was Kinder lernen – gegen `referenz/brennen-loeschen/`
+  prüfen, nicht raten.
+- **Lichtstimmung:** `SPIEL.licht` in `brennen/src/spiel.js`.
+- **Feuer:** `baueFeuer(opt)` in `brennen/src/welt/feuer.js`. Die Flamme sind
+  vier ineinandergesteckte Kegel; jeder innere ist **höher** als der äußere,
+  sonst verdeckt die deckende Hülle ihn vollständig. `feuerAnteileSetzen(f,
+  flamme, glut)` stellt Flammen- gegen Glutbrand ein – das braucht Level 2.
+- **Brandgut:** `baueBrandgut(art)` in `brennen/src/welt/platz.js`.
+- **Löschgerät:** `brennen/src/welt/loeschen.js` — Wanne mit brennender
+  Flüssigkeit, Schaumdecke (`schaumFuellen`), tragbarer Feuerlöscher, Gasfackel
+  mit Handrad (`fackelAbsperren`). Der Wasserstrahl selbst steht bei der Flamme
+  in `feuer.js`: `baueStrahl({ fein, farbe, weite, hoch })`, `strahlAn(s, 0..1)`.
+- **Rückmeldung, die nichts verdeckt:** `unterbau(...)` in
+  `brennen/src/bausteine.js`. Auf dieser Seite stehen die Antwortknöpfe unten am
+  Bildrand; ein `UI.toast` liegt dann genau auf ihnen, und man muss vier
+  Sekunden warten, bis man weitertippen kann. `unterbau` setzt die Rückmeldung
+  stattdessen in den Fluss darüber und hält ihren Platz frei. Wichtig: dem
+  `motivWache` den Unterbau übergeben, nicht das Antwortfeld darin.
+- **Regler:** `regler(opt)` in `brennen/src/bausteine.js`, innen ein
+  `input type=range` – damit funktionieren Finger, Maus und Pfeiltasten ohne
+  eigenes Zutun. `zonen` färbt die Schiene ein.
+- **Neues Level:** Datei in `brennen/src/levels/` anlegen, `LEVELS.push({...})`,
+  Dateiname bestimmt die Reihenfolge.
+- **Boss-Einsätze:** `EINSAETZE` in `brennen/src/data/brandlehre.js`. Jeder
+  Einsatz nennt Brandklasse, Löschverfahren und Löschmittel; `mittelAuch` und
+  `verfahrenAuch` sind fachlich ebenfalls zulässige Antworten und zählen als
+  richtig.
+- **Feuerwand:** `KATEGORIEN` und `QUIZ` in derselben Datei. Auf der Wand
+  landet, was `kat` und `wert` (100 bis 400) trägt – vier je Kategorie. Fragen
+  ohne `kat` kommen nur in der Blitzrunde vor.
+- **Beamer-Modus:** `brennen/src/beamer.js`, Einstieg über `?modus=beamer`
+  oder den Knopf im Profil.
+
 ### Bildausschnitt
 
 Kameras werden nicht mehr von Hand gesetzt, sondern eingepasst:
-`motivEinpassen(punkte, panel, opt)` und `motivWache(...)` in `src/ui.js`
+`motivEinpassen(punkte, panel, opt)` und `motivWache(...)` in `gemeinsam/ui.js`
 richten die Kamera so aus, dass die übergebenen Weltpunkte vollständig in der
 freien Fläche neben bzw. über dem Bedienfeld liegen – vom Handy bis zum
 Beamer. `opt.hoch` / `opt.weit` bestimmen den Blickwinkel (steil für die
-Vogelperspektive, flach für die Einsatzstelle).
+Vogelperspektive, flach für die Einsatzstelle). `opt.obenNode` schiebt die
+Oberkante der freien Fläche unter ein Element, das über der Bühne liegt
+(Auftragskarte); `opt.panelUnten` erzwingt das Bedienfeld unter der Bühne,
+auch auf breiten Schirmen.
+
+**Die Falle dabei:** eingepasst werden nicht die übergebenen Punkte, sondern
+die acht Ecken des Quaders um sie herum. Ein einzelner hoher Punkt in der Mitte
+– die Flammenspitze über einer flachen Grundfläche – zieht deshalb vier Ecken
+hoch über Stellen, an denen gar nichts steht. Der Quader wird fast doppelt so
+hoch wie das Motiv, und die Kamera fährt entsprechend weit weg. Punkte also
+knapp fassen, notfalls die Spitze weglassen und über `rand` Luft geben.
+
+Wo ohnehin kein Bildstreifen frei bleibt – Auftragskarte oben, Bedienfeld
+unten, Karten dazwischen –, lohnt das Einpassen nicht: dann lieber ein kleiner
+`anteil` ohne Panel-Bindung, und die Bühne ist ehrlich Kulisse hinter den
+Karten.
 
 ## Quellen
+
+**Einsatzbereit:**
 
 - `referenz/FwDV3-2008-volltext.txt` — Volltext der Dienstvorschrift
   (Hessische Landesfeuerwehrschule, Ausgabe 2008)
@@ -283,3 +501,16 @@ Vogelperspektive, flach für die Einsatzstelle).
 
 Alle Zitate im Spiel sind wörtlich aus der FwDV 3 übernommen und als solche
 gekennzeichnet.
+
+**Brennen & Löschen:**
+
+- `referenz/brennen-loeschen/HLFS-Truppmann1-Brennen-und-Loeschen-2012.txt` —
+  Hessische Landesfeuerwehrschule, Truppmannausbildung Teil 1, Kapitel 2.3,
+  Ausgabe 10/2012
+- `referenz/brennen-loeschen/HLFS-Truppfuehrer-F-II-Brennen-und-Loeschen-2010.txt` —
+  dieselbe Schule, Lehrgang Truppführer (F II), Kapitel 2.3, Ausgabe 02/2010
+- `referenz/brennen-loeschen/QUELLEN.md` — was woher stammt und warum diese
+  Quellen. Die HLFS ist die für Harheim zuständige Landesfeuerwehrschule;
+  die Brandklassen folgen DIN EN 2.
+
+Zitate sind mit „Lernunterlage · " gekennzeichnet.

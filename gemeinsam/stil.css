@@ -1,30 +1,24 @@
 /* ============================================================================
-   Einsatzbereit – FwDV 3 Lernspiel
-   Designsprache: dunkle Einsatznacht, Feuerrot + Wasserblau als Leitfarben,
-   grosse griffige Flaechen, alles fingerfreundlich.
+   Gemeinsamer Stil beider Lernseiten.
+
+   Hier steht nur das Geruest: Groessen, Abstaende, Bewegung, Zustaende.
+   Jede Farbe kommt aus einer Variablen, und die Variablen setzt das Spiel in
+   seiner eigenen farben.css – die wird VOR dieser Datei eingebunden.
+   „Einsatzbereit" spielt nachts an der Einsatzstelle, „Brennen & Loeschen"
+   mittags auf dem Uebungsplatz. Dieselbe Datei, zwei Welten.
+
+   Wer hier eine Farbe hart hinschreibt, bricht genau das.
    ========================================================================== */
 
 :root{
-  --bg:#080b14; --bg2:#0d1322; --panel:#141c30; --panel2:#1b2540;
-  --linie:#2a3654; --linie2:#3a4a72;
-  --txt:#eaf0ff; --txt2:#a3b0cf; --txt3:#6f7d9e;
-
-  --rot:#ff4d3d; --rot-d:#c92e20; --glut:#ff8c42;
-  --gelb:#ffd23f; --blau:#35c8ff; --gruen:#3ddc84; --lila:#c98bff;
-
   /* Schrift: Archivo Black fuer Schilder und Zahlen, Outfit fuer alles Uebrige */
   --display:'Archivo Black','Outfit',system-ui,sans-serif;
   --text:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
 
   --r:16px; --r-l:24px; --r-xl:34px;
-  --schatten:0 12px 40px rgba(0,0,0,.55);
   --ease:cubic-bezier(.22,1,.36,1);
   --skala:1;
 }
-/* Bewusst einthemig: Das Spiel spielt nachts an der Einsatzstelle. Ein helles
-   Thema wuerde der 3D-Kulisse widersprechen, deshalb setzen wir Grund und
-   Farben durchgaengig selbst. */
-:root{ color-scheme:dark; }
 
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -50,7 +44,7 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
 #ui{position:fixed; inset:0; z-index:1; display:flex; flex-direction:column; pointer-events:none}
 #ui > *{pointer-events:auto}
 .vignette{position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%,transparent 48%,rgba(4,6,12,.55) 100%)}
+  background:radial-gradient(ellipse at 50% 45%,transparent 48%,var(--vignette) 100%)}
 
 /* ---------- Bildschirme --------------------------------------------------- */
 .screen{
@@ -72,18 +66,18 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.55em;
   padding:.72em 1.5em; border-radius:999px; font-weight:800; font-size:1.02em;
   background:linear-gradient(180deg,color-mix(in srgb,var(--f) 88%,#fff 12%),var(--f));
-  color:#fff; box-shadow:0 6px 0 color-mix(in srgb,var(--f) 55%,#000 45%), 0 12px 26px rgba(0,0,0,.45);
+  color:#fff; box-shadow:0 6px 0 color-mix(in srgb,var(--f) 55%,#000 45%), var(--schatten-knopf);
   transition:transform .13s var(--ease), box-shadow .13s var(--ease), filter .18s;
   text-shadow:0 1px 2px rgba(0,0,0,.28); white-space:nowrap; text-decoration:none;
 }
 .btn:hover{filter:brightness(1.08)}
-.btn:active{transform:translateY(5px); box-shadow:0 1px 0 color-mix(in srgb,var(--f) 55%,#000 45%), 0 6px 14px rgba(0,0,0,.4)}
+.btn:active{transform:translateY(5px); box-shadow:0 1px 0 color-mix(in srgb,var(--f) 55%,#000 45%), var(--schatten-knopf-tief)}
 .btn.gross{padding:.88em 2.1em; font-size:1.24em}
-.btn.blau{--f:var(--blau); color:#04121c}
-.btn.gruen{--f:var(--gruen); color:#05200f}
-.btn.gelb{--f:var(--gelb); color:#241a00}
+.btn.blau{--f:var(--blau); color:var(--auf-blau)}
+.btn.gruen{--f:var(--gruen); color:var(--auf-gruen)}
+.btn.gelb{--f:var(--gelb); color:var(--auf-gelb)}
 .btn.geist{background:transparent; color:var(--txt); box-shadow:inset 0 0 0 2px var(--linie2); text-shadow:none}
-.btn.geist:hover{background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 2px var(--txt3)}
+.btn.geist:hover{background:var(--tint); box-shadow:inset 0 0 0 2px var(--txt3)}
 .btn.geist:active{transform:translateY(2px); box-shadow:inset 0 0 0 2px var(--linie2)}
 .btn[disabled]{opacity:.42; pointer-events:none}
 .btn-reihe{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
@@ -94,42 +88,46 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   border:1px solid var(--linie); border-radius:var(--r-l);
   box-shadow:var(--schatten); padding:clamp(14px,2vw,24px);
 }
-.glas{background:rgba(20,28,48,.72); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.09)}
+.glas{background:var(--glas); backdrop-filter:blur(14px); border:1px solid var(--glas-rand)}
 
 /* ---------- Kopfzeile (HUD) ----------------------------------------------- */
 #hud{
   display:flex; align-items:center; gap:12px; padding:10px 14px;
-  background:rgba(8,11,20,.78); backdrop-filter:blur(12px);
+  background:var(--hud); backdrop-filter:blur(12px);
   border-bottom:1px solid var(--linie); z-index:5; flex-wrap:wrap;
 }
 #hud[hidden]{display:none}
 .hud-zurueck{display:flex; align-items:center; gap:.4em; padding:.42em .95em; border-radius:999px;
-  background:rgba(255,255,255,.07); font-weight:700; font-size:.9em; transition:background .15s}
-.hud-zurueck:hover{background:rgba(255,255,255,.14)}
+  background:var(--tint); font-weight:700; font-size:.9em; transition:background .15s}
+.hud-zurueck:hover{background:var(--tint2)}
 .hud-zurueck .nur-breit{font-style:normal}
 @media (max-width:640px){ .hud-zurueck .nur-breit{display:none} }
 .hud-titel{font-weight:800; font-size:1.02em; letter-spacing:-.01em}
 .hud-spacer{flex:1}
 .rangchip{display:flex; align-items:center; gap:.5em; padding:.34em .85em; border-radius:999px;
-  background:rgba(255,210,63,.13); border:1px solid rgba(255,210,63,.3); font-weight:800; font-size:.86em}
-.xpbar{width:clamp(80px,14vw,180px); height:9px; border-radius:99px; background:rgba(255,255,255,.11); overflow:hidden}
+  background:color-mix(in srgb,var(--gelb) 14%,transparent); border:1px solid color-mix(in srgb,var(--gelb) 34%,transparent);
+  font-weight:800; font-size:.86em}
+.xpbar{width:clamp(80px,14vw,180px); height:9px; border-radius:99px; background:var(--tint2); overflow:hidden}
 .xpbar > i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--gelb),var(--glut)); transition:width .7s var(--ease)}
 
 /* ---------- Startbildschirm ----------------------------------------------- */
 .marke{font-family:var(--display); font-size:clamp(2.6rem,8.5vw,6.2rem); font-weight:400; letter-spacing:-.03em; line-height:.94;
-  background:linear-gradient(175deg,#fff 8%,var(--gelb) 46%,var(--glut) 74%,var(--rot) 98%);
+  background:var(--marke-verlauf);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  filter:drop-shadow(0 8px 34px rgba(255,90,45,.42))}
+  filter:drop-shadow(0 8px 34px var(--marke-schein))}
 .unterzeile{color:var(--txt2); font-size:1.06em; max-width:34ch; margin-inline:auto}
+/* Die Herkunftsmarke ueber einer Ueberschrift: „Feuerwehr-Dienstvorschrift 3"
+   drueben, „Truppmannausbildung" hier. */
 .dienstvorschrift{display:inline-flex; align-items:center; gap:.5em; padding:.34em 1em; border-radius:999px;
-  background:rgba(53,200,255,.12); border:1px solid rgba(53,200,255,.32); color:var(--blau);
+  background:color-mix(in srgb,var(--blau) 13%,transparent); border:1px solid color-mix(in srgb,var(--blau) 34%,transparent);
+  color:var(--blau-txt,var(--blau));
   font-weight:800; font-size:.82em; letter-spacing:.06em; text-transform:uppercase}
 
 .moduswahl{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr)); gap:16px; width:min(760px,100%)}
 .moduskarte{position:relative; text-align:left; padding:22px; border-radius:var(--r-l); cursor:pointer;
   background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--linie);
   transition:transform .2s var(--ease), border-color .2s, box-shadow .2s; overflow:hidden}
-.moduskarte:hover{transform:translateY(-5px); border-color:var(--f,var(--rot)); box-shadow:0 16px 44px rgba(0,0,0,.5)}
+.moduskarte:hover{transform:translateY(-5px); border-color:var(--f,var(--rot)); box-shadow:var(--schatten-hoch)}
 .moduskarte .ic{font-size:2.5em; line-height:1; margin-bottom:.24em; display:block}
 .moduskarte b{display:block; font-size:1.24em; margin-bottom:.28em}
 .moduskarte span{color:var(--txt2); font-size:.94em; line-height:1.45}
@@ -143,17 +141,17 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--linie);
   transition:transform .2s var(--ease), border-color .2s, box-shadow .2s; overflow:hidden; min-height:150px;
   display:flex; flex-direction:column}
-.levelkarte:hover{transform:translateY(-5px) scale(1.015); border-color:var(--f); box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.levelkarte:hover{transform:translateY(-5px) scale(1.015); border-color:var(--f); box-shadow:var(--schatten-hoch)}
 .levelkarte .nr{position:absolute; top:12px; right:15px; font-family:var(--display); font-size:2.7em; font-weight:400;
   color:var(--f); opacity:.17; line-height:1}
 .levelkarte .ic{font-size:2em; line-height:1; margin-bottom:.3em}
 .levelkarte b{font-size:1.08em; display:block; margin-bottom:.24em; padding-right:1.6em}
 .levelkarte small{color:var(--txt2); font-size:.87em; line-height:1.4; flex:1}
-.levelkarte .balken{margin-top:12px; height:6px; border-radius:99px; background:rgba(255,255,255,.09); overflow:hidden}
+.levelkarte .balken{margin-top:12px; height:6px; border-radius:99px; background:var(--tint2); overflow:hidden}
 .levelkarte .balken > i{display:block; height:100%; background:var(--f); border-radius:99px; transition:width .6s var(--ease)}
-.levelkarte.boss{border-color:rgba(255,77,61,.45); background:linear-gradient(180deg,#241426,#1a1030)}
+.levelkarte.boss{border-color:color-mix(in srgb,var(--rot) 48%,transparent); background:var(--boss)}
 .levelkarte.boss::before{content:''; position:absolute; inset:-40% -10% auto; height:120%;
-  background:radial-gradient(circle at 70% 0%,rgba(255,90,45,.3),transparent 62%); pointer-events:none}
+  background:radial-gradient(circle at 70% 0%,color-mix(in srgb,var(--glut) 32%,transparent),transparent 62%); pointer-events:none}
 .levelkarte .sterne{position:absolute; bottom:14px; right:15px; font-size:.9em; letter-spacing:.08em}
 /* verschlossenes Level: sichtbar, aber deutlich zurueckgenommen */
 .levelkarte.zu{filter:grayscale(.55); opacity:.72; cursor:not-allowed}
@@ -171,37 +169,39 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   display:flex; align-items:center; gap:.85em;
 }
 .antwort:hover:not(.aus){transform:translateX(6px); border-color:var(--blau); background:var(--panel2)}
-.antwort .marker{flex:0 0 1.9em; height:1.9em; border-radius:50%; background:rgba(255,255,255,.09);
+.antwort .marker{flex:0 0 1.9em; height:1.9em; border-radius:50%; background:var(--tint2);
   display:grid; place-items:center; font-weight:900; font-size:.86em}
-.antwort.richtig{border-color:var(--gruen); background:rgba(61,220,132,.16); animation:puls .5s var(--ease)}
-.antwort.richtig .marker{background:var(--gruen); color:#04220f}
-.antwort.falsch{border-color:var(--rot); background:rgba(255,77,61,.14)}
-.antwort.falsch .marker{background:var(--rot)}
+.antwort.richtig{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 17%,transparent); animation:puls .5s var(--ease)}
+.antwort.richtig .marker{background:var(--gruen); color:var(--auf-gruen)}
+.antwort.falsch{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 15%,transparent)}
+.antwort.falsch .marker{background:var(--rot); color:#fff}
 .antwort.aus{opacity:.42; pointer-events:none}
 @keyframes puls{0%{transform:scale(1)}45%{transform:scale(1.035)}100%{transform:scale(1)}}
 
 /* ---------- Rueckmeldung -------------------------------------------------- */
 .feedback{
   width:min(720px,100%); padding:1.1em 1.3em; border-radius:var(--r); text-align:left;
-  border-left:5px solid var(--blau); background:rgba(53,200,255,.09); font-size:.98em;
+  border-left:5px solid var(--blau); background:color-mix(in srgb,var(--blau) 10%,transparent); font-size:.98em;
   animation:rein .34s var(--ease) both;
 }
-.feedback.gut{border-color:var(--gruen); background:rgba(61,220,132,.1)}
-.feedback.schlecht{border-color:var(--rot); background:rgba(255,77,61,.1)}
+.feedback.gut{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 11%,transparent)}
+.feedback.schlecht{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 11%,transparent)}
 .feedback b{display:block; margin-bottom:.2em; font-size:1.06em}
 .zitat{
-  margin-top:.7em; padding:.7em .95em; border-radius:12px; background:rgba(0,0,0,.3);
+  margin-top:.7em; padding:.7em .95em; border-radius:12px; background:var(--zitat-bg);
   font-size:.87em; color:var(--txt2); font-style:italic; border-left:3px solid var(--linie2);
 }
-.zitat::before{content:'FwDV 3 · '; font-style:normal; font-weight:800; color:var(--txt3); letter-spacing:.05em}
+/* Woher das Zitat stammt, steht als Variable in farben.css – drueben die
+   FwDV 3, hier die Lernunterlage der Landesfeuerwehrschule. */
+.zitat::before{content:var(--quelle); font-style:normal; font-weight:800; color:var(--txt3); letter-spacing:.05em}
 
 /* ---------- Ziehen & Ablegen ---------------------------------------------- */
 .ziehbar{cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none}
 .ziehbar:active{cursor:grabbing}
 .ziehbar.faehrt{position:fixed; z-index:900; pointer-events:none; transform-origin:center;
-  box-shadow:0 22px 50px rgba(0,0,0,.6); transition:none}
+  box-shadow:var(--schatten-zug); transition:none}
 .ablage{transition:background .16s, border-color .16s, transform .16s var(--ease)}
-.ablage.aktiv{background:rgba(53,200,255,.16); border-color:var(--blau); transform:scale(1.035)}
+.ablage.aktiv{background:color-mix(in srgb,var(--blau) 17%,transparent); border-color:var(--blau); transform:scale(1.035)}
 .ablage.voll{border-style:solid}
 
 /* ---------- Toast / Hinweis ----------------------------------------------- */
@@ -209,19 +209,19 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; width:min(560px,92vw)}
 .toast{
   padding:.72em 1.25em; border-radius:999px; font-weight:800; font-size:.98em;
-  background:rgba(20,28,48,.95); border:1px solid var(--linie2); box-shadow:var(--schatten);
+  background:var(--toast); border:1px solid var(--linie2); box-shadow:var(--schatten);
   animation:toastRein .4s var(--ease) both; display:flex; align-items:center; gap:.6em; text-align:center;
 }
-.toast.gut{border-color:var(--gruen); background:rgba(20,60,38,.95)}
-.toast.schlecht{border-color:var(--rot); background:rgba(66,22,20,.95)}
-.toast.gold{border-color:var(--gelb); background:rgba(58,44,10,.96)}
+.toast.gut{border-color:var(--gruen); background:var(--toast-gut)}
+.toast.schlecht{border-color:var(--rot); background:var(--toast-schlecht)}
+.toast.gold{border-color:var(--gelb); background:var(--toast-gold)}
 @keyframes toastRein{from{opacity:0; transform:translateY(-16px) scale(.94)} to{opacity:1; transform:none}}
 .toast.weg{animation:toastRaus .32s ease-in both}
 @keyframes toastRaus{to{opacity:0; transform:translateY(-12px) scale(.96)}}
 
 /* ---------- Fortschrittsleiste im Level ----------------------------------- */
 .schritte{display:flex; gap:6px; align-items:center; justify-content:center}
-.schritte i{width:26px; height:6px; border-radius:99px; background:rgba(255,255,255,.13); transition:background .3s, width .3s}
+.schritte i{width:26px; height:6px; border-radius:99px; background:var(--tint2); transition:background .3s, width .3s}
 .schritte i.jetzt{background:var(--gelb); width:38px}
 .schritte i.fertig{background:var(--gruen)}
 
@@ -229,21 +229,21 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
 .uhr{font-family:var(--display); font-variant-numeric:tabular-nums; font-size:1.3em; letter-spacing:.01em}
 .uhr.eilig{color:var(--rot); animation:tick .5s infinite}
 @keyframes tick{50%{opacity:.55}}
-.zeitbalken{width:min(560px,100%); height:10px; border-radius:99px; background:rgba(255,255,255,.1); overflow:hidden}
+.zeitbalken{width:min(560px,100%); height:10px; border-radius:99px; background:var(--tint2); overflow:hidden}
 .zeitbalken > i{display:block; height:100%; background:linear-gradient(90deg,var(--gruen),var(--gelb),var(--rot));
   border-radius:99px; transition:width .12s linear}
 
 /* ---------- Ergebnisbildschirm -------------------------------------------- */
 .ergebnis{display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center}
 .ergebnis .zeile{text-align:left; line-height:1.35}
-/* Auswertung steht oft vor heller 3D-Kulisse – kraeftigerer Grund */
-.panel.glas.ergebnis{background:rgba(14,20,36,.93); border-color:rgba(255,255,255,.14)}
+/* Auswertung steht oft vor unruhiger 3D-Kulisse – kraeftigerer Grund */
+.panel.glas.ergebnis{background:var(--ergebnis); border-color:var(--glas-rand2)}
 .note{font-family:var(--display); font-size:clamp(3.4rem,11vw,7rem); font-weight:400; line-height:.94; letter-spacing:-.035em;
-  background:linear-gradient(180deg,#fff,var(--gelb) 60%,var(--glut));
+  background:var(--note-verlauf);
   -webkit-background-clip:text; background-clip:text; color:transparent}
 .abzeichen{display:flex; align-items:center; gap:.8em; padding:.85em 1.4em; border-radius:var(--r);
-  background:linear-gradient(135deg,rgba(255,210,63,.2),rgba(255,140,66,.12));
-  border:1px solid rgba(255,210,63,.4); animation:rein .5s var(--ease) both}
+  background:linear-gradient(135deg,color-mix(in srgb,var(--gelb) 22%,transparent),color-mix(in srgb,var(--glut) 13%,transparent));
+  border:1px solid color-mix(in srgb,var(--gelb) 42%,transparent); animation:rein .5s var(--ease) both}
 .abzeichen .ic{font-size:2.1em; line-height:1}
 .abzeichen b{display:block}
 .abzeichen small{color:var(--txt2)}
@@ -251,13 +251,14 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
 /* ---------- Tabellen / Listen --------------------------------------------- */
 .liste{display:flex; flex-direction:column; gap:8px; width:min(720px,100%); text-align:left}
 .zeile{display:flex; align-items:center; gap:.8em; padding:.7em 1em; border-radius:12px;
-  background:rgba(255,255,255,.045); border:1px solid var(--linie)}
+  background:var(--tint); border:1px solid var(--linie)}
 .zeile .pill{padding:.16em .7em; border-radius:99px; font-size:.78em; font-weight:800; white-space:nowrap}
 
 /* Abdunkler: legt sich zwischen 3D-Kulisse und Text. Am Beamer sitzt jemand
-   zehn Meter weg – da muss der Kontrast stimmen, die Kulisse darf stoeren. */
+   zehn Meter weg – da muss der Kontrast stimmen, die Kulisse darf stoeren.
+   Bei heller Kulisse deckt derselbe Knoten hell ab statt dunkel. */
 .dunkler{position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,9,17,.82),rgba(6,9,17,.66) 45%,rgba(6,9,17,.86))}
+  background:var(--dunkler)}
 
 /* ---------- Beamer-Modus -------------------------------------------------- */
 .teamleiste{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; width:100%}
@@ -269,7 +270,7 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
 
 /* ---------- Sonstiges ----------------------------------------------------- */
 .chip{display:inline-flex; align-items:center; gap:.4em; padding:.3em .8em; border-radius:99px;
-  background:rgba(255,255,255,.08); font-size:.84em; font-weight:700}
+  background:var(--tint2); font-size:.84em; font-weight:700}
 .hinweis{color:var(--txt2); font-size:.92em; max-width:46ch; margin-inline:auto}
 .klein{font-size:.86em; color:var(--txt3)}
 .mono{font-variant-numeric:tabular-nums; font-feature-settings:'tnum'}
@@ -290,10 +291,16 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
   letter-spacing:-.02em; line-height:1}
 
 /* Heimfahrt zur Lernwerkstatt: das Bild zieht sich auf den Grundton zu, in dem
-   die Startseite ihre Einfahrt beginnt. */
+   die Startseite ihre Einfahrt beginnt.
+
+   Das ist nicht zwingend die eigene Hintergrundfarbe. Die Startseite fragt
+   nicht, woher jemand kommt – ihre Einfahrt beginnt immer im selben Nachtton.
+   Ein helles Spiel muss deshalb auf diesen Ton zufahren und nicht auf seinen
+   eigenen, sonst blitzt beim Ankommen die halbe Seite auf. Welcher Ton das
+   ist, setzt jedes Spiel in seiner farben.css als `--heimfarbe`. */
 .heimfahrt{
   position:fixed; inset:0; z-index:990; pointer-events:none;
-  background:var(--bg); opacity:0; transition:opacity .46s ease-in;
+  background:var(--heimfarbe,var(--bg)); opacity:0; transition:opacity .46s ease-in;
 }
 .heimfahrt.an{opacity:1}
 @media (prefers-reduced-motion:reduce){ .heimfahrt{transition:none} }

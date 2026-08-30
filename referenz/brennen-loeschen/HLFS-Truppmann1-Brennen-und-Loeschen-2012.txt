@@ -1,0 +1,760 @@
+Veranstaltung:        Truppmannausbildung Teil 1
+
+Ausbildungseinheit:   Brennen und Löschen
+
+Ausgabe:              10/2012
+
+Zuständig:            Abteilung 3
+
+Literaturhinweis:     Brandlehre, Rempe/Rodewald
+                      Feuerlöschmittel, Alfons Rempe
+                      Verbrennen und Löschen, Rotes Heft Nr. 1
+                      Chemie, Grundwissen für den Feuerwehrmann,
+                      Rotes Heft Nr. 59
+Brennen und Löschen
+
+Inhalt
+
+1         Merkmale und Voraussetzungen des Brennens ............................... 3
+
+2         Brennbarer Stoff ................................................................................. 4
+2.1       Brandklassen nach EN 2 ........................................................................................... 4
+2.2       Verbrennungs- und Zersetzungsprodukte ................................................................. 4
+
+3         Sauerstoff ............................................................................................ 5
+3.1       Zusammensetzung des Gasgemisches „Luft“ ........................................................... 5
+3.2       Reduzierung der Sauerstoffzufuhr............................................................................. 6
+3.3       Erhöhung der Sauerstoffzufuhr ................................................................................. 6
+3.3.1     Entzündbarkeit .......................................................................................................... 7
+3.3.2     Brennbarkeit .............................................................................................................. 7
+3.3.3     Abbrandrate / Verbrennungsgeschwindigkeit ............................................................ 7
+3.3.4     Brandtemperatur ....................................................................................................... 7
+
+4         Mengenverhältnis ............................................................................... 8
+4.1       Verhältnis Masse zu Oberfläche................................................................................ 8
+4.2       Flammpunkt und Brennpunkt .................................................................................... 9
+4.3       Explosionsbereich ................................................................................................... 10
+
+5         Zündenergie ...................................................................................... 11
+
+6         Löschmittel ....................................................................................... 13
+6.1       Löschregeln ............................................................................................................. 13
+6.2       Löschmittel Wasser ................................................................................................. 13
+6.3       Löschmittel Schaum ................................................................................................ 14
+6.4       Löschmittel Pulver ................................................................................................... 15
+6.5       Löschmittel Kohlendioxid ......................................................................................... 16
+6.6       Fettbrand-Löschmittel.............................................................................................. 16
+6.7       Löschmittel und Brandklassen ................................................................................ 17
+6.8       Anwendung von Feuerlöschern ............................................................................... 17
+
+7         Quellenverzeichnis ........................................................................... 19
+
+
+
+
+                                 Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                                                                   2
+                                                     Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+1 Merkmale und Voraussetzungen des Brennens
+
+
+
+
+Abb. 1: Merkmale und Voraussetzungen des Brennens
+
+
+Ergänzen Sie die Grafik mit den erläuterten Begriffen.
+
+Je nach Aggregatzustand und Zusammensetzung verbrennen Stoffe mit unterschiedlichen
+sichtbaren Erscheinungen.
+
+Die Glut bezeichnet den Energiezustand eines festen oder flüssigen Stoffes, d. h die von
+ihm ausgehende Wärmestrahlung. Glut alleine entsteht bei festen, nicht weiter
+zersetzlichen brennbaren Stoffen. Beispiele hierfür sind künstlich entgaste Stoffe wie
+Holzkohle oder Koks, aber auch Metalle wie Eisen, Aluminium oder Magnesium.
+
+Reine Flammenbrände stellen die Brände brennbarer Gase und Flüssigkeiten dar. Bei
+brennbaren Flüssigkeiten brennt nicht die Flüssigkeit selbst, sondern es brennen die
+Dämpfe oberhalb der Flüssigkeit.
+
+Feste und zersetzliche brennbare Stoffe verbrennen mit Flamme und Glut. Hierbei
+entsteht die Glut wie bereits oben beschrieben, die Flamme entsteht durch die bei der
+thermischen Zersetzung freiwerdenden Gase und Dämpfe.
+Ein gutes Beispiel hierfür stellt das Holz dar, das zu einem großen Teil aus Kohlenstoff
+besteht, aber auch Bestandteile hat, die beim Erwärmen dampf- oder gasförmig werden
+und mit Flamme verbrennen.
+
+Um eine Verbrennung zu ermöglichen, müssen brennbarer Stoff und Sauerstoff im
+richtigen Mengenverhältnis vorhanden sein, sie werden als stoffliche Voraussetzungen
+bezeichnet. Die Zündenergie, als energetische Voraussetzung, muss ebenfalls zur
+Verfügung stehen. Diese Voraussetzungen zum Starten und zur Aufrechterhaltung einer
+Verbrennung werden im Folgenden weiter behandelt.
+
+
+
+
+                          Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                       3
+                                              Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+2 Brennbarer Stoff
+2.1    Brandklassen nach EN 2
+
+Die Brandklasseneinteilung ist eine verhältnismäßig grobe Klassifizierung von Stoffen, die
+im Wesentlichen das gleiche Brandverhalten zeigen. Sie dient dazu, bestimmten Bränden
+geeignete Löschmittel zuordnen zu können.
+
+  Brandklasse                    Brände von ...                      Stoffbeispiele             Erscheinung
+
+
+                                                                 Holz, Kohle, Papier,          Flamme und/oder
+                                 festen Stoffen
+                                                                    Kunststoffe*                    Glut
+
+                                                                    Benzin, Alkohol,
+                    flüssigen und flüssig werdenden
+                                                                   Paraffin, Bitumen,              Flamme
+                                Stoffen
+                                                                     Kunststoffe*
+
+                                                                   Erdgas, Acetylen,
+                           gasförmigen Stoffen                                                     Flamme
+                                                                    Methan, Propan
+
+
+                                                                    Magnesium,
+                                   Metallen                                                         Glut
+                                                                 Aluminium, Natrium
+
+
+                         Speiseölen und –fetten                          Palmin®                   Flamme
+
+Tab. 1: Brandklassen nach EN 2
+
+* Es gibt einige Arten von Kunststoffen, die aufgrund ihres Brandverhaltens und des zu
+bevorzugenden Löschmittels eher in die Brandklasse B einzuordnen sind (z.B. die
+Verpackungskunststoffe Polyethylen PE oder Polypropylen PP).
+
+
+2.2    Verbrennungs- und Zersetzungsprodukte
+
+Je nach Zusammensetzung der brennenden Stoffe und der Brandphase entstehen
+verschiedene Verbrennungs- und Zersetzungsprodukte.
+
+       Wasserstoff
+          o Wasser
+
+       Alkohol
+           o Kohlendioxid, Wasser
+
+       Holz
+           o Kohlendioxid, Wasser, Kohlenmonoxid,
+             Methanol, Formaldehyd, Ruß, Teer,
+             Essigsäure, aromatische Kohlenwasserstoffe, …
+
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                                          4
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+       Kunststoffe
+          o Kohlendioxid, Kohlenmonoxid, Wasser, Ammoniak,
+             Stickoxide, Blausäure, Salzsäure, Schwefeldioxid, …
+
+
+
+Da diese Atemgifte bei jedem Löscheinsatz
+vorkommen, ist das Vorgehen ab der
+Rauchgrenze nur unter Atemschutz möglich.
+
+
+
+
+3 Sauerstoff
+3.1    Zusammensetzung des Gasgemisches „Luft“
+
+Der zur Verbrennung notwendige Sauerstoff ist zu ca. 21 Vol.-% in der Umgebungsluft
+vorhanden. Neben diesem elementaren Sauerstoff gibt es eine ganze Reihe von
+Verbindungen (z. B. Peroxide), die sehr viel Sauerstoff enthalten, der bei der Erwärmung
+abgespalten wird.
+
+
+
+
+Abb. 2: Zusammensetzung des Gasgemisches „Luft“
+
+
+
+
+                          Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                       5
+                                              Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+3.2       Reduzierung der Sauerstoffzufuhr
+
+Die meisten Brände erlöschen bei einer Sauerstoffkonzentration von 15 Vol.-% bis
+17 Vol.- %. Die Sauerstoffkonzentration, ab der ein Brand erlischt, ist abhängig vom
+jeweiligen Brennstoff und wird Mindestsauerstoffkonzentration genannt.
+
+
+
+
+Abb. 3: Reduzierung der Sauerstoffzufuhr
+
+
+
+
+3.3       Erhöhung der Sauerstoffzufuhr
+
+Folgende Brandkenngrößen werden durch eine zunehmende Sauerstoffkonzentration
+erhöht bzw. gesteigert:
+
+          Entzündbarkeit
+          Brennbarkeit
+          Abbrandrate / Verbrennungsgeschwindigkeit
+          Brandtemperatur
+
+
+
+
+                            Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                         6
+                                                Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+3.3.1 Entzündbarkeit
+Der Begriff Entzündbarkeit bezieht sich auf die Einleitung des Brennens, also auf den
+Vorgang der Entzündung.
+Ein brennbarer Stoff ist umso leichter entzündbar, je weniger Energie zum Zünden
+erforderlich ist.
+Durch eine erhöhte Sauerstoffkonzentration wird die Entzündbarkeit bis hin zur
+Selbstentzündung gesteigert. Insbesondere Kohlenwasserstoffe neigen in Gegenwart von
+reinem Sauerstoff zur Selbstentzündung. Armaturen von Sauerstoffflaschen dürfen aus
+diesem Grund auf keinen Fall mit Fetten oder Ölen in Kontakt kommen.
+
+3.3.2 Brennbarkeit
+Der Begriff der Brennbarkeit beschreibt die Befähigung zur selbstständigen
+Aufrechterhaltung der stabilen Verbrennung nach der Entfernung der Zündquelle.
+Neben anderen Kriterien wird die Brennbarkeit im baulichen Brandschutz zur Einteilung in
+die Baustoffklassen verwendet.
+Durch eine erhöhte Sauerstoffkonzentration wird die Brennbarkeit gesteigert und unter
+normalen Bedingungen nicht brennbare Stoffe werden brennbar (z. B. Eisen-, Stahl-,
+Metallteile).
+
+3.3.3 Abbrandrate / Verbrennungsgeschwindigkeit
+Die Abbrandrate beschreibt den Masseverlust eines brennenden Stoffes in einer
+bestimmten Zeit.
+Neben dem Sauerstoffangebot ist die Abbrandrate von den Strömungsverhältnissen und
+der Umgebungstemperatur abhängig.
+Zur Bestimmung der Abbrandrate wird die Verbrennungsgeschwindigkeit
+(Abbrandgeschwindigkeit) verwendet.
+Die Abhängigkeit der Abbrandrate bzw. der Verbrennungsgeschwindigkeit von der
+Sauerstoffkonzentration wird deutlich, wenn man einen Holzspan in leicht erhöhter
+Sauerstoffkonzentration brennen lässt. Der Span brennt mit großer, heller, rauschender
+Flamme in sehr viel kürzerer Zeit ab.
+
+3.3.4 Brandtemperatur
+Die bei einem Brand auftretende Temperatur wird durch eine Erhöhung der
+Sauerstoffkonzentration ebenfalls erhöht, was z. B. technisch bei der Acetylenverbrennung
+mit reinem Sauerstoff beim autogenen Schweißen ausgenutzt wird. Die Brandtemperatur
+ist abhängig von der Verbrennungswärme (Heizwert) und wie schnell diese freigesetzt
+wird (s. Verbrennungsgeschwindigkeit und Abbrandrate).
+Beispiele für Brandtemperaturen:
+
+Schwelbrände:      200°C - 300°C
+Großbrände:        800°C - 1000°C
+Metallbrände:      über 2500°C
+
+
+
+Für alle Brandkenngrößen gilt:
+Die Verbrennung ist bei fein verteilten brennbaren Stoffen intensiver als bei massiv
+vorliegenden Stoffen, da eine bessere Mischung von Sauerstoff und brennbarem Stoff
+vorliegt.
+
+
+
+
+                     Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                     7
+                                         Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+4 Mengenverhältnis
+4.1     Verhältnis Masse zu Oberfläche
+
+Eine Verbrennung kann nur innerhalb bestimmter Mischungsverhältnisse der beteiligten
+Stoffe stattfinden.
+
+       Bei festen brennbaren Stoffen bestimmt die Größe der Oberfläche des
+        brennbaren Stoffes, die mit Luftsauerstoff in Kontakt kommen kann, das
+        Mischungsverhältnis und damit Entzündbarkeit und Verbrennungsgeschwindigkeit
+        (Kontaktverhältnis). Diese Oberfläche ist umso größer, je größer der
+        Zerteilungsgrad des Materials ist.
+
+       Feinstverteilte, feste brennbare Stoffe (z. B. Stäube) sind bezüglich Entzündbarkeit
+        und Verbrennungsgeschwindigkeit vergleichbar mit dampfbildenden und
+        gasförmigen Stoffen.
+
+       An folgenden Einsatzstellen ist mit brennbaren Stäuben zu rechnen:
+
+            o   Landwirtschaftlich genutzte Gebäude
+            o   Schreinereien
+            o   Metallverarbeitende Betriebe
+            o   Mühlen
+            o   Kohlenkeller
+            o   Dachböden
+            o   Bäckereien
+
+
+
+
+Abb. 4, Abb. 5 und Abb. 6: Verbrennung von Lykopodium (Bärlappsporen)
+
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                        8
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+4.2    Flammpunkt und Brennpunkt
+
+Die Entzündbarkeit von flüssigen brennbaren Stoffen ist abhängig von der
+Flüssigkeitstemperatur, bei der sich (unter festgelegten Bedingungen) Dämpfe in solchen
+Mengen entwickeln, dass über dem Flüssigkeitsspiegel ein durch Fremdzündung
+entzündbares Dampf-Luft-Gemisch entsteht. Diese Temperatur der Flüssigkeit wird als
+Flammpunkt bezeichnet.
+Anhand des Flammpunktes kann die Feuergefährlichkeit einer brennbaren Flüssigkeit
+ermittelt werden. Am gefährlichsten sind solche brennbaren Flüssigkeiten, die schon bei
+normaler Umgebungstemperatur ihren Flammpunkt überschritten haben, also genügend
+brennbare Dämpfe zur Entzündung liefern, wie z. B. Benzin mit einem Flammpunkt von
+unter - 20°C. Ungefährlicher sind solche Flüssigkeiten, die erst auf ihren Flammpunkt
+erwärmt werden müssen, um genügend Mengen an brennbaren Dämpfen für eine
+Verbrennung zu liefern, wie z. B. Diesel mit einem Flammpunkt von mehr als 55°C.
+
+Der Brennpunkt bezeichnet die niedrigste Temperatur einer brennbaren Flüssigkeit, bei
+der sich Dämpfe in solchen Mengen entwickeln, dass ein ständiges Brennen unterhalten
+bleibt.
+
+
+
+
+   Am Flammpunkt kommt es zur                            Die Flammen verlöschen wieder, weil nicht
+     Entzündung der Dämpfe.                            ausreichend brennbarer Stoff nachgeliefert wird.
+
+Abb. 7: Erläuterung: Flammpunkt
+
+
+
+
+      Am Brennpunkt kommt es zur                             Die Flammen bleiben bestehen, weil
+        Entzündung der Dämpfe.                         ausreichend brennbarer Stoff nachgeliefert wird.
+
+Abb. 8: Erläuterung: Brennpunkt
+
+
+
+
+                            Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                                   9
+                                                Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+4.3   Explosionsbereich
+
+Bei dampfbildenden, bei gasförmigen und bei staubförmigen brennbaren Stoffen bestimmt
+deren Konzentration in der Luft das Brandverhalten (Mischungsverhältnis).
+Es gibt für die verschiedenen brennbaren Dämpfe, Gase, Nebel und/oder Stäube einen
+zündfähigen Mischungsbereich, der jeweils zwischen einer stoffspezifischen unteren und
+oberen Grenze liegt. Wird das so genannte optimale Mischungsverhältnis erreicht, kann
+sich die Verbrennungsgeschwindigkeit bis zur Explosion steigern.
+
+Dieser Bereich, innerhalb dessen die Zündung und Verbrennung möglich ist, nennt man
+Explosionsbereich. Die Grenzen zwischen der unteren bzw. oberen Konzentration des
+brennbaren Stoffes, bei denen es gerade nicht mehr zur Verbrennung kommt, nennt man
+untere bzw. obere Explosionsgrenze:
+
+
+
+
+Abb. 9: Explosionsgrenzen am Beispiel von Methan
+
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                        10
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+5 Zündenergie
+Auch wenn alle stofflichen Voraussetzungen der Verbrennung erfüllt sind, kommt es in der
+überwiegenden Zahl der Fälle noch nicht zur offenen Verbrennung. Hierzu bedarf es noch
+eines energetischen Anstoßes, der das zündfähige System in einen erforderlichen
+Mindestwärmezustand versetzt.
+
+Zunächst muss durch eine Zündquelle der zündfähigen Mischung Energie zugeführt
+werden.
+
+Wird die Zündenergie zur Einleitung der Verbrennung von außen zugeführt, so spricht
+man von einer Fremdzündung.
+
+Die Zündenergie, die zur Einleitung der Verbrennung mindestens zugeführt werden muss,
+bezeichnet man als Mindestentzündungsenergie. Der brennbare Stoff erreicht dann
+einen Wärmezustand, der Zündtemperatur genannt wird. Die Zufuhr der Zündenergie
+wird bei den meisten brennbaren Stoffen zuvor benötigt, um den Brennstoff thermisch
+aufzubereiten, d.h. der brennbare Stoff muss ggf. aufgewärmt, zersetzt, verschwelt,
+verflüssigt oder verdampft werden.
+
+Die erforderliche Mindestentzündungsenergie wie auch die Zündtemperatur sind
+stoffspezifische Größen des jeweiligen Brennstoffs und abhängig von den schon
+erläuterten äußeren Faktoren (Verhältnis Masse zu Oberfläche, Sauerstoffkonzentration
+etc.).
+Nach Überschreiten der Zündtemperatur wird die Verbrennung eingeleitet. Eine
+selbstständig fortschreitende Verbrennung erfolgt aber erst, wenn die so genannte
+Mindestverbrennungstemperatur erreicht wird, die oft wesentlich höher als die
+Zündtemperatur ist.
+
+
+
+           ←      Normale Verbrennungstemperatur
+
+           ←      Mindestverbrennungstemperatur
+
+           ←      Zündtemperatur
+
+
+
+
+Abb. 10: Verbrennungstemperaturen
+
+
+
+
+                          Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                       11
+                                              Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+Mögliche Zündquellen für eine Fremdzündung können u.a. sein:
+
+     Offenes Feuer, Funkenflug und Flugfeuer
+     Elektrizität (z.B. Funken, Kurzschluss)
+     Mechanisch erzeugte Funken
+     Erwärmte Oberflächen
+     Chemische Reaktionen
+     Statische Aufladungen
+     Gebündeltes Sonnenlicht
+
+Wird die Zündenergie nicht von außen zugeführt, sondern durch eigene Reaktionswärme
+des brennbaren Stoffes in entsprechenden Mengen unter Wärmestau erzeugt, kann es zur
+Selbstentzündung kommen.
+
+Die Selbstentzündung von Heu z.B. wird durch Bakterientätigkeiten ausgelöst. Bis ca.
+70oC wird die Wärmeerzeugung durch Bakterien hervorgerufen. Über dieser Temperatur
+sterben die Bakterien ab, jedoch reicht die Temperatur nun aus, um das Heu selbst zur
+Oxidation zu bringen und somit den Wärmestau bis hin zur Entzündung fortzuführen.
+
+
+
+
+Abb. 11: Schematische Darstellung der Selbstentzündung
+
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                        12
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+6 Löschmittel
+Löschmittel sind feste, flüssige oder gasförmige Stoffe, die zum Löschen brennender
+Stoffe geeignet sind. Beim Löschen wird mit Hilfe des Löschmittels die Zündenergie, der
+brennbare Stoff, Sauerstoff oder das richtige Mengenverhältnis so beeinflusst, dass die
+Verbrennung unterbunden wird.
+
+Vorwiegend verwendete Löschmittel
+
+          Wasser
+          Löschschaum
+          Löschpulver
+          Kohlendioxid
+
+
+6.1       Löschregeln
+
+Glutbrände:
+
+              Glutbrände werden mit Wasser bekämpft. Das Löschverfahren nennt sich
+              Abkühlen. Hierbei wird dem Brand mit Hilfe des Wassers die Energie entzogen.
+
+Flammenbrände:
+
+              Flammenbrände können mit Schaum, Pulver oder Kohlendioxid bekämpft
+              werden. Dieses Löschverfahren nennt sich Ersticken. Hierbei wird durch
+              Einsatz des Löschmittels das Mengenverhältnis zwischen Brennstoff und
+              Sauerstoff gestört.
+
+
+6.2       Löschmittel Wasser
+
+Löschwirkung
+      Abkühlende Wirkung durch das hohe Wärmeaufnahmevermögen bei
+        Temperaturerhöhung und Verdampfung des Wassers.
+
+
+Anwendung
+      Vollstrahl
+       o gebündelte Wasserabgabe
+
+
+
+
+                                                                           Abb. 12: Vollstrahl
+
+
+
+
+            Sprühstrahl
+             o fein verteilte flächendeckende
+                Wasserabgabe
+
+
+                                                                           Abb. 13: Sprühstrahl
+                          Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                           13
+                                              Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+6.3    Löschmittel Schaum
+
+Bestandteile
+
+       Der von der Feuerwehr erzeugte klassische Löschschaum besteht aus den
+        Komponenten Wasser, welches über die Feuerlöschkreiselpumpe zur Verfügung
+        gestellt wird, Schaummittel, das dem Wasser im Zumischer zugegeben wird und
+        Luft, die durch das Schaumstrahlrohr hinzu kommt.
+
+
+
+
+Abb. 14: Aufbau eines Schaumangriffs
+
+
+Löschwirkung
+
+       Hauptlöschwirkung
+          o Ersticken durch Trennen des brennbaren Stoffes vom Sauerstoff
+
+       Nebenlöschwirkung
+          o abkühlende Wirkung bei Schäumen mit hohem Wassergehalt
+
+
+Wichtige Faktoren bei der Schaumerzeugung sind die Zumischrate (ZR) und die
+Verschäumungszahl (VZ).
+
+Die Zumischrate, die den prozentualen Anteil des Schaummittels im Wasser-
+Schaummittelgemisch (auch Schaummittellösung genannt) angibt, beträgt in der Regel
+3%. Bei besonderen Anwendungen oder bei speziellen Schaummitteln geben die
+Schaummittelhersteller auch andere Zumischraten an, die dann im jeweiligen Fall durch
+die Führungskraft vorgegeben werden müssen. Wird der Einsatzkraft, die den Zumischer
+bedient, keine andere Zumischrate genannt, so ist der Zumischer auf 3% einzustellen.
+Diese Zumischung ist für die weit verbreiteten Mehrbereichsschaummittel in den meisten
+Anwendungsfällen zutreffend.
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                        14
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+Die Schaumarten Schwer-, Mittel- und Leichtschaum werden anhand der
+Verschäumungszahl eingeteilt. Die Verschäumungszahl gibt an, wie viel Liter Schaum
+aus einem Liter Schaummittellösung hergestellt werden können. Unterschieden wird je
+nach Luftgehalt des fertigen Schaums. Je höher die Verschäumungszahl, desto mehr Luft
+ist im Schaum enthalten.
+
+       Schwerschaum
+        o VZ bis 20
+
+       Mittelschaum
+        o VZ 20 bis 200
+
+       Leichtschaum
+        o VZ über 200
+
+
+
+
+Abb. 15: Erläuterung: Verschäumungszahl
+
+
+
+
+6.4    Löschmittel Pulver
+
+Löschwirkungen
+
+       direkter Eingriff der Pulverteilchen in die Verbrennungsreaktion
+       Ersticken durch Verändern des Mengenverhältnisses von Brennstoff und Sauerstoff
+
+Anwendung
+
+       Das Löschmittel wird durch ein
+        Treibmittel (unter Druck gespeichertes
+        Gas) gewöhnlich aus dem Mundstück
+        eines Feuerlöschers in Form einer
+        Pulverwolke ausgestoßen.
+
+
+                                                                 Abb. 16: Einsatz eines Pulverlöschers
+
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                                  15
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+6.5    Löschmittel Kohlendioxid
+
+Löschwirkung
+
+       Ersticken durch Reduzieren des Sauerstoffanteils der Umgebungsluft unter die für
+        die Verbrennung notwendige Konzentration.
+
+Anwendung
+
+       Das Kohlendioxid wird durch verschiedene Mundstücksformen der Feuerlöscher
+        meist als Aerosol (Nebel) oder in Schneeform angewendet.
+
+
+
+
+          Abb. 17 und Abb. 18: Einsatz eines Kohlendioxidlöschers
+
+
+
+
+6.6    Fettbrand-Löschmittel
+
+Löschwirkungen
+
+       Ersticken durch Trennen der Flüssigkeitsoberfläche vom Sauerstoff, hervorgerufen
+        durch die Verseifung des Löschmittels.
+
+       Abkühlen
+
+Anwendung
+
+       Das zumeist flüssige Löschmittel wird über die Löschpistole eines Feuerlöschers
+        fein verteilt auf das brennende Speisefett bzw. -öl gesprüht.
+
+
+
+
+          Abb. 19 und Abb. 20: Einsatz eines Fettbrandlöschers
+
+
+
+
+                            Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                         16
+                                                Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+6.7   Löschmittel und Brandklassen
+
+Ordnen Sie den Brandklassen die geeigneten Löschmittel zu:
+
+
+
+
+Tab. 2: Zuordnung Löschmittel und Brandklassen
+
+
+
+
+6.8   Anwendung von Feuerlöschern
+
+Da die Löschmittel der tragbaren Feuerlöscher und somit auch die Löschzeit begrenzt ist,
+muss das Löschmittel zielgerichtet eingesetzt werden. Um dieses zu erreichen gibt es
+Grundsätze, deren Beachtung gerade bei der Anwendung von Pulverlöschern zu einem
+schlagartigen Löscherfolg führen.
+
+Der Angriff des Feuers mit dem Wind hält zum einen die entstehenden Atemgifte von der
+löschenden Person fern, zum anderen hilft der Wind, die Löschpulverwolke über das
+Brandgut zu verteilen. Eine großvolumige Verteilung des Löschpulvers gerade bei
+Bränden der Brandklasse B ist wichtig, damit die Flammen komplett von der
+Löschpulverwolke eingeschlossen werden und das Löschpulver seine Löschwirkung
+optimal umsetzen kann.
+
+Feststoffbrände werden am effektivsten mit kurzen Löschmittelstößen gelöscht. Brände
+von Gasen oder Flüssigkeiten müssen ohne Unterbrechung des Löschstrahls gelöscht
+werden, da die Flammen sonst auch nicht komplett von der Löschpulverwolke
+eingeschlossen werden können.
+
+Liegen Tropf- oder Fließbrände vor, so werden diese von oben nach unten gelöscht. So
+wird verhindert, dass nachfließende brennende Flüssigkeit eine am Boden bereits
+abgelöschte Fläche immer wieder neu entzündet.
+
+
+
+                           Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                        17
+                                               Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+Für einen schlagartigen Löscherfolg ist auch eine massive Aufbringung des Löschmittels
+vorteilhaft. Mehrere Feuerlöscher parallel eingesetzt bringen mehr Nutzen als
+nacheinander eingesetzt.
+
+Beim Einsatz von Feuerlöschern ist generell die Gefahr von Rückzündungen zu beachten,
+daher ist die Brandstelle nach dem Löschen eingehend zu kontrollieren und nach
+Möglichkeit eine Löschmittelreserve zurück zu halten. 
+
+
+
+
+Abb. 21: Taktisch richtiges Vorgehen beim Einsatz von Feuerlöschern
+
+
+
+
+                            Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                         18
+                                                Kapitel 2.3 - Lernunterlage
+Brennen und Löschen
+
+7 Quellenverzeichnis
+1. Hessische Landesfeuerwehrschule
+   Abb. 1 bis 13, Abb. 16 bis 18
+   Tab. 1 bis 2
+
+2. Firegrafics GmbH
+   Abb. 14 und 21
+
+3. Dr. Sthamer
+   Abb. 15
+
+3. Minimax mobile Services GmbH &Co. KG
+   Abb. 19 und 20
+
+
+
+
+                      Ausbildungsleitfaden Truppausbildung - Truppmannausbildung Teil 1
+10/2012                                                                                   19
+                                          Kapitel 2.3 - Lernunterlage
+

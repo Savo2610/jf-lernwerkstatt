@@ -3,6 +3,7 @@
 # und der Autodeploy baut ohnehin selbst.
 dist/
 hub/dist/
+brennen/dist/
 hub/vorschau/
 
 # Werkzeug

@@ -1,0 +1,83 @@
+/* ============================================================================
+   Brennen & Löschen – Farbwelt: Übungsplatz am hellen Vormittag.
+
+   Bewusst die Gegenwelt zu „Einsatzbereit": dort Einsatznacht mit Blaulicht,
+   hier heller Beton, warmer Sand, viel Luft. Das Thema ist keine
+   Einsatzlage, sondern eine Lehrstunde – und die findet bei Tageslicht statt.
+
+   Feuer und Wasser bleiben die beiden Leitfarben, aber gedeckter als drüben:
+   auf hellem Grund muss Farbe dunkel genug sein, um lesbar zu bleiben.
+   Reines #ff4d3d auf Weiß ist es nicht.
+
+   Setzt die Variablen, die gemeinsam/stil.css benutzt – wird VOR dieser Datei
+   eingebunden.
+   ========================================================================== */
+
+:root{
+  color-scheme:light;
+
+  /* Grund: Sandbeton, nicht Weiß. Weiß blendet am Beamer. */
+  --bg:#f2ece1; --bg2:#e9e1d3;
+  /* Farbe, auf die die Heimfahrt zufährt – der Nachtton, in dem die
+     Startseite ihre Einfahrt beginnt. Bewusst nicht --bg: siehe .heimfahrt
+     in gemeinsam/stil.css. */
+  --heimfarbe:#080b14;
+  --panel:#fffdf9; --panel2:#f7f1e6;
+  --linie:#ded2be; --linie2:#c4b49a;
+  --txt:#2a2018; --txt2:#6d5f4e; --txt3:#948572;
+
+  /* Feuer */
+  --rot:#d93a12; --rot-d:#a52a08; --glut:#f07818;
+  --gelb:#d99512;
+  /* Wasser */
+  --blau:#0e8fa8;
+  --gruen:#1f8f52; --lila:#6f52c4;
+
+  /* Schriftfarbe auf farbigem Grund – hier durchweg weiß, die Farben sind
+     kräftig genug. */
+  --auf-blau:#ffffff; --auf-gruen:#ffffff; --auf-gelb:#ffffff;
+
+  /* abgedunkelte Flächen: Hover, Balkengründe, Chips. Auf hellem Grund muss
+     eine Fläche dunkler werden, nicht heller – sonst verschwindet sie. */
+  --tint:rgba(42,32,24,.045); --tint2:rgba(42,32,24,.10);
+
+  --glas:rgba(255,253,249,.84); --glas-rand:rgba(42,32,24,.10); --glas-rand2:rgba(42,32,24,.16);
+  --hud:rgba(247,242,233,.86);
+  --ergebnis:rgba(255,253,249,.96);
+  --zitat-bg:rgba(42,32,24,.05);
+  --boss:linear-gradient(180deg,#fff2e4,#ffe6d2);
+
+  --toast:rgba(255,253,249,.97); --toast-gut:rgba(226,245,232,.97);
+  --toast-schlecht:rgba(253,231,225,.97); --toast-gold:rgba(253,242,214,.97);
+
+  /* Vignette wärmt die Ränder an, statt sie abzudunkeln */
+  --vignette:rgba(148,116,74,.20);
+  /* Der Abdunkler deckt hier hell ab – vor heller Kulisse wäre eine dunkle
+     Schicht ein Fremdkörper. */
+  --dunkler:linear-gradient(180deg,rgba(244,238,229,.88),rgba(244,238,229,.74) 45%,rgba(244,238,229,.92));
+
+  /* Schatten warm und weich – harte schwarze Schatten sehen auf Sand
+     schmutzig aus. */
+  --schatten:0 12px 34px rgba(90,64,34,.15);
+  --schatten-hoch:0 16px 40px rgba(90,64,34,.18);
+  --schatten-zug:0 22px 46px rgba(90,64,34,.26);
+  --schatten-knopf:0 12px 22px rgba(90,64,34,.20);
+  --schatten-knopf-tief:0 6px 12px rgba(90,64,34,.18);
+
+  --marke-verlauf:linear-gradient(172deg,var(--gelb) 4%,var(--glut) 44%,var(--rot) 88%);
+  --marke-schein:rgba(217,58,18,.26);
+  --note-verlauf:linear-gradient(180deg,var(--gelb),var(--glut) 55%,var(--rot));
+
+  /* steht vor jedem Zitat */
+  --quelle:'Lernunterlage · ';
+}
+
+/* --- Zwei Ergänzungen, die es nur hier gibt ------------------------------- */
+
+/* Die Panele stehen vor einem hellen Himmel und brauchen eine Kante, sonst
+   schwimmen sie. Drüben übernimmt das der Kontrast von selbst. */
+.panel{ border-color:var(--linie) }
+
+/* Auf hellem Grund liest sich eine hauchdünne Umrandung besser als ein
+   Schlagschatten allein. */
+.antwort{ box-shadow:0 1px 0 rgba(90,64,34,.06) }
