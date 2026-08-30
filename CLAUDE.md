@@ -69,6 +69,9 @@ statt sich durchzuklicken.
 Push auf `main` reicht — Cloudflare Workers Builds baut und veröffentlicht.
 Einzelheiten und der Weg von Hand: [docs/deploy.md](docs/deploy.md).
 
+Was hier entsteht, steht unter **CC BY 4.0**. Was nicht — Three.js, der
+Volltext der FwDV 3, die Unterlagen der Wehr — steht in [LIZENZ.md](LIZENZ.md).
+
 ## Was hier sonst noch dranhängt
 
 Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
@@ -101,6 +104,10 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 - **Die Antreteordnung ist an einer Stelle definiert** (`ANTRETEN.gruppe` in
   `src/three/vehicles.js`) und wird von vier Leveln benutzt. Änderst du sie,
   ändert sich alles Vier.
+- **Die Baustelle ist die letzte Station** (`hub/src/themen.js`). Die
+  Absperrung am Straßenende setzt `welt.js` automatisch dahinter. Wer ein
+  Thema anhängt, schiebt die Baustelle eins weiter nach rechts, statt sie zu
+  überschreiben — sonst ist der Weg ins Repo weg.
 - **Der Boss ist gesperrt** (`BOSS_STERNE`), bis sieben Sterne da sind. Zum
   Testen `?level=loeschangriff` bzw. `?level=ernstfall` benutzen, nicht die
   Sperre herausnehmen.
@@ -139,6 +146,22 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 - **`UI.toast` legt sich über die Antwortknöpfe**, wenn die unten am Bildrand
   stehen — und man muss vier Sekunden warten, bis man weitertippen kann. In
   `brennen/` dafür `unterbau(...)` benutzen (`brennen/src/bausteine.js`).
+- **Zentrieren und `overflow:hidden` vertragen sich nicht.** Ein Flex-Container
+  mit `justify-content:center` läuft bei Überlänge an *beiden* Enden über —
+  oben ist dann nicht einmal durch Scrollen erreichbar. Deshalb steht auf
+  `.mitte` ein `justify-content:safe center`. Wer einen neuen Bildschirm baut,
+  prüft ihn bei 360 × 740 mit `--skala: 1.3` (das entspricht Chromes
+  Textskalierung auf 130 %).
+- **Im Kulissen-SVG dürfen keine Backticks stehen.** `hub/src/szene.js` baut
+  jede Kulisse als Template-Literal. Ein Backtick in einem SVG-Kommentar
+  beendet die Zeichenkette — die Seite bleibt dann weiß, ohne Fehler in der
+  Konsole, weil das Skript gar nicht erst geparst wird. Lange Erklärungen
+  gehören darum über die Funktion, nicht ins Markup.
+- **Ein Link mitten in der Kulisse braucht `tabindex="-1"`.** Sonst scrollt der
+  Browser beim Tabben das Ziel sichtbar. `#buehne` steht auf `overflow:hidden`,
+  lässt sich programmatisch aber trotzdem verschieben, und die Bühne hängt
+  danach dauerhaft schief. Der Schaukasten an der Wache macht es so; der
+  tastaturgängige Weg zu Instagram steht im Fuß.
 - **CSS-`transform` schlägt das SVG-Attribut `transform`.** Auf der Startseite
   kostet das regelmäßig Zeit; deshalb liegen bewegte Teile in einer
   Wrapper-Gruppe. Und `transform-origin` braucht `transform-box: fill-box`.

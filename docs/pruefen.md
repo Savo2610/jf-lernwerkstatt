@@ -150,9 +150,20 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
 1. `npm run build` läuft ohne Fehler — er baut Startseite und beide Spiele
 2. `__eb.Fehlerliste` und `__bl.Fehlerliste` sind leer, Browserkonsole ohne
    Fehler
-3. Ein Level je Spiel und die Startseite einmal auf schmalem Bildschirm
-   (375 px). Was an einem 3D-Objekt klebt, stößt dort als erstes an: vier
-   Marken an vier Säulen liegen schnell übereinander
-4. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
+3. Ein Level je Spiel und die Startseite einmal bei **360 × 740** — das ist ein
+   verbreitetes Android-Format und der Fall, in dem zuerst etwas nicht mehr
+   passt. Dazu in der Konsole `document.body.style.setProperty('--skala',1.3)`:
+   das entspricht Chromes Textskalierung auf 130 %, die viele eingeschaltet
+   haben. Prüfen, ob die Überschrift oben noch sichtbar und alles unten
+   erreichbar ist. Was an einem 3D-Objekt klebt, stößt dort als erstes an:
+   vier Marken an vier Säulen liegen schnell übereinander.
+4. Die Wege nach draußen einmal anklicken: der Schaukasten an der Wache und
+   der Instagram-Link im Fuß, dazu „Hilf mit beim Bauen" an der Baustelle.
+   Alle drei sind leicht zu übersehen und fallen deshalb auch nicht auf,
+   wenn sie kaputt sind.
+5. Beide Übergänge einmal fahren: von der Startseite in jedes Spiel (die
+   Blende muss den Grundton des Ziels haben, nicht den des Nachbarn) und mit
+   dem Knopf oben links wieder zurück.
+6. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
    Ersatzweg geben, nicht nur weniger Bewegung
-5. Zurück-Knopf des Browsers, wenn du an einem Übergang warst
+7. Zurück-Knopf des Browsers, wenn du an einem Übergang warst

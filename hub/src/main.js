@@ -119,17 +119,28 @@ const karten = STATIONEN.map((s) => {
   const k = document.createElement('article');
   k.className = 'karte';
   k.id = 'karte-' + s.id;
-  const chip = s.status === 'bald' ? '<span class="chip bald">In Arbeit</span>'
-    : '<span class="chip">3D · 8 Aufgaben</span>';
+  const chip = `<span class="chip${s.status === 'bald' ? ' bald' : ''}">${s.chip}</span>`;
   const liste = s.punkte ? '<ul>' + s.punkte.map(p => `<li>${p}</li>`).join('') + '</ul>' : '';
+  // `data-fahrt` markiert den einen Knopf, an dem die Ausrueck-Animation
+  // haengt. Ohne die Marke wuerde die Suche weiter unten an der Baustelle den
+  // GitHub-Knopf erwischen und die Abfahrt vor einem fremden Ziel abspielen.
   const knopf = s.status === 'offen'
-    ? `<a class="knopf" href="${s.ziel}">${s.knopf}
+    ? `<a class="knopf" data-fahrt href="${s.ziel}">${s.knopf}
         <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 7h14M10 2l5 5-5 5"
           fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`
     : `<span class="knopf still">${s.knopf}</span>`;
+  // Zweiter Knopf, bislang nur an der Baustelle. Fuehrt aus der Seite heraus,
+  // also neuer Tab und keine Abfahrt.
+  const mit = s.mit
+    ? `<a class="knopf geist" href="${s.mit.ziel}" target="_blank" rel="noopener noreferrer">
+        <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path
+          d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.2 4 18.2 4.3 18.2 4.3c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+        ${s.mit.text}</a>`
+    : '';
   k.innerHTML = `<p class="karte-ober">${s.ober}${chip}</p>
     <h2>${s.titel}</h2>
-    <p class="zeile">${s.zeile}</p>${liste}${knopf}`;
+    <p class="zeile">${s.zeile}</p>${liste}
+    <div class="karte-knoepfe">${knopf}${mit}</div>`;
   // Bis eine Karte an der Reihe ist, ist sie fuer Tastatur und Vorlese-
   // programme nicht vorhanden – sonst springt der Fokus in unsichtbare Links.
   k.inert = true; k.setAttribute('aria-hidden', 'true');
@@ -138,8 +149,9 @@ const karten = STATIONEN.map((s) => {
 });
 
 karten.forEach((k, i) => {
+  // Die Station gehoert zur Karte: Aus ihr kommt der Grundton der Blende.
   const s = STATIONEN[i];
-  const a = k && k.querySelector('a.knopf');
+  const a = k && k.querySelector('a.knopf[data-fahrt]');
   if (!a || RUHIG) return;
   a.addEventListener('pointerenter', () => vorladen(a.href));
   a.addEventListener('focus', () => vorladen(a.href));
@@ -262,14 +274,20 @@ function zuStation(i) {
   scrollTo({ top: scrollFuerStation(i), behavior: RUHIG ? 'auto' : 'smooth' });
 }
 
-/* ---------- Fuss: dieselben Themen noch einmal als schlichte Liste --------- */
+/* ---------- Fuss: dieselben Themen noch einmal als schlichte Liste ---------
+   Nur die, die es wirklich gibt. Die Baustelle steht auf der Strecke, aber
+   nicht hier: eine Liste „Alle Themen" soll Themen aufzaehlen, keine
+   Absichtserklaerungen. Der Weg ins Repo steht ohnehin unter der Liste.    */
 const fussListe = document.getElementById('fuss-liste');
-THEMEN.filter(t => t.status !== 'start').forEach(t => {
+THEMEN.filter(t => t.status !== 'start' && t.fuss !== false).forEach(t => {
   const offen = t.status === 'offen';
   const el = document.createElement(offen ? 'a' : 'div');
   if (offen) el.href = t.ziel;
   const punkte = t.punkte ? '<ul>' + t.punkte.map(p => `<li>${p}</li>`).join('') + '</ul>' : '';
-  el.innerHTML = `<b>${t.titel}</b><small>${offen ? t.zeile : t.zeile + ' Kommt als Nächstes.'}</small>${punkte}`;
+  // Im Fuss gibt es keine Knoepfe. Wo die Karte einen stillen Knopf zeigt,
+  // muss der Satz selbst sagen, woran man ist.
+  const satz = offen ? t.zeile : t.zeile + ' ' + t.nachsatz;
+  el.innerHTML = `<b>${t.titel}</b><small>${satz}</small>${punkte}`;
   const li = document.createElement('li');
   li.appendChild(el); fussListe.appendChild(li);
 });

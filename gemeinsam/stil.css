@@ -31,7 +31,12 @@ body{
 }
 body.beamer{ --skala:1.42; }
 
-h1,h2,h3{margin:0; font-family:var(--display); font-weight:400; letter-spacing:-.015em; line-height:1.1; text-wrap:balance}
+/* `anywhere` und nicht `break-word`: nur `anywhere` verkleinert auch die
+   Mindestbreite, die eine Ueberschrift als Flex-Element beansprucht. Sonst
+   ragt „Wer tritt gegeneinander an?" im Beamer-Modus auf schmalen Schirmen
+   seitlich aus ihrem Kasten. Gebrochen wird ohnehin nur, wenn ein Wort
+   wirklich nicht in die Zeile passt. */
+h1,h2,h3{margin:0; font-family:var(--display); font-weight:400; letter-spacing:-.015em; line-height:1.1; text-wrap:balance; overflow-wrap:anywhere}
 h1{font-size:2.6em} h2{font-size:1.8em} h3{font-size:1.2em}
 p{margin:0 0 .7em}
 button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
@@ -58,7 +63,22 @@ button{font:inherit; color:inherit; border:0; background:none; cursor:pointer}
 .raus{animation:raus .26s ease-in both}
 @keyframes raus{to{opacity:0; transform:translateY(-14px) scale(.99)}}
 
-.mitte{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(12px,2vh,26px); text-align:center; min-height:0}
+/* Der Inhalt steht mittig – aber nur, solange er passt. `safe center` faellt
+   bei Ueberlauf auf `flex-start` zurueck; ohne das laeuft ein zentrierter
+   Flex-Container an *beiden* Enden ueber, und weil .screen auf overflow:hidden
+   steht, kaeme man an oben und unten gleichzeitig nicht mehr heran. Genau das
+   passiert auf schmalen Geraeten, wo die Karten einspaltig umbrechen.
+   Die Zeile davor bleibt fuer Browser ohne `safe` stehen – die verhalten sich
+   dann wie bisher, koennen aber wenigstens nach unten scrollen.
+   Die Menue- und Beamer-Bildschirme setzen justifyContent und overflowY selbst
+   als Inline-Stil und bleiben davon unberuehrt. */
+.mitte{flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; justify-content:safe center;
+  /* `overflow-x:clip`, weil ein alleinstehendes overflow-y:auto die andere
+     Achse laut Spezifikation auf `auto` mitzieht – sonst laesst sich der
+     Beamer-Bildschirm um sieben Pixel seitwaerts schieben. */
+  overflow-y:auto; overflow-x:clip; overscroll-behavior:contain;
+  gap:clamp(12px,2vh,26px); text-align:center; min-height:0}
 
 /* ---------- Knoepfe ------------------------------------------------------- */
 .btn{

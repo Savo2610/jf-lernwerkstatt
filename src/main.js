@@ -301,6 +301,17 @@ const App = {
             `🏅 Abzeichen (${State.abzeichenAnzahl()}/${Object.keys(ABZEICHEN).length})`),
           el('button', { class: 'btn geist', onclick: () => { Audio3.klick(); App.profil(); } }, '👤 Profil')));
 
+      // Woher die Inhalte stammen, steht hier und nicht auf der Startseite:
+      // gelernt wird hier, also gehoert die Quelle auch hierhin.
+      fuss.appendChild(el('p', {
+        class: 'klein',
+        style: { margin: '20px auto 0', maxWidth: '58ch', lineHeight: '1.5' },
+        text: 'Inhalte nach der Feuerwehr-Dienstvorschrift 3 „Einheiten im Lösch- und '
+            + 'Hilfeleistungseinsatz", Stand Februar 2008; Sitz- und Antreteordnung nach den '
+            + 'Unterlagen der Jugendfeuerwehr Harheim. Alle Infos ohne Gewähr und kein Ersatz '
+            + 'für die Ausbildung in der eigenen Wehr.',
+      }));
+
       s.appendChild(el('div', { class: 'mitte', style: { justifyContent: 'flex-start', paddingTop: '10px', overflowY: 'auto', width: '100%' } },
         kopf, gitter, fuss));
       s.classList.add('scrollbar');

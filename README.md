@@ -11,8 +11,9 @@ läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit
 
 Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um.
 
-**Vorschau als Artifact:** Spiel https://claude.ai/code/artifact/89189aa0-35ad-4ee7-a675-6b79d20f5d32 ·
-Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
+**Live:** Startseite https://jf.veerka.mp · Einsatzbereit
+https://jf.veerka.mp/fwdv3/ · Brennen & Löschen
+https://jf.veerka.mp/brennen-loeschen/
 
 ## Wo was steht
 
@@ -22,6 +23,7 @@ Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
 | [docs/deploy.md](docs/deploy.md) | Autodeploy, Worker, Routen, DNS |
 | [docs/pruefen.md](docs/pruefen.md) | Konsolen-Haken, Direktsprünge, was vor dem Veröffentlichen dran ist |
 | [docs/verwandte-projekte.md](docs/verwandte-projekte.md) | die Absprache mit veerka.mp (`?einfahrt=1`) |
+| [LIZENZ.md](LIZENZ.md) | CC BY 4.0, und was nicht darunter fällt |
 | dieses README | das ausführliche Handbuch — Inhalte, Aufbau, Stellschrauben |
 
 ---
@@ -130,6 +132,17 @@ der Streckenplan, dessen Punkte anklickbar sind. Sie steht auch kürzer als die
 Themen (`HALT_START` gegen `HALT_GEWICHT` in `hub/src/main.js`) — es gibt dort
 nichts zu lesen, also soll es schnell losgehen.
 
+Am anderen Ende steht die **Baustelle**: eine Station ohne Thema, mit Bauzaun,
+Kran und einer Tafel „Thema 3 — ?". Ihre Karte hat zwei Knöpfe, „Wird gerade
+gebaut" und „Hilf mit beim Bauen"; der zweite führt ins GitHub-Repo. Sie ist
+absichtlich die letzte Station — die Absperrung am Straßenende setzt `welt.js`
+automatisch dahinter, sie wandert also mit, sobald ein Thema dazukommt. Wird
+die Baustelle irgendwann ein echtes Thema, zieht sie eins nach rechts weiter.
+
+In der Liste „Alle Themen" im Fuß taucht sie **nicht** auf (`fuss: false` in
+`hub/src/themen.js`): dort sollen die Themen stehen, die es gibt. Der Weg ins
+Repo steht ohnehin darunter im Kleingedruckten.
+
 Hin und zurück ist eine Fahrt. Wer auf **Losfahren** drückt, fährt auch los:
 die Bedienelemente blenden aus,
 die Welt rauscht vorbei, das Fahrzeug zieht rechts aus dem Bild, und das Bild
@@ -169,9 +182,19 @@ auch nicht. Der Code dafür liegt drüben in `public/scene.js` des Repos
 `Savo2610/Julians-Website`; die Absprache zwischen beiden Repos steht in
 [docs/verwandte-projekte.md](docs/verwandte-projekte.md).
 
-Nach draußen führt genau ein Link: das **Team Zukunft auf Instagram**, unten im
-Fuß zwischen den Themen und dem Kleingedruckten. Er steht bewusst dort und in
-keiner Karte — die Karten sind für Lerninhalte da.
+Nach draußen führen drei Wege, alle bewusst am Rand:
+
+- der **Schaukasten am Feuerwehrhaus**, gleich hinter dem Schlauchturm — ein
+  kleines Schild mit dem Instagram-Zeichen und „Team Zukunft". Man fährt auf
+  dem Weg zum ersten Thema daran vorbei; wer ihn anklickt, kommt zum Kanal.
+  Warum er `tabindex="-1"` trägt, steht im Kommentar über `kulisseWache()`.
+- derselbe Link noch einmal als **Fließtext im Fuß**, zwischen den Themen und
+  dem Kleingedruckten — das ist der Weg für Tastatur und Vorleseprogramme.
+- an der **Baustelle** ein zweiter Knopf „Hilf mit beim Bauen", der ins
+  GitHub-Repo führt — und dieselbe Adresse noch einmal in der Lizenzzeile
+  ganz unten.
+
+In den Karten steht sonst nichts davon — die sind für Lerninhalte da.
 
 Ein Thema hinzufügen: Eintrag in `hub/src/themen.js` ergänzen und `kulisse` auf
 eine Kulisse aus `hub/src/szene.js` setzen. Scrolllänge, Streckenplan und die
@@ -500,7 +523,9 @@ Karten.
   (eigene Unterlagen)
 
 Alle Zitate im Spiel sind wörtlich aus der FwDV 3 übernommen und als solche
-gekennzeichnet.
+gekennzeichnet. Woher die Inhalte stammen, steht im Spiel selbst — unten im
+Levelmenü — und nicht auf der Startseite: gelernt wird im Spiel, also gehört
+die Quelle dorthin.
 
 **Brennen & Löschen:**
 
@@ -514,3 +539,9 @@ gekennzeichnet.
   die Brandklassen folgen DIN EN 2.
 
 Zitate sind mit „Lernunterlage · " gekennzeichnet.
+
+## Lizenz
+
+Was hier selbst gebaut wurde, steht unter **CC BY 4.0** ([LICENSE](LICENSE)).
+Three.js in `vendor/`, der Volltext der FwDV 3 und die Unterlagen der Wehr in
+`referenz/` fallen nicht darunter — Einzelheiten in [LIZENZ.md](LIZENZ.md).
