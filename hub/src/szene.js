@@ -69,6 +69,23 @@ function schlauchrolle(x) {
     <circle cx="0" cy="-13" r="7" fill="none" stroke="var(--rot-t)" stroke-width="5"/></g>`;
 }
 
+/* Bauzaun aus Gitterelementen. Stand frueher fest im Brandhaus; seit
+   „Brennen & Loeschen" in die Zielgerade gegangen ist, wird er gebraucht,
+   wo gerade wirklich gebaut wird – deshalb jetzt als eigener Baustein.      */
+function bauzaun(x, breite, hoehe) {
+  const b = breite || 220, h = hoehe || 64;
+  let gitter = '';
+  for (let i = 0; i * 12 < b - 22; i++) {
+    gitter += `<line x1="${i * 12}" y1="-2" x2="${i * 12 + 22}" y2="${-h}" stroke="var(--metall)" stroke-width="2.4" opacity=".85"/>`;
+  }
+  return `<g transform="translate(${zahl(x)},0)" opacity=".9">
+    <rect x="0" y="${-h - 2}" width="${b}" height="4" rx="2" fill="var(--metall)"/>
+    <rect x="0" y="-6" width="${b}" height="4" rx="2" fill="var(--metall)"/>
+    ${gitter}
+    <rect x="-4" y="${-h - 6}" width="7" height="${h + 6}" rx="3" fill="var(--metall)"/>
+    <rect x="${b - 3}" y="${-h - 6}" width="7" height="${h + 6}" rx="3" fill="var(--metall)"/></g>`;
+}
+
 function wolke(x, y, s) {
   return `<g transform="translate(${zahl(x)},${zahl(y)}) scale(${s})" opacity="var(--wolke-a)">
     <circle cx="0" cy="0" r="26" fill="var(--wolke)"/>
@@ -105,7 +122,16 @@ function baueKLF(x) {
     ${rad(-42, 15)}${rad(46, 15)}</g>`;
 }
 
-/* ---------- Kulisse 1: die Feuerwache ------------------------------------- */
+/* ---------- Kulisse 1: die Feuerwache -------------------------------------
+   Am Gehweg haengt ein Schaukasten mit dem Team Zukunft auf Instagram – der
+   einzige Weg, der aus der Strasse herausfuehrt. Bewusst klein: wer ihn
+   findet, findet ihn; im Fuss steht derselbe Link noch einmal als Fliesstext.
+
+   Der Link traegt tabindex="-1", und das ist Absicht. Ein Tabstopp mitten in
+   der Kulisse braechte den Browser dazu, das Ziel sichtbar zu scrollen.
+   #buehne steht zwar auf overflow:hidden, laesst sich programmatisch aber
+   trotzdem verschieben – die Buehne haengt danach dauerhaft schief. Den
+   tastaturgaengigen Weg zu Instagram gibt es unten im Fuss.                  */
 function kulisseWache(x) {
   let tore = '';
   for (let i = 0; i < 2; i++) {
@@ -134,6 +160,25 @@ function kulisseWache(x) {
       letter-spacing="1.6" fill="var(--schild-txt)">FEUERWEHR HARHEIM</text>
     ${tore}
     ${baueKLF(-176)}
+    <!-- Schaukasten: der versteckte Weg zum Team Zukunft -->
+    <a class="aushang" href="https://www.instagram.com/ff_harheim_teamzukunft/"
+       target="_blank" rel="noopener noreferrer" tabindex="-1"
+       aria-label="Team Zukunft der Jugendfeuerwehr Harheim auf Instagram">
+      <title>Team Zukunft auf Instagram</title>
+      <g transform="translate(348,0)">
+        <ellipse cx="0" cy="1" rx="16" ry="4" fill="rgba(0,0,0,.18)"/>
+        <rect x="-3.5" y="-86" width="7" height="86" rx="3" fill="var(--metall)"/>
+        <rect x="-44" y="-146" width="88" height="64" rx="6" fill="var(--metall)"/>
+        <rect x="-39" y="-141" width="78" height="54" rx="3" fill="var(--schild)"/>
+        <g transform="translate(0,-118)" fill="none" stroke="var(--rot)" stroke-width="2.1">
+          <rect x="-8.5" y="-8.5" width="17" height="17" rx="5"/>
+          <circle cx="0" cy="0" r="3.9"/>
+          <circle cx="5" cy="-5" r="1.1" fill="var(--rot)" stroke="none"/>
+        </g>
+        <text class="t-text" x="0" y="-93" text-anchor="middle" font-size="7.5"
+          letter-spacing=".5" fill="var(--schild-txt)">TEAM ZUKUNFT</text>
+      </g>
+    </a>
     <!-- Fahnenmast -->
     <rect x="-52" y="-168" width="5" height="168" rx="2" fill="var(--metall)"/>
     <path d="M-47 -166 q 26 8 52 0 v 34 q -26 8 -52 0 Z" fill="var(--rot)"/>
@@ -174,8 +219,6 @@ function kulisseUebungshof(x) {
 function kulisseBrandhaus(x) {
   let wellen = '';
   for (let i = 1; i < 9; i++) wellen += `<line x1="${i * 21}" y1="-100" x2="${i * 21}" y2="0" stroke="rgba(0,0,0,.13)" stroke-width="2"/>`;
-  let zaun = '';
-  for (let i = 0; i <= 18; i++) zaun += `<line x1="${-16 + i * 12}" y1="-2" x2="${-16 + i * 12 + 22}" y2="-64" stroke="var(--metall)" stroke-width="2.4" opacity=".85"/>`;
   const flamme = (dx, h, k) => `<g transform="translate(${dx},0)">
     <path class="flamme ${k}"
       d="M0 0 c -${h * .36} -${h * .3} -${h * .2} -${h * .62} 0 -${h}
@@ -205,13 +248,60 @@ function kulisseBrandhaus(x) {
       <ellipse cx="27" cy="-2" rx="9" ry="6" fill="var(--stein)"/>
       <ellipse cx="0" cy="2" rx="10" ry="5.5" fill="var(--stein)"/>
     </g>
-    <!-- Bauzaun: hier wird noch gearbeitet -->
-    <g opacity=".9">
-      <rect x="-18" y="-66" width="220" height="4" rx="2" fill="var(--metall)"/>
-      <rect x="-18" y="-6" width="220" height="4" rx="2" fill="var(--metall)"/>
-      ${zaun}
-      <rect x="-22" y="-70" width="7" height="70" rx="3" fill="var(--metall)"/>
-      <rect x="196" y="-70" width="7" height="70" rx="3" fill="var(--metall)"/>
+  </g>`;
+}
+
+/* ---------- Kulisse 4: die Baustelle --------------------------------------
+   Hinter dem Zaun steht noch nichts – das ist der Punkt. Ein Kran, ein Stapel
+   Rohre, ein Haufen Aushub: hier entsteht das naechste Thema. Frueher stand
+   der Zaun vor dem Brandhaus; er ist eine Station weitergewandert, als
+   „Brennen & Loeschen" in die Zielgerade ging.                               */
+function kulisseBaustelle(x) {
+  // Gittermast: pro Feld ein Andreaskreuz, sonst wirkt er wie ein Balken
+  let mast = '';
+  for (let i = 0; i < 7; i++) {
+    const y = -24 - i * 30;
+    mast += `<path d="M0 ${y} L26 ${y - 30} M26 ${y} L0 ${y - 30}" stroke="var(--metall)" stroke-width="2.4" opacity=".8"/>`;
+  }
+  // Rohrstapel: drei, zwei, eins
+  let rohre = '';
+  for (let r = 0; r < 3; r++) {
+    for (let i = 0; i < 3 - r; i++) {
+      rohre += `<circle cx="${i * 24 + r * 12}" cy="${-11 - r * 21}" r="11.5" fill="var(--metall)"/>
+        <circle cx="${i * 24 + r * 12}" cy="${-11 - r * 21}" r="6" fill="rgba(0,0,0,.22)"/>`;
+    }
+  }
+  return `<g transform="translate(${zahl(x)},0)">
+    <!-- Kran. Der Ausleger zeigt nach links, ueber die Grube. -->
+    <g transform="translate(176,0)">
+      <rect x="-14" y="-16" width="54" height="16" rx="4" fill="var(--metall)"/>
+      <rect x="0" y="-234" width="4" height="234" fill="var(--metall)"/>
+      <rect x="22" y="-234" width="4" height="234" fill="var(--metall)"/>
+      ${mast}
+      <rect x="-8" y="-258" width="42" height="10" rx="4" fill="var(--rot)"/>
+      <rect x="-152" y="-250" width="152" height="5" rx="2.5" fill="var(--metall)"/>
+      <path d="M-150 -247 L0 -256 M-150 -247 L-74 -247" stroke="var(--metall)" stroke-width="2.4" fill="none" opacity=".8"/>
+      <g class="haken">
+        <line x1="-112" y1="-245" x2="-112" y2="-124" stroke="var(--metall)" stroke-width="2"/>
+        <rect x="-121" y="-126" width="18" height="10" rx="3" fill="var(--gelb)"/>
+        <path d="M-112 -116 q -9 8 0 15 q 9 -7 0 -15 Z" fill="var(--metall)"/>
+      </g>
+    </g>
+    <!-- Grube mit Aushub -->
+    <g transform="translate(0,${BODEN.gehweg - 1})">
+      <ellipse cx="96" cy="0" rx="86" ry="12" fill="rgba(0,0,0,.2)"/>
+      <path d="M-6 -3 q 22 -30 46 -2 Z" fill="var(--stein)"/>
+      <path d="M150 -3 q 26 -36 54 -2 Z" fill="var(--stein)"/>
+    </g>
+    <g transform="translate(24,${BODEN.gehweg - 2})">${rohre}</g>
+    ${bauzaun(-24, 236, 66)}
+    <!-- Bautafel am Zaun statt am Strassenrand: an der Strasse stuende sie
+         der Absperrung im Weg, die welt.js hinter die letzte Station setzt. -->
+    <g transform="translate(62,-62)">
+      <rect x="0" y="0" width="88" height="50" rx="4" fill="var(--schild)"/>
+      <text class="t-text" x="44" y="16" text-anchor="middle" font-size="9.5"
+        letter-spacing="1.3" fill="var(--schild-txt)">THEMA 3</text>
+      <text class="t-display" x="44" y="44" text-anchor="middle" font-size="27" fill="var(--gelb)">?</text>
     </g>
   </g>`;
 }
@@ -238,6 +328,7 @@ const KULISSEN = {
   wache: kulisseWache,
   uebungshof: kulisseUebungshof,
   brandhaus: kulisseBrandhaus,
+  baustelle: kulisseBaustelle,
 };
 
 /* ---------- Das Loeschfahrzeug -------------------------------------------- */

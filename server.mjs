@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
-const PORT = 8412;
+// siehe hub/server.mjs: PORT sticht die feste Nummer
+const PORT = Number(process.env.PORT) || 8412;
 createServer((req, res) => {
   try {
     const html = readFileSync(new URL('./dist/index.html', import.meta.url));

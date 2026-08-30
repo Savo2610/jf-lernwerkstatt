@@ -51,14 +51,27 @@ jemals um, sind das die Stellen.
 
 ## Instagram
 
-Von der Startseite führt genau ein Link nach draußen: das **Team Zukunft** der
-Jugendfeuerwehr auf Instagram, unten im Fuß zwischen den Themen und dem
-Kleingedruckten (`hub/src/body.html`). Er steht dort und in keiner Karte — die
-Karten sind für Lerninhalte da.
+Von der Startseite führen zwei Wege zum **Team Zukunft** der Jugendfeuerwehr
+auf Instagram — derselbe Kanal, zweimal:
+
+- der **Schaukasten** am Feuerwehrhaus, gleich hinter dem Schlauchturm. Er
+  liegt auf dem Weg zum ersten Thema und ist bewusst klein gehalten. Er trägt
+  `tabindex="-1"`, weil ein Tabstopp in der Kulisse den Browser dazu brächte,
+  die Bühne zu scrollen — die steht auf `overflow:hidden` und hinge danach
+  dauerhaft schief. Deshalb braucht es den zweiten Weg:
+- der Link **im Fuß**, zwischen den Themen und dem Kleingedruckten. Das ist
+  der tastaturgängige. Solange er dort steht, darf der Schaukasten stumm sein.
 
 Auf veerka.mp stand dieser Link früher am Feuerwehrauto. Er ist dort durch den
-Link hierher ersetzt worden; die Verbindung zu Instagram besteht jetzt über
-diese Seite.
+Link hierher ersetzt worden.
+
+## GitHub
+
+Das Repo ist selbst verlinkt, an zwei Stellen: als zweiter Knopf „Hilf mit
+beim Bauen" auf der Baustellen-Karte (und in der Themenliste im Fuß), sowie in
+der Lizenzzeile ganz unten. Beides steht als `mit` bzw. als Fließtext in
+`hub/src/themen.js` und `hub/src/body.html`. Zieht das Repo um, sind das die
+Stellen — dazu `LIZENZ.md` und die Zeile in `README.md`.
 
 ## Die alte Adresse
 

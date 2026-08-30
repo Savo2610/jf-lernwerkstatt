@@ -7,7 +7,9 @@ import { join, dirname, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DIST = join(dirname(fileURLToPath(import.meta.url)), 'dist');
-const PORT = 8413;
+// Feste Nummer, damit Lesezeichen halten – aber PORT sticht, wenn 8413 schon
+// belegt ist (zwei Sitzungen gleichzeitig).
+const PORT = Number(process.env.PORT) || 8413;
 
 const datei = (p) => { try { return statSync(p).isFile() ? readFileSync(p) : null; } catch { return null; } };
 

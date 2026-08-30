@@ -90,6 +90,10 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
    das entspricht Chromes Textskalierung auf 130 %, die viele eingeschaltet
    haben. Prüfen, ob die Überschrift oben noch sichtbar und alles unten
    erreichbar ist.
-4. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
+4. Die Wege nach draußen einmal anklicken: der Schaukasten an der Wache und
+   der Instagram-Link im Fuß, dazu „Hilf mit beim Bauen" an der Baustelle.
+   Alle drei sind leicht zu übersehen und fallen deshalb auch nicht auf,
+   wenn sie kaputt sind.
+5. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
    Ersatzweg geben, nicht nur weniger Bewegung
-5. Zurück-Knopf des Browsers, wenn du an einem Übergang warst
+6. Zurück-Knopf des Browsers, wenn du an einem Übergang warst
