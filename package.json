@@ -8,7 +8,7 @@
     "dev": "node hub/server.mjs",
     "dev:spiel": "node server.mjs",
     "vorschau": "node hub/build.mjs --artifact",
-    "deploy": "node hub/build.mjs && wrangler deploy --config hub/wrangler.jsonc"
+    "deploy": "node hub/build.mjs && npx wrangler deploy --config hub/wrangler.jsonc"
   },
   "devDependencies": {
     "wrangler": "^4.127.1"
