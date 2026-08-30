@@ -16,6 +16,8 @@
    mit      ergaenzt einen zweiten, stillen Knopf neben dem ersten. Bislang
             nur an der Baustelle: der Weg ins Repo, fuer alle, die mitbauen
             wollen.
+   fuss:false laesst den Eintrag aus der Liste „Alle Themen" heraus. Die
+            Baustelle steht auf der Strecke, ist aber kein Thema.
    -------------------------------------------------------------------------*/
 const THEMEN = [
   {
@@ -76,7 +78,7 @@ const THEMEN = [
       'Mitbauen geht auch ohne Feuerwehrhelm',
     ],
     knopf: 'Wird gerade gebaut',
-    nachsatz: 'Wünsch dir was.',
     mit: { text: 'Hilf mit beim Bauen', ziel: 'https://github.com/Savo2610/jf-lernwerkstatt' },
+    fuss: false,
   },
 ];

@@ -273,17 +273,12 @@ a{color:inherit}
 .fuss-innen{max-width:900px; margin:0 auto; display:grid; gap:clamp(24px,4vw,44px)}
 .fuss h2{font-size:clamp(1.4rem,3vw,2rem)}
 .fuss-liste{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); margin:0; padding:0; list-style:none}
-.fuss-liste > li > a, .fuss-liste > li > div{
+.fuss-liste a, .fuss-liste div{
   display:block; text-decoration:none; height:100%;
   padding:18px 20px; border-radius:var(--r); border:1px solid var(--karte-linie);
   background:var(--karte); transition:transform .18s var(--ease), border-color .18s;
 }
-.fuss-liste > li > a:hover{transform:translateY(-3px); border-color:var(--rot)}
-/* Der Weg ins Repo, an der Baustelle. Steckt in einer Kachel ohne eigenen
-   Link – deshalb hier ein richtiger Link statt der ganzen Kachel. */
-.fuss-mit{display:inline-block; margin-top:.8em; font-size:.86em; font-weight:700;
-  color:var(--rot); text-decoration:underline; text-underline-offset:.25em}
-.fuss-mit:hover{color:var(--txt)}
+.fuss-liste a:hover{transform:translateY(-3px); border-color:var(--rot)}
 .fuss-liste b{display:block; font-family:var(--display); font-weight:400; font-size:1.15em; letter-spacing:-.01em}
 .fuss-liste ul{margin:.7em 0 0; padding:0; list-style:none; display:grid; gap:.3em}
 .fuss-liste ul li{position:relative; padding-left:1.3em; font-size:.85em; color:var(--txt2)}

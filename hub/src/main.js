@@ -256,9 +256,12 @@ function zuStation(i) {
   scrollTo({ top: scrollFuerStation(i), behavior: RUHIG ? 'auto' : 'smooth' });
 }
 
-/* ---------- Fuss: dieselben Themen noch einmal als schlichte Liste --------- */
+/* ---------- Fuss: dieselben Themen noch einmal als schlichte Liste ---------
+   Nur die, die es wirklich gibt. Die Baustelle steht auf der Strecke, aber
+   nicht hier: eine Liste „Alle Themen" soll Themen aufzaehlen, keine
+   Absichtserklaerungen. Der Weg ins Repo steht ohnehin unter der Liste.    */
 const fussListe = document.getElementById('fuss-liste');
-THEMEN.filter(t => t.status !== 'start').forEach(t => {
+THEMEN.filter(t => t.status !== 'start' && t.fuss !== false).forEach(t => {
   const offen = t.status === 'offen';
   const el = document.createElement(offen ? 'a' : 'div');
   if (offen) el.href = t.ziel;
@@ -266,10 +269,7 @@ THEMEN.filter(t => t.status !== 'start').forEach(t => {
   // Im Fuss gibt es keine Knoepfe. Wo die Karte einen stillen Knopf zeigt,
   // muss der Satz selbst sagen, woran man ist.
   const satz = offen ? t.zeile : t.zeile + ' ' + t.nachsatz;
-  const mit = t.mit
-    ? `<a class="fuss-mit" href="${t.mit.ziel}" target="_blank" rel="noopener noreferrer">${t.mit.text} \u2192</a>`
-    : '';
-  el.innerHTML = `<b>${t.titel}</b><small>${satz}</small>${punkte}${mit}`;
+  el.innerHTML = `<b>${t.titel}</b><small>${satz}</small>${punkte}`;
   const li = document.createElement('li');
   li.appendChild(el); fussListe.appendChild(li);
 });

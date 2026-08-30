@@ -5,8 +5,6 @@ Hilfeleistungseinsatz" (Stand Februar 2008). Zielgruppe: 10 bis 17 Jahre.
 
 **Live:** Startseite https://jf.veerka.mp · Spiel https://jf.veerka.mp/fwdv3/
 (die alte Adresse `fwdv3.veerka.mp` leitet dorthin um)
-**Vorschau als Artifact:** Spiel https://claude.ai/code/artifact/89189aa0-35ad-4ee7-a675-6b79d20f5d32 ·
-Startseite https://claude.ai/code/artifact/8756628e-6754-43ab-bfe4-dad81a4109ca
 
 ## Wo was steht
 
@@ -61,6 +59,10 @@ absichtlich die letzte Station — die Absperrung am Straßenende setzt `welt.js
 automatisch dahinter, sie wandert also mit, sobald ein Thema dazukommt. Wird
 die Baustelle irgendwann ein echtes Thema, zieht sie eins nach rechts weiter.
 
+In der Liste „Alle Themen" im Fuß taucht sie **nicht** auf (`fuss: false` in
+`hub/src/themen.js`): dort sollen die Themen stehen, die es gibt. Der Weg ins
+Repo steht ohnehin darunter im Kleingedruckten.
+
 Hin und zurück ist eine Fahrt. Wer auf **Losfahren** drückt, fährt auch los:
 die Bedienelemente blenden aus,
 die Welt rauscht vorbei, das Fahrzeug zieht rechts aus dem Bild, und das Bild
@@ -95,7 +97,8 @@ Nach draußen führen drei Wege, alle bewusst am Rand:
 - derselbe Link noch einmal als **Fließtext im Fuß**, zwischen den Themen und
   dem Kleingedruckten — das ist der Weg für Tastatur und Vorleseprogramme.
 - an der **Baustelle** ein zweiter Knopf „Hilf mit beim Bauen", der ins
-  GitHub-Repo führt, dazu die Lizenzzeile ganz unten.
+  GitHub-Repo führt — und dieselbe Adresse noch einmal in der Lizenzzeile
+  ganz unten.
 
 In den Karten steht sonst nichts davon — die sind für Lerninhalte da.
 

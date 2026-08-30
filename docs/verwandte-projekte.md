@@ -68,10 +68,10 @@ Link hierher ersetzt worden.
 ## GitHub
 
 Das Repo ist selbst verlinkt, an zwei Stellen: als zweiter Knopf „Hilf mit
-beim Bauen" auf der Baustellen-Karte (und in der Themenliste im Fuß), sowie in
-der Lizenzzeile ganz unten. Beides steht als `mit` bzw. als Fließtext in
-`hub/src/themen.js` und `hub/src/body.html`. Zieht das Repo um, sind das die
-Stellen — dazu `LIZENZ.md` und die Zeile in `README.md`.
+beim Bauen" auf der Baustellen-Karte, und in der Lizenzzeile ganz unten. Das
+eine steht als `mit` in `hub/src/themen.js`, das andere als Fließtext in
+`hub/src/body.html`. Zieht das Repo um, sind das die Stellen — dazu
+`LIZENZ.md` und die Zeile in `README.md`.
 
 ## Die alte Adresse
 
