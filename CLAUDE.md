@@ -73,6 +73,12 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   ändert sich alles Vier.
 - **Der Boss ist gesperrt** (`BOSS_STERNE`), bis sieben Sterne da sind. Zum
   Testen `?level=loeschangriff` benutzen, nicht die Sperre herausnehmen.
+- **Zentrieren und `overflow:hidden` vertragen sich nicht.** Ein Flex-Container
+  mit `justify-content:center` läuft bei Überlänge an *beiden* Enden über —
+  oben ist dann nicht einmal durch Scrollen erreichbar. Deshalb steht auf
+  `.mitte` ein `justify-content:safe center`. Wer einen neuen Bildschirm baut,
+  prüft ihn bei 360 × 740 mit `--skala: 1.3` (das entspricht Chromes
+  Textskalierung auf 130 %).
 - **CSS-`transform` schlägt das SVG-Attribut `transform`.** Auf der Startseite
   kostet das regelmäßig Zeit; deshalb liegen bewegte Teile in einer
   Wrapper-Gruppe. Und `transform-origin` braucht `transform-box: fill-box`.

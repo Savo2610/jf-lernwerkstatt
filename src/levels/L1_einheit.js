@@ -57,10 +57,13 @@ LEVELS.push({
         ]);
         let gesetzt = 0;
 
+        // Die Masse sind bewusst knapp: auf einem 360-px-Handy muessen Formel
+        // und Kartenvorrat zusammen in die Hoehe passen, sonst muss gescrollt
+        // werden. `min()` haelt die Felder auch dann nebeneinander.
         const slot = (nr) => el('div', {
           class: 'ablage panel', 'data-slot': nr,
-          style: { minWidth: '190px', minHeight: '104px', display: 'grid', placeItems: 'center',
-                   borderStyle: 'dashed', borderWidth: '2px', textAlign: 'center', padding: '14px' },
+          style: { minWidth: 'min(150px,42vw)', minHeight: '84px', display: 'grid', placeItems: 'center',
+                   borderStyle: 'dashed', borderWidth: '2px', textAlign: 'center', padding: '12px' },
         }, el('span', { class: 'klein', text: '?' }));
 
         const s1 = slot(1), s2 = slot(2);
@@ -69,14 +72,14 @@ LEVELS.push({
           style: { display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' },
         },
           s1,
-          el('div', { style: { fontSize: '2.4em', fontWeight: '900', color: 'var(--gelb)' }, text: '+' }),
+          el('div', { style: { fontSize: '2em', fontWeight: '900', color: 'var(--gelb)' }, text: '+' }),
           s2,
-          el('div', { style: { fontSize: '2.4em', fontWeight: '900', color: 'var(--gelb)' }, text: '=' }),
+          el('div', { style: { fontSize: '2em', fontWeight: '900', color: 'var(--gelb)' }, text: '=' }),
           el('div', {
             class: 'panel',
-            style: { minWidth: '200px', padding: '18px 22px', textAlign: 'center',
+            style: { minWidth: 'min(180px,52vw)', padding: '14px 20px', textAlign: 'center',
                      borderColor: 'var(--gelb)', background: 'rgba(255,210,63,.1)' },
-          }, el('b', { style: { fontSize: '1.15em' }, text: 'Taktische Einheit' })));
+          }, el('b', { style: { fontSize: '1.1em' }, text: 'Taktische Einheit' })));
 
         const vorrat = el('div', {
           style: { display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '760px' },
@@ -84,9 +87,9 @@ LEVELS.push({
 
         karten.forEach(k => {
           const node = el('div', {
-            class: 'panel', style: { padding: '14px 20px', display: 'flex', alignItems: 'center',
-                                     gap: '.6em', fontWeight: '800', cursor: 'grab' },
-          }, el('span', { style: { fontSize: '1.5em' }, text: k.ic }), el('span', { text: k.t }));
+            class: 'panel', style: { padding: '11px 15px', display: 'flex', alignItems: 'center',
+                                     gap: '.5em', fontWeight: '800', cursor: 'grab' },
+          }, el('span', { style: { fontSize: '1.3em' }, text: k.ic }), el('span', { text: k.t }));
           ziehbarMachen(node, {
             daten: k,
             aufAblage: (ablage, daten, quelle) => {

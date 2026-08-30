@@ -84,7 +84,12 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
 
 1. `npm run build` läuft ohne Fehler
 2. `__eb.Fehlerliste` ist leer, Browserkonsole ohne Fehler
-3. Ein Level und die Startseite einmal auf schmalem Bildschirm (375 px)
+3. Ein Level und die Startseite einmal bei **360 × 740** — das ist ein
+   verbreitetes Android-Format und der Fall, in dem zuerst etwas nicht mehr
+   passt. Dazu in der Konsole `document.body.style.setProperty('--skala',1.3)`:
+   das entspricht Chromes Textskalierung auf 130 %, die viele eingeschaltet
+   haben. Prüfen, ob die Überschrift oben noch sichtbar und alles unten
+   erreichbar ist.
 4. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
    Ersatzweg geben, nicht nur weniger Bewegung
 5. Zurück-Knopf des Browsers, wenn du an einem Übergang warst
