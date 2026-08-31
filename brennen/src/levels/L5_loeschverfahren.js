@@ -484,9 +484,9 @@ LEVELS.push({
           frage: 'Was macht das Löschverfahren „Abkühlen"?',
           antworten: [
             'Es verdrängt den Sauerstoff',
-            'Es entzieht die Wärme, die die Verbrennung braucht',
+            'Es entzieht die Wärme',
             'Es legt eine Decke über den Brand',
-            'Es bremst die Verbrennungsreaktion aus',
+            'Es bremst die Reaktion aus',
           ],
           richtig: 1,
           erklaerung: 'Abkühlen greift die Zündenergie an. Bei Wasser entzieht das Verdampfen fünfmal mehr Wärme als das bloße Erwärmen – deshalb kühlt Sprühstrahl besser als Vollstrahl.',
@@ -502,9 +502,9 @@ LEVELS.push({
           frage: 'Warum steht „Trennen" in der Mitte des Dreiecks und nicht an einer Ecke?',
           antworten: [
             'Weil es das wichtigste Verfahren ist',
-            'Weil es beide Reaktionspartner voneinander trennt – also das Verhältnis zwischen ihnen angreift',
+            'Weil es beide Reaktionspartner zugleich betrifft',
             'Weil Schaum in der Mitte aufgetragen wird',
-            'Das ist nur so gezeichnet',
+            'Weil es die Zündenergie mit wegnimmt',
           ],
           richtig: 1,
           erklaerung: 'Trennen nimmt weder den Stoff noch den Sauerstoff weg. Beide sind noch da – sie kommen nur nicht mehr zusammen. Genau das ist das Mengenverhältnis, und das steht in der Mitte.',
@@ -515,7 +515,7 @@ LEVELS.push({
           antworten: [
             'Den Sauerstoff',
             'Die Zündenergie',
-            'Keine – es greift die Verbrennungsreaktion selbst an',
+            'Keine',
             'Das Mengenverhältnis',
           ],
           richtig: 2,

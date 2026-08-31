@@ -143,6 +143,17 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   nachträglich zu ändern steuert nur noch den Funkenflug – die Flammenkegel
   bleiben, wie sie sind. Wer eine Flamme umformen will, skaliert die Gruppe
   (`f.scale.set(breit, hoch, breit)`).
+- **Wo man Karten zieht, muss alles gleichzeitig ins Bild passen.** Scrollen
+  ist dort keine Rettung: Was unter dem Bildrand liegt, kann man nicht
+  anfassen, um es nach oben zu ziehen. Aufgabe 6 Runde 1 war deshalb am Handy
+  eine Sackgasse — vier Körbe untereinander, und die Kartenleiste stand außer
+  Reichweite. Im Hochformat also alles zusammenstreichen, was nicht die
+  Aufgabe ist (`.korb > small` verschwindet dort ganz), und `scroll: true`
+  nur als Netz für große Textskalierung.
+- **Antwortmöglichkeiten gleich lang halten.** Wer als einzige Antwort seine
+  Begründung mitbringt, wird an der Länge erkannt und nicht gewusst. Die
+  Begründung gehört in die Auflösung (`e` bzw. `erklaerung`), nicht in die
+  Antwort. Gilt für `QUIZ` genauso wie für die Fragen in den Leveln.
 - **`UI.toast` legt sich über die Antwortknöpfe**, wenn die unten am Bildrand
   stehen — und man muss vier Sekunden warten, bis man weitertippen kann. In
   `brennen/` dafür `unterbau(...)` benutzen (`brennen/src/bausteine.js`).

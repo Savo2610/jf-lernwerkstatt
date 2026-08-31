@@ -190,6 +190,9 @@ LEVELS.push({
       const karten = shuffle(LOESCHMITTEL.slice());
       let offen = karten.length;
 
+      // scrollbar als Netz: Bei eingeschalteter Textskalierung wird selbst das
+      // kompakte Hochformat-Layout zu hoch. Ziehen und Scrollen kommen sich
+      // nicht in die Quere – `.ziehbar` steht auf `touch-action:none`.
       UI.zeige('l6-wirkung', (s) => {
         const korb = (v) => el('div', {
           class: 'ablage korb', 'data-korb': v.id, style: { '--f': v.farbe },
@@ -248,7 +251,7 @@ LEVELS.push({
         // Kulisse, nicht Bühne: Auftrag, vier Körbe und die Kartenleiste
         // lassen keinen Bildstreifen übrig, in den sich etwas einpassen liesse.
         return motivWache(MOTIV_KLEIN, null, { hoch: .55, weit: .9, anteil: .58, rand: .9 });
-      });
+      }, { scroll: true });
     };
 
 
@@ -644,10 +647,10 @@ LEVELS.push({
         {
           frage: 'In der Küche brennt das Frittierfett. Warum niemals Wasser?',
           antworten: [
-            'Weil Wasser das Fett verdünnt',
-            'Weil das Wasser schlagartig verdampft und brennendes Fett meterweit schleudert',
-            'Weil Wasser Strom leitet',
-            'Weil das Fett dann hart wird',
+            'Weil das Wasser das Fett verdünnt',
+            'Weil das Wasser schlagartig verdampft',
+            'Weil das Wasser den Strom weiterleitet',
+            'Weil das Fett dabei hart wird',
           ],
           richtig: 1,
           erklaerung: 'Aus einem Liter Wasser werden beim Verdampfen rund 1700 Liter Dampf. Passiert das unter der Fettoberfläche, fliegt das brennende Fett durch den Raum – die Fettexplosion. Deshalb hat Klasse F ein eigenes Löschmittel.',
@@ -666,9 +669,9 @@ LEVELS.push({
         {
           frage: 'Ein Holzstapel glüht tief im Inneren. Welche Strahlart?',
           antworten: [
-            'Sprühstrahl, weil er besser kühlt',
-            'Vollstrahl, weil er die Glut zerteilt und eindringt',
-            'Egal, Hauptsache Wasser',
+            'Sprühstrahl, wegen der besseren Kühlung',
+            'Vollstrahl, wegen der Auftreffwucht',
+            'Egal, Hauptsache viel Wasser',
             'Erst Sprühstrahl, dann Pulver',
           ],
           richtig: 1,

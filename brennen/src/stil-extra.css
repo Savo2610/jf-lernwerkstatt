@@ -142,9 +142,17 @@
   animation:rein .3s var(--ease) both;
 }
 .korbchip i{font-style:normal}
+/* Im Hochformat bleiben es zwei Spalten. Einspaltig sind vier Koerbe plus
+   Auftragskarte plus Kartenleiste hoeher als ein Handybildschirm – und weil
+   man die Karten in die Koerbe zieht, kann der Bildschirm nicht einfach
+   scrollen: Die Karten stehen dann unter dem Bildrand, und man kommt gar
+   nicht erst an sie heran. Deshalb hier alles kompakt, was nicht die Aufgabe
+   ist: Der Beisatz erklaert das Verfahren, und das steht schon in Aufgabe 5. */
 @media (max-width:620px){
-  .koerbe{grid-template-columns:1fr}
-  .korb{min-height:92px}
+  .korb{min-height:0; padding:.5em .5em}
+  .korb > b{font-size:.92em}
+  .korb > small{display:none}
+  .korbchip{font-size:.7em; padding:.2em .5em}
 }
 
 /* --- Marke, die im Bild an einem Objekt klebt -----------------------------
@@ -486,4 +494,15 @@ body:has(.ergebnis) .toast.weg{animation:toastRaus .32s ease-in both}
   .wandfeld b{font-size:1.2em}
   .wandfeld .ic{font-size:1.1em}
   .wandfeld.aus small{font-size:.6em}
+}
+
+/* Zwei Löscher nebeneinander (Level 7, Runde 2b). Nur so sieht man auf einen
+   Blick, dass nacheinander beide leer sind – untereinander liest man zwei
+   Balken als einen vorher und einen nachher. */
+.vorratreihe{display:flex; gap:8px; width:min(560px,100%); margin:0 auto .1em}
+.vorratreihe .vorrat{width:auto; flex:1 1 0; margin:0; min-width:0}
+@media (max-width:520px){
+  .vorratreihe .vorrat{padding:.35em .55em; gap:.45em}
+  .vorratreihe .vorrat .ic{font-size:1.1em}
+  .vorratreihe .klein{font-size:.68em}
 }

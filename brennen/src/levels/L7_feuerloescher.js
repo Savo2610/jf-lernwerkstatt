@@ -32,7 +32,7 @@ LEVELS.push({
   kurz: 'Neun Sekunden Löschzeit. Danach ist er leer – egal, ob es gereicht hat.',
 
   start(api) {
-    let fehlerWind = 0, fehlerTechnik = 0, fehlerSchluss = 0;
+    let fehlerWind = 0, fehlerTechnik = 0, fehlerMehrere = 0, fehlerSchluss = 0;
 
     const regel = (id) => LOESCHERREGELN.find(r => r.id === id);
 
@@ -99,13 +99,13 @@ LEVELS.push({
        Jeder Brand bekommt seinen eigenen Löscher: Der Balken faengt bei jedem
        Anlauf wieder voll an. Nur Runde 3 baut ihn absichtlich angebrochen –
        da geht es genau darum, was mit dem Rest passiert. */
-    const vorratBauen = (start) => {
+    const vorratBauen = (start, name) => {
       let wert = start == null ? 1 : start;
       const balken = el('div', { class: 'vorratbalken' }, el('i', { style: { width: (wert * 100) + '%' } }));
       const node = el('div', { class: 'vorrat' },
         el('span', { class: 'ic', text: '🧯' }),
         el('div', { style: { flex: '1' } },
-          el('div', { class: 'klein', text: 'Löschmittel im Löscher' }),
+          el('div', { class: 'klein', text: name || 'Löschmittel im Löscher' }),
           balken));
       node.setzen = (v) => {
         wert = clamp(v, 0, 1);
@@ -388,12 +388,144 @@ LEVELS.push({
                 el('span', { style: { fontSize: '1.4em' }, text: r.icon }),
                 el('div', {}, el('b', { text: r.regel }), el('div', { class: 'klein', text: r.warum })));
             })),
-          el('p', { class: 'hinweis', style: { marginTop: '.6em', textAlign: 'center' },
-            text: regel('mehrere').regel + ': ' + regel('mehrere').warum }),
           el('button', { class: 'btn gross', style: { marginTop: '.5em' },
-            onclick: () => { Audio3.klick(); phaseSchluss(); } }, 'Weiter →'));
+            onclick: () => { Audio3.klick(); phaseMehrere(); } }, 'Weiter →'));
         s.appendChild(panel);
         return motivWache(MOTIV, panel, { hoch: .45, weit: .9, anteil: .88, rand: .8, panelUnten: true });
+      });
+    };
+
+    /* --- Runde 2b: einer nach dem anderen oder beide auf einmal? ----------
+       Die Regel „ausreichend Feuerlöscher gleichzeitig einsetzen" stand bisher
+       nur als Satz in der Auflösung. Als Satz glaubt sie einem niemand – sie
+       klingt nach Verschwendung. Also wird sie vorgeführt: Zwei Balken, und
+       man sieht, dass nacheinander beide leer sind und es trotzdem brennt.  */
+    const phaseMehrere = () => {
+      buehne.clear();
+      [-1.15, 0, 1.15].forEach(x => {
+        const h = baueBrandgut('holz');
+        h.position.set(x, 0, rnd(-.2, .2));
+        h.rotation.y = rnd(-.4, .4);
+        h.scale.setScalar(1.2);
+        buehne.add(h);
+      });
+      brandFeuer.position.set(0, .35, 0);
+      brandFeuer.scale.set(2.4, 1.2, 1.7);
+      feuerAnteileSetzen(brandFeuer, 1, .7);
+      feuerStaerke(brandFeuer, 1, true);
+      feuerStaerke(tropfFeuer, 0, true);
+      wind = 1;
+      wolkenStaerke(rauch, .8);
+
+      UI.zeige('l7-mehrere', (s) => {
+        let fertig = false, laeuft = false;
+        const eins = vorratBauen(1, 'Löscher 1');
+        const zwei = vorratBauen(1, 'Löscher 2');
+        const unten = unterbau(el('div', { class: 'vorratreihe' }, eins, zwei));
+
+        const zuruecksetzen = () => {
+          eins.setzen(1); zwei.setzen(1);
+          feuerAnteileSetzen(brandFeuer, 1, .7);
+          brandFeuer.scale.set(2.4, 1.2, 1.7);
+          feuerStaerke(brandFeuer, 1);
+          wolkenStaerke(rauch, .8);
+          wolkenStaerke(pulverwolke, 0);
+          laeuft = false;
+        };
+
+        const WAHL = [
+          {
+            id: 'gleich', text: 'Beide gleichzeitig draufhalten',
+            spielen: () => {
+              Audio3.whoosh();
+              wolkenStaerke(pulverwolke, 1);
+              eins.leeren(.35, 1.2);
+              zwei.leeren(.35, 1.2);
+              setTimeout(() => { feuerStaerke(brandFeuer, 0); wolkenStaerke(rauch, 0); }, 900);
+              setTimeout(() => wolkenStaerke(pulverwolke, 0), 2200);
+            },
+          },
+          {
+            id: 'nach', text: 'Erst den einen, dann den anderen',
+            spielen: () => {
+              // Der erste drückt das Feuer nur herunter. Bis der zweite kommt,
+              // steht es wieder – und dann ist gar nichts mehr übrig.
+              Audio3.whoosh();
+              wolkenStaerke(pulverwolke, 1);
+              eins.leeren(0, 1.1);
+              setTimeout(() => feuerStaerke(brandFeuer, .25), 500);
+              setTimeout(() => {
+                wolkenStaerke(pulverwolke, 0);
+                feuerStaerke(brandFeuer, 1);
+                Audio3.feuer();
+                funkenSchauer(Stage.welt, new THREE.Vector3(0, 1, 0), { anzahl: 16, wucht: .9, dauer: .9 });
+              }, 1400);
+              setTimeout(() => {
+                Audio3.whoosh();
+                wolkenStaerke(pulverwolke, 1);
+                zwei.leeren(0, 1.1);
+              }, 2200);
+              setTimeout(() => wolkenStaerke(pulverwolke, 0), 3600);
+            },
+          },
+          {
+            id: 'reserve', text: 'Einen nehmen, den anderen als Reserve behalten',
+            spielen: () => {
+              Audio3.whoosh();
+              wolkenStaerke(pulverwolke, 1);
+              eins.leeren(0, 1.2);
+              setTimeout(() => feuerStaerke(brandFeuer, .3), 700);
+              setTimeout(() => {
+                wolkenStaerke(pulverwolke, 0);
+                feuerStaerke(brandFeuer, 1);
+                Audio3.feuer();
+              }, 1900);
+            },
+          },
+        ];
+
+        const WARUM = {
+          nach: 'Der erste Löscher hat das Feuer nur heruntergedrückt. Bis der zweite kommt, steht es wieder – und jetzt sind beide leer.',
+          reserve: 'Ein Löscher reicht für diesen Brand nicht. Die Reserve gehört ans Ende, nicht an den Anfang: erst löschen, dann kontrollieren.',
+        };
+
+        const feld = el('div', { class: 'antworten unten drei' },
+          ...WAHL.map((w, n) => {
+            const b = el('button', { class: 'antwort' },
+              el('span', { class: 'marker', text: 'ABC'[n] }),
+              el('span', { text: w.text }));
+            b.addEventListener('click', () => {
+              if (fertig || laeuft) return;
+              laeuft = true;
+              w.spielen();
+              if (w.id !== 'gleich') {
+                fehlerMehrere++;
+                Audio3.falsch();
+                b.classList.add('falsch');
+                unten.hinweis(WARUM[w.id], 'schlecht', 6000);
+                setTimeout(() => { b.classList.remove('falsch'); zuruecksetzen(); },
+                  w.id === 'nach' ? 4600 : 3400);
+                return;
+              }
+              fertig = true;
+              Audio3.richtig();
+              b.classList.add('richtig');
+              unten.hinweis(regel('mehrere').warum, 'gut', 4600);
+              setTimeout(phaseSchluss, 3000);
+            });
+            return b;
+          }));
+        unten.appendChild(feld);
+
+        const auftrag = el('div', { class: 'auftrag' },
+          el('div', { class: 'dienstvorschrift', text: 'Zu zweit am Brand' }),
+          el('h2', { text: 'Zwei Löscher, ein Feuer' }),
+          el('p', { class: 'hinweis', text: 'Der Stapel brennt in voller Breite, und ihr seid zu zweit. Jeder hat einen vollen Löscher in der Hand.' }));
+        s.appendChild(auftrag);
+        s.appendChild(unten);
+
+        return motivWache(MOTIV, unten,
+          { hoch: .34, weit: .9, anteil: .94, rand: .5, panelUnten: true, obenNode: auftrag });
       });
     };
 
@@ -511,7 +643,7 @@ LEVELS.push({
           frage: 'Und bei einem Gas- oder Flüssigkeitsbrand?',
           antworten: [
             'Auch in kurzen Stößen',
-            'In einem Zug, ohne Unterbrechung',
+            'In einem Zug, ohne Pause',
             'Von hinten nach vorn',
             'Mit Wasser hinterher',
           ],
@@ -537,8 +669,9 @@ LEVELS.push({
         Stage.bildVersatz(0, 0);
         frageReihe(s, fragen,
           (richtig, gesamt) => {
-            const fehler = fehlerWind + fehlerTechnik + fehlerSchluss;
-            const guete = clamp(richtig / gesamt - fehlerWind * .07 - fehlerTechnik * .08 - fehlerSchluss * .06, 0, 1);
+            const fehler = fehlerWind + fehlerTechnik + fehlerMehrere + fehlerSchluss;
+            const guete = clamp(richtig / gesamt - fehlerWind * .07 - fehlerTechnik * .08
+              - fehlerMehrere * .06 - fehlerSchluss * .06, 0, 1);
             const abzeichen = [];
             if (fehlerWind === 0) abzeichen.push('wind');
             if (fehlerTechnik === 0) abzeichen.push('technik');
@@ -552,6 +685,7 @@ LEVELS.push({
                 el('span', { html: '<b>Mit dem Wind</b> angreifen, Flächenbrände von vorn beginnend.' }),
                 el('span', { html: '<b>Feststoff:</b> kurze Stöße. <b>Gas und Flüssigkeit:</b> ein Zug ohne Lücke.' }),
                 el('span', { html: '<b>Tropfbrand:</b> von oben nach unten – sonst zündet das Nachlaufende wieder an.' }),
+                el('span', { html: '<b>Zu zweit:</b> beide Löscher gleichzeitig. Nacheinander sind nur beide leer.' }),
                 el('span', { html: '<b>Danach:</b> kontrollieren und eine Reserve behalten. Pulver kühlt kaum.' }),
               ],
             });

@@ -441,7 +441,7 @@ LEVELS.push({
         },
         {
           frage: 'Eine Flüssigkeit brennt. Was brennt dabei eigentlich?',
-          antworten: ['Die Flüssigkeit selbst', 'Die Dämpfe über der Flüssigkeit', 'Der Behälter', 'Der Sauerstoff'],
+          antworten: ['Die Flüssigkeit selbst', 'Die Dämpfe darüber', 'Der Behälter darunter', 'Der Sauerstoff darin'],
           richtig: 1,
           erklaerung: 'Nie die Flüssigkeit selbst. Es brennt immer das Dampf-Luft-Gemisch darüber. Deshalb hört eine Flüssigkeit auf zu brennen, sobald sie zu kalt für Dämpfe wird.',
           zitat: 'Bei brennbaren Flüssigkeiten brennt nicht die Flüssigkeit selbst, sondern es brennen die Dämpfe oberhalb der Flüssigkeit.',

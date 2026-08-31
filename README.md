@@ -66,7 +66,7 @@ funktionieren genau wie drüben, alles andere ist eigen.
 |---|-------|--------|
 | 5 | Wie löscht man? | Fünf Löschverfahren auf ihre fünf Angriffspunkte im Dreieck ziehen. Danach zweimal Wasser — und trotzdem zwei verschiedene Verfahren |
 | 6 | Womit löschen wir? | Fünf Löschmittel ihrer Hauptlöschwirkung zuordnen, fünf Brände löschen (und sehen, was bei der falschen Wahl passiert), Vollstrahl gegen Sprühstrahl |
-| 7 | Der Feuerlöscher | Von welcher Seite (Wind), mit welcher Technik (Stöße, ein Zug, von oben nach unten), und was nach dem Löschen kommt. Der Vorratsbalken läuft die ganze Zeit mit |
+| 7 | Der Feuerlöscher | Von welcher Seite (Wind), mit welcher Technik (Stöße, ein Zug, von oben nach unten), zu zweit gleichzeitig statt nacheinander, und was nach dem Löschen kommt. Der Vorratsbalken läuft die ganze Zeit mit |
 | 8 | Der Ernstfall (Boss) | Vier Einsätze, je drei Entscheidungen: Was brennt da? Was muss weg? Womit? Die Auflösung kommt erst, wenn alle drei stehen |
 
 Aufgabe 7 bringt alle sieben Regeln aus Kapitel 6.8 unter, aber keine als
@@ -242,7 +242,16 @@ Die Spielarten unterscheiden sich:
 
 Die Feuerwand ist jeden Abend dieselbe. Das ist Absicht: Wer die Fragen schon
 kennt, kann sie beantworten, und genau darum geht es. Ein Gruppenabend ist
-keine Prüfung.
+keine Prüfung. Die 400er sind trotzdem echte Brocken — Transferfragen, die
+nirgends wörtlich in der Unterlage stehen (ein Flammpunkt von −20 °C an einem
+Wintertag, die Voraussetzung unter einem Schaumteppich).
+
+**Antwortmöglichkeiten sind gleich lang zu halten.** Eine richtige Antwort,
+die als einzige ihre eigene Begründung mitliefert („Nein – er bringt
+Sauerstoff, keine Energie"), wird nicht gewusst, sondern an der Länge erkannt.
+Die Begründung gehört in `e` (die Auflösung), nicht in `o`. Ein Prüfskript
+dafür gibt es nicht — beim Ergänzen einer Frage die vier Zeilen einmal
+untereinander lesen.
 
 ### XP nur einmal
 
