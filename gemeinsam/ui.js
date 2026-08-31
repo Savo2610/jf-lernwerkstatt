@@ -118,6 +118,29 @@ const UI = {
       zitatText ? this.zitat(zitatText) : null);
   },
 
+  /* --- Nachweis fuer den Jugendwart ---------------------------------------
+     Erscheint erst, wenn wirklich alle Abzeichen da sind. Der Code haengt am
+     Vornamen und am heutigen Tag; warum das reicht und warum es nicht mehr
+     kann, steht in gemeinsam/nachweis.js.
+
+     crypto.subtle rechnet asynchron, die Tafel wird aber synchron gebaut –
+     also steht erst ein Platzhalter da und der Code wird nachgetragen.     */
+  nachweisKarte(alleKeys) {
+    if (!alleKeys.every(k => State.abzeichen[k])) return null;
+
+    const feld = el('div', { class: 'nachweiscode', text: '…' });
+    NACHWEIS.erzeugen(SPIEL.id, State.name, alleKeys)
+      .then(code => { feld.textContent = code; })
+      .catch(() => { feld.textContent = 'geht hier nicht'; feld.classList.add('fehlt'); });
+
+    return el('div', { class: 'panel nachweis' },
+      el('div', { style: { fontSize: '2em', lineHeight: 1.1 }, text: '📜' }),
+      el('b', { text: 'Alle Abzeichen – Nachweis' }),
+      el('div', { class: 'klein', text: `Zeig das deinem Jugendwart. Der Code gehört zu „${State.name}“ und gilt nur mit diesem Namen.` }),
+      feld,
+      el('div', { class: 'klein', text: NACHWEIS.tagAlsDatum(NACHWEIS.tagVon()) }));
+  },
+
   /* --- Ergebnis eines Levels --------------------------------------------- */
   ergebnis(opt) {
     // opt: { levelId, titel, guete (0..1), xp, abzeichen[], zeilen[], weiter(), nochmal() }

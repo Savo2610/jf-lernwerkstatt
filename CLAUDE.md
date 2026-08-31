@@ -13,6 +13,7 @@ Drei Seiten, ein Worker, eine Domain:
 | `jf.veerka.mp/` | Startseite („Lernwerkstatt"), 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
 | `jf.veerka.mp/fwdv3/` | das Spiel „Einsatzbereit" (FwDV 3), 3D mit Three.js | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | das Spiel „Brennen & Löschen" (Brandlehre), 3D | `brennen/src/` |
+| `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart, nirgends verlinkt | `hub/src/nachweis.*` |
 
 Beide Spiele stehen auf derselben Basis in `gemeinsam/`: Bühne, Spielstand,
 Bildschirme, Klänge, Designsystem. Beide haben acht Aufgaben und einen
@@ -189,5 +190,16 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   Deshalb heißen die Zwischenstände jetzt `bau/fwdv3.html` und
   `bau/brennen-loeschen.html`. Wer sie nach `dist/` zurückbenennt, holt einen
   stillen Fehlschlag zurück, den man erst im Netz sieht.
+- **Der Nachweiscode haengt am Vornamen — und der Name ist deshalb ab dem
+  ersten Abzeichen gesperrt** (`State.nameGesperrt()`). Ohne diese Sperre
+  koennte ein fertiges Kind der ganzen Gruppe Codes ausstellen: Name aendern,
+  Code abschreiben, Name zurueckstellen. Wer die Sperre herausnimmt, macht den
+  ganzen Nachweis wertlos. Was er kann und was nicht, steht ausfuehrlich in
+  `gemeinsam/nachweis.js` — kurz: gegen Weitergeben hilft er, gegen einen
+  gefälschten Spielstand nicht, und das ist bewusst so.
+- **Wer ein Abzeichen ergänzt, ändert alle bisherigen Nachweiscodes.** Der Satz
+  der Schlüssel steckt im Hash. `hub/build.mjs` liest ihn beim Bauen aus den
+  Datendateien; ändert sich dort die Schreibweise des `ABZEICHEN`-Blocks,
+  bricht der Build absichtlich ab, statt still falsche Urteile zu fällen.
 - **`hub/vorschau/` liegt bewusst neben `hub/dist/`** und nicht darin: was in
   `dist/` liegt, lädt der Worker mit hoch.

@@ -149,6 +149,17 @@ const App = {
                  background: 'var(--panel)', color: 'var(--txt)', fontSize: '1.1em', fontWeight: '700',
                  textAlign: 'center', width: '100%', font: 'inherit' },
       });
+      /* Ab dem ersten Abzeichen gehoert der Name zum Nachweis und ist
+         festgeschrieben – siehe gemeinsam/nachweis.js. Aendern geht nur noch
+         ueber „Fortschritt zuruecksetzen", und das kostet dann eben alles. */
+      if (State.nameGesperrt()) {
+        eingabe.readOnly = true;
+        eingabe.tabIndex = -1;
+        eingabe.style.opacity = '.7';
+        eingabe.style.cursor = 'default';
+        eingabe.title = 'Dein Name gehört zu deinen Abzeichen.';
+      }
+
       // Kleine Belohnung fuers Tippen: Das Feuer zieht an, sobald ein Name
       // dasteht. Kostet nichts und macht den ersten Bildschirm lebendig.
       eingabe.addEventListener('input', () => {
@@ -157,7 +168,7 @@ const App = {
       });
 
       const weiter = () => {
-        State.name = (eingabe.value || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
+        if (!State.nameGesperrt()) State.name = (eingabe.value || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
         State.sichern();
         Audio3.klick();
         App.levelMenue();
@@ -185,6 +196,13 @@ const App = {
           return;
         }
         State.zuruecksetzen();
+        // Ohne Abzeichen ist auch der Name wieder frei – sonst bliebe das Feld
+        // gesperrt, bis jemand den Bildschirm neu aufbaut.
+        eingabe.readOnly = false;
+        eingabe.tabIndex = 0;
+        eingabe.style.opacity = '';
+        eingabe.style.cursor = '';
+        eingabe.removeAttribute('title');
         Audio3.fanfare();
         UI.toast('Fortschritt gelöscht. XP, Sterne und Abzeichen stehen wieder auf null.', 'gut', 3200);
         loeschKnopf.textContent = '✓ Zurückgesetzt';
@@ -196,7 +214,9 @@ const App = {
       const karte = el('div', { class: 'panel glas', style: { width: 'min(400px,92vw)', display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'center' } },
         el('div', { class: 'dienstvorschrift', style: { alignSelf: 'center' }, text: 'Brennen & Löschen' }),
         el('h2', { text: State.name ? 'Dein Profil' : 'Wer bist du?' }),
-        el('p', { class: 'klein', style: { margin: 0 }, text: 'Den Namen kannst du jederzeit ändern.' }),
+        el('p', { class: 'klein', style: { margin: 0 }, text: State.nameGesperrt()
+          ? 'Dein Name gehört jetzt zu deinen Abzeichen und steht fest.'
+          : 'Den Namen kannst du jederzeit ändern – bis zum ersten Abzeichen.' }),
         eingabe,
         el('button', { class: 'btn gross', onclick: weiter },
           State.name ? 'Weiter üben →' : 'Los geht’s →'),
@@ -207,7 +227,7 @@ const App = {
         el('button', {
           class: 'btn geist', style: { fontSize: '.92em' },
           onclick: () => {
-            State.name = (eingabe.value || State.name || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
+            if (!State.nameGesperrt()) State.name = (eingabe.value || State.name || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
             State.sichern();
             Audio3.klick(); App.beamerStart();
           },
@@ -316,11 +336,17 @@ const App = {
         el('div', { class: 'levelgitter', style: { maxWidth: '900px' } },
           keys.map(k => {
             const a = ABZEICHEN[k], hat = !!State.abzeichen[k];
+            const tag = State.abzeichenTag(k);
             return el('div', { class: 'panel', style: { textAlign: 'center', opacity: hat ? 1 : .38 } },
               el('div', { style: { fontSize: '2.6em', lineHeight: 1.1 }, text: hat ? a.icon : '🔒' }),
               el('b', { text: a.name }),
-              el('div', { class: 'klein', text: a.text }));
-          })),
+              el('div', { class: 'klein', text: a.text }),
+              // Wann das Abzeichen fiel. Spielstaende von vor dieser Aenderung
+              // wissen den Tag nicht mehr – dann steht hier eben nichts.
+              tag ? el('div', { class: 'klein mono', style: { marginTop: '6px' },
+                                text: NACHWEIS.tagAlsDatum(tag) }) : null);
+          }),
+          UI.nachweisKarte(keys)),
         el('button', { class: 'btn geist', onclick: () => { Audio3.klick(); App.levelMenue(); } }, '← Zurück')));
     }, { scroll: true });
   },

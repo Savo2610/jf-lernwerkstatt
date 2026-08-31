@@ -72,4 +72,60 @@ async function spielUebernehmen(quelle, roh, unter) {
 if (!alsArtifact) {
   await spielUebernehmen('../build.mjs', '../bau/fwdv3.html', 'fwdv3');
   await spielUebernehmen('../brennen/build.mjs', '../bau/brennen-loeschen.html', 'brennen-loeschen');
+  nachweisseiteBauen();
+}
+
+// --- Nachweisseite fuer den Jugendwart -------------------------------------
+// Liegt unter jf.veerka.mp/nachweis/ und ist bewusst nirgends verlinkt: Sie
+// geht die Kinder nichts an. Versteckt ist sie damit nicht – das Geheimnis
+// steckt ohnehin in jedem Spiel (siehe gemeinsam/nachweis.js), hier kommt also
+// nichts dazu, was nicht schon draussen waere.
+
+// Die Abzeichenschluessel stehen in den Datendateien der Spiele. Die Seite
+// braucht genau denselben Satz wie das Spiel, sonst passt kein einziger Code.
+// Deshalb hier lesen statt abschreiben – und laut scheitern, wenn sich die
+// Schreibweise dort aendert, statt still falsche Urteile auszugeben.
+function abzeichenSchluessel(datei) {
+  const quelle = readFileSync(join(ROOT, datei), 'utf8');
+  const block = /const ABZEICHEN = \{([\s\S]*?)\n\};/.exec(quelle);
+  if (!block) throw new Error(`${datei}: ABZEICHEN nicht gefunden – Nachweisseite kann nicht bauen`);
+  const keys = [...block[1].matchAll(/^\s*([A-Za-zÄÖÜäöü_$][\w$]*)\s*:/gm)].map(m => m[1]);
+  if (keys.length < 5) throw new Error(`${datei}: nur ${keys.length} Abzeichen gelesen – das kann nicht stimmen`);
+  return keys;
+}
+
+function nachweisseiteBauen() {
+  const spiele = [
+    { id: 'fwdv3', name: 'Einsatzbereit', abzeichen: abzeichenSchluessel('../src/data/fwdv3.js') },
+    { id: 'brennen', name: 'Brennen & Löschen', abzeichen: abzeichenSchluessel('../brennen/src/data/brandlehre.js') },
+  ];
+
+  const seite = `<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f1420">
+<title>Nachweis prüfen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+${r('src/nachweis.css')}
+</style>
+${r('src/nachweis.html')}
+<script>
+(function(){
+"use strict";
+const SPIELE = ${JSON.stringify(spiele)};
+${readFileSync(join(ROOT, '../gemeinsam/nachweis.js'), 'utf8')}
+${r('src/nachweis.js')}
+})();
+</script>
+</html>
+`;
+  mkdirSync(join(ROOT, 'dist/nachweis'), { recursive: true });
+  writeFileSync(join(ROOT, 'dist/nachweis/index.html'), seite);
+  console.log(`hub/dist/nachweis/index.html geschrieben – ${(seite.length / 1024).toFixed(0)} KB, `
+    + spiele.map(s => `${s.id}: ${s.abzeichen.length} Abzeichen`).join(', '));
 }

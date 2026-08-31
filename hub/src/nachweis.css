@@ -1,0 +1,63 @@
+/* Nachweisseite – bewusst schlicht. Sie wird im Gerätehaus am Handy benutzt,
+   meist im Stehen, oft mit einer Hand. Keine Kulisse, keine Animation, große
+   Felder, große Schrift.                                                    */
+:root{
+  --bg:#0f1420; --panel:#182031; --linie:#2c3550;
+  --txt:#eef2fb; --txt2:#aab4c8; --txt3:#7e8aa2;
+  --rot:#ff4d3d; --gruen:#3ddc84; --gelb:#ffd23f;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; padding:24px 18px 60px;
+  background:var(--bg); color:var(--txt);
+  font-family:Outfit,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:clamp(16px,2.4vw,18px); line-height:1.55;
+}
+main{max-width:34rem; margin-inline:auto}
+
+h1{
+  font-family:"Archivo Black",Outfit,system-ui,sans-serif;
+  font-size:clamp(1.7em,7vw,2.3em); line-height:1.1; margin:.2em 0 .3em;
+}
+h2{font-size:1.05em; margin:0 0 .4em}
+.unter{color:var(--txt2); margin:0 0 1.8em}
+
+form{display:flex; flex-direction:column; gap:14px; margin-bottom:22px}
+label{display:flex; flex-direction:column; gap:6px}
+label span{font-size:.88em; font-weight:600; color:var(--txt2)}
+input{
+  font:inherit; font-weight:700; color:var(--txt);
+  background:var(--panel); border:2px solid var(--linie); border-radius:14px;
+  padding:.7em .9em; width:100%;
+}
+input:focus{outline:none; border-color:var(--gelb)}
+/* Der Code wird abgetippt – Tabellenziffern und Abstand beugen Zahlendrehern vor */
+.mono{font-variant-numeric:tabular-nums; letter-spacing:.12em; text-transform:uppercase}
+
+button{
+  font:inherit; font-weight:800; cursor:pointer;
+  background:var(--gelb); color:#1b1400; border:0; border-radius:999px;
+  padding:.8em 1.4em; font-size:1.05em;
+}
+button:disabled{opacity:.6; cursor:default}
+
+#ergebnis{
+  border-radius:16px; padding:16px 18px; margin-bottom:26px;
+  border:2px solid var(--linie); background:var(--panel);
+}
+#ergebnis b{display:block; font-size:1.15em; margin-bottom:.25em}
+#ergebnis.gilt{border-color:var(--gruen)}
+#ergebnis.gilt b{color:var(--gruen)}
+#ergebnis.nein{border-color:var(--rot)}
+#ergebnis.nein b{color:var(--rot)}
+#ergebnis .klein{color:var(--txt2); font-size:.9em}
+
+.hinweis{border-top:1px solid var(--linie); padding-top:20px; color:var(--txt2); font-size:.94em}
+.hinweis p{margin:0 0 .9em}
+.hinweis b{color:var(--txt)}
+
+@media (prefers-reduced-motion:no-preference){
+  #ergebnis{animation:auf .22s ease-out}
+  @keyframes auf{from{opacity:0; transform:translateY(-4px)}}
+}

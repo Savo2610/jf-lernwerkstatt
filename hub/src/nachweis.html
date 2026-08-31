@@ -1,0 +1,43 @@
+<main>
+  <h1>Nachweis prüfen</h1>
+  <p class="unter">
+    Für Jugendwarte. Ein Kind zeigt dir seinen Code, wenn es alle Abzeichen
+    eines Spiels zusammenhat. Vornamen und Code eintragen — der Rest steht dann
+    hier.
+  </p>
+
+  <form id="form" autocomplete="off">
+    <label>
+      <span>Vorname</span>
+      <input id="name" type="text" maxlength="14" placeholder="wie im Spiel eingetragen"
+             required autocapitalize="words" spellcheck="false">
+    </label>
+    <label>
+      <span>Code</span>
+      <input id="code" type="text" maxlength="12" placeholder="ABCD-2345"
+             required autocapitalize="characters" spellcheck="false" class="mono">
+    </label>
+    <button type="submit" id="knopf">Prüfen</button>
+  </form>
+
+  <div id="ergebnis" hidden></div>
+
+  <section class="hinweis">
+    <h2>Was der Code sagt — und was nicht</h2>
+    <p>
+      <b>Er gehört zum Vornamen.</b> Weitergeben nützt nichts: Toms Code gilt
+      nur zu „Tom“. Wer mit fremdem Namen ankommt, fällt hier durch.
+    </p>
+    <p>
+      <b>Der Name steht ab dem ersten Abzeichen fest.</b> Ändern geht nur noch,
+      indem man den ganzen Fortschritt zurücksetzt und von vorne anfängt. Ein
+      fertiges Kind kann also niemandem eben schnell einen Code ausstellen.
+    </p>
+    <p>
+      <b>Er beweist nicht, wer gespielt hat.</b> Wer sich mit der
+      Entwicklerkonsole auskennt, kann seinen Spielstand fälschen. Dagegen hilft
+      kein Code, sondern eine Frage: Lass dir die Abzeichentafel zeigen und frag
+      zu einem Abzeichen nach. Dort steht auch, wann jedes einzelne fiel.
+    </p>
+  </section>
+</main>

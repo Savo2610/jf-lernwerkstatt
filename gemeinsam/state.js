@@ -16,7 +16,7 @@ const State = {
   helmfarbe: '#ffd23f',
   xp: 0,
   levelStatus: {},          // { levelId: { best: 0..1, gespielt: n } }
-  abzeichen: {},            // { key: true }
+  abzeichen: {},            // { key: tagNummer } – siehe abzeichenGeben
   ton: true,
   sprache: true,            // Sprachausgabe der Kommandos
 
@@ -118,13 +118,28 @@ const State = {
   sterneMoeglich() { return LEVELS.length * 3; },
   alleDreiSterne() { return LEVELS.length > 0 && LEVELS.every(l => this.sterne(l.id) === 3); },
 
+  /* Gespeichert wird der Tag, an dem das Abzeichen fiel – er steht in der
+     Abzeichentafel und macht sichtbar, ob sich das Spiel ueber Wochen gezogen
+     hat oder an einem Abend durchgepeitscht wurde. Alte Spielstaende haben
+     hier `true` stehen; das bleibt gueltig und heisst „Tag unbekannt".     */
   abzeichenGeben(key) {
     if (this.modus !== 'solo' || this.abzeichen[key]) return false;
-    this.abzeichen[key] = true;
+    this.abzeichen[key] = NACHWEIS.tagVon();
     this.sichern();
     return true;
   },
   abzeichenAnzahl() { return Object.keys(this.abzeichen).length; },
+  abzeichenTag(key) {
+    const v = this.abzeichen[key];
+    return typeof v === 'number' ? v : null;
+  },
+
+  /* --- Der Name gehoert ab dem ersten Abzeichen dazu ----------------------
+     Sonst koennte ein fertiges Kind der ganzen Gruppe Nachweise ausstellen:
+     Name auf „Tom" aendern, Code abschreiben, Name zurueckstellen. Ab dem
+     ersten Abzeichen geht das nur noch ueber „Fortschritt zuruecksetzen" –
+     und dann ist der Fortschritt eben auch weg.                            */
+  nameGesperrt() { return this.abzeichenAnzahl() > 0; },
 };
 
 /* ---------- Beamer-Modus: Teams ------------------------------------------ */

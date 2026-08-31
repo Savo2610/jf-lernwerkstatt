@@ -1,7 +1,8 @@
 /* Ein Worker fuer beide Adressen.
 
-   jf.veerka.mp    liefert die Startseite und darunter die Spiele:
-                   /fwdv3/ und /brennen-loeschen/.
+   jf.veerka.mp    liefert die Startseite und darunter die Spiele
+                   /fwdv3/ und /brennen-loeschen/ sowie /nachweis/ – die
+                   Pruefseite fuer den Jugendwart, nirgends verlinkt.
    fwdv3.veerka.mp ist die alte Adresse des Spiels und leitet dauerhaft um.
 
    Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`), sonst
@@ -9,7 +10,7 @@
    werden.                                                                    */
 const ALT = 'fwdv3.veerka.mp';
 const NEU = 'https://jf.veerka.mp/fwdv3/';
-const SPIELE = ['/fwdv3', '/brennen-loeschen'];
+const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/nachweis'];
 
 export default {
   async fetch(request, env) {
@@ -18,8 +19,8 @@ export default {
       // Query mitnehmen: ?level=uebung und ?modus=beamer sollen weiter gehen.
       return Response.redirect(NEU + url.search + url.hash, 301);
     }
-    // Ohne Schraegstrich landet ein Spiel sonst in der Ersatzseite
-    if (SPIELE.includes(url.pathname)) {
+    // Ohne Schraegstrich landet eine Unterseite sonst in der Ersatzseite
+    if (UNTERSEITEN.includes(url.pathname)) {
       return Response.redirect(url.origin + url.pathname + '/' + url.search + url.hash, 301);
     }
     return env.ASSETS.fetch(request);

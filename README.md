@@ -253,6 +253,36 @@ Die Begründung gehört in `e` (die Auflösung), nicht in `o`. Ein Prüfskript
 dafür gibt es nicht — beim Ergänzen einer Frage die vier Zeilen einmal
 untereinander lesen.
 
+### Nachweis: „Ich habe alle Abzeichen"
+
+Wer alle Abzeichen eines Spiels hat, bekommt unten in der Abzeichentafel einen
+Code — acht Zeichen, gut abzutippen und vorzulesen. Der Jugendwart prüft ihn
+auf **`jf.veerka.mp/nachweis/`**: Vorname eintragen, Code eintragen, fertig.
+Die Seite ist bewusst nirgends verlinkt und sagt bei einem gültigen Code auch,
+aus welchem Spiel er stammt und wann das Kind fertig geworden ist.
+
+Der Code hängt am Vornamen (HMAC-SHA-256 über Spiel, Name, Abzeichensatz und
+Tag; `crypto.subtle` ist im Browser eingebaut, es kommt also keine
+Abhängigkeit dazu). **Weitergeben nützt deshalb nichts** — Toms Code gilt nur
+zu „Tom". Damit ein fertiges Kind nicht einfach kurz den Namen wechselt und
+der halben Gruppe Codes ausstellt, **steht der Name ab dem ersten Abzeichen
+fest**: Ändern geht nur noch über „Fortschritt zurücksetzen", und dann fängt
+man von vorne an. Schummeln kostet damit genau so viel wie ehrlich spielen.
+
+Was der Code **nicht** kann: beweisen, wer wirklich gespielt hat. Das
+Geheimnis steckt im ausgelieferten JavaScript — es muss dort stehen, weil der
+Code ohne Netz entstehen soll. Wer die Entwicklerkonsole bedienen kann,
+fälscht seinen Spielstand. Dagegen hilft kein Verfahren, sondern eine Frage:
+In der Abzeichentafel steht bei jedem Abzeichen, wann es fiel. Ein echter
+Verlauf zieht sich über Wochen. Die Überlegungen dazu stehen ausführlich in
+`gemeinsam/nachweis.js`.
+
+**Ein neues Abzeichen ändert alle bisherigen Codes**, weil der Satz der
+Schlüssel mit in den Hash geht. Das ist gewollt — ein Nachweis über „alle
+Abzeichen" muss sich auf den aktuellen Satz beziehen. `hub/build.mjs` liest
+die Schlüssel beim Bauen aus den Datendateien und bricht ab, wenn es sie dort
+nicht findet, statt still falsche Urteile zu fällen.
+
 ### XP nur einmal
 
 XP gibt es je Aufgabe nur bis zur vollen Punktzahl. Wiederholt man eine
@@ -427,6 +457,10 @@ Die Speicherschlüssel sind verschieden (`fwdv3-einsatzbereit-v1` gegen
 `jf-brennen-loeschen-v1`), obwohl beide auf einer Domain liegen und sich den
 Browserspeicher teilen — jedes Spiel hat seinen eigenen Fortschritt. Der
 gemeinsame Speicher ist der Grund, warum das später auch anders gehen kann.
+
+Dazu kommt `gemeinsam/nachweis.js`: der Prüfcode für „alle Abzeichen". Er
+gehört hierhin, weil beide Spiele ihn ausstellen und die Nachweisseite beide
+prüfen können muss (siehe „Nachweis" weiter oben).
 
 Wer an `gemeinsam/` etwas ändert, ändert **beide** Spiele. Danach beide
 ansehen, nicht nur eines.

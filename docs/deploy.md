@@ -79,6 +79,7 @@ falsche Seite zu veröffentlichen. Diese Trennung bitte so lassen.
 | `jf.veerka.mp/` | Startseite (`hub/dist/index.html`) |
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit (`hub/dist/fwdv3/index.html`) |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen (`hub/dist/brennen-loeschen/index.html`) |
+| `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart (`hub/dist/nachweis/index.html`) |
 | `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` |
 | `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query und Fragment bleiben |
 

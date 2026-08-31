@@ -17,6 +17,8 @@ spielBauen({
     'brennen/src/spiel.js',
     'brennen/src/data/brandlehre.js',
     'gemeinsam/util.js',
+    // nachweis.js vor state.js: der Spielstand stempelt Abzeichen mit dem Tag
+    'gemeinsam/nachweis.js',
     'gemeinsam/state.js',
     'gemeinsam/audio.js',
     'gemeinsam/ui.js',
