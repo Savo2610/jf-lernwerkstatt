@@ -31,5 +31,5 @@ spielBauen({
     'brennen/src/main.js',
   ],
 
-  ziel: 'brennen/dist/index.html',
+  ziel: 'bau/brennen-loeschen.html',
 });

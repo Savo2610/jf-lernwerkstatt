@@ -292,6 +292,13 @@ einen alten Stand eines Spiels veröffentlichen. Einzeln bauen geht mit
 `node build.mjs` bzw. `node brennen/build.mjs`; die Reihenfolge der Quelldateien
 steht jeweils dort.
 
+Die Spiele landen dabei zuerst roh in `bau/` (`bau/fwdv3.html`,
+`bau/brennen-loeschen.html`) und werden von dort nach `hub/dist/` übernommen.
+`hub/dist/` ist das **einzige** `dist/` im Repo, und das mit Absicht: solange es
+ein zweites gab, konnte ein falsch aufgerufener Deploy still das rohe Spiel
+statt der ganzen Auslieferung veröffentlichen. Näheres in
+[docs/deploy.md](docs/deploy.md).
+
 Die Server liefern das **Gebaute** aus, nicht die Quellen — nach jeder Änderung
 also neu bauen. Kein Hot Reload.
 

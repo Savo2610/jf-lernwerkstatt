@@ -30,5 +30,5 @@ spielBauen({
     'src/main.js',
   ],
 
-  ziel: 'dist/index.html',
+  ziel: 'bau/fwdv3.html',
 });

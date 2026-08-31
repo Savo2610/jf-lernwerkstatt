@@ -1,9 +1,10 @@
 # Gebautes – entsteht aus src/ und hub/src/ mit `node hub/build.mjs`.
 # Bewusst nicht im Repo: sonst haette jeder Commit eine 1-MB-Datei dabei,
 # und der Autodeploy baut ohnehin selbst.
-dist/
+# bau/ sind die rohen Spiele, hub/dist/ ist die fertige Auslieferung – und das
+# einzige dist/ im Repo, damit kein Deploy versehentlich das Falsche hochlaedt.
+bau/
 hub/dist/
-brennen/dist/
 hub/vorschau/
 
 # Werkzeug

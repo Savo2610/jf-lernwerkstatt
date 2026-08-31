@@ -58,7 +58,9 @@ npm run dev:brennen # nur Brennen & Löschen, Port 8414
 
 `npm run build` ruft `hub/build.mjs`, und das ruft `build.mjs` im Hauptordner
 und `brennen/build.mjs`. **Ein Befehl baut alles** — so kann man nicht
-versehentlich einen alten Stand eines Spiels veröffentlichen.
+versehentlich einen alten Stand eines Spiels veröffentlichen. Die rohen Spiele
+liegen dabei in `bau/`; `hub/dist/` ist das **einzige** `dist/` im Repo und
+muss es bleiben (siehe Fallen).
 
 Zum Prüfen im Browser: [docs/pruefen.md](docs/pruefen.md). Da stehen die
 Konsolen-Haken, mit denen man ein Level oder eine Fahrt direkt anspringt,
@@ -179,5 +181,13 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 - **Der Zurück-Knopf des Browsers holt die Seite aus dem Cache**, samt
   laufender Animation und zugezogener Blende. Alles, was einen Zustand setzt,
   braucht ein `pageshow` mit `e.persisted`.
+- **Es darf nur ein `dist/` geben, nämlich `hub/dist/`.** Wrangler löst
+  `assets.directory` relativ zu der Config auf, die es gelesen hat. Als das
+  rohe Einsatzbereit noch in einem zweiten `dist/` in der Wurzel lag, hat ein
+  Deploy ohne `--config hub/wrangler.jsonc` genau dieses hochgeladen: die
+  Startseite war weg, beide Spiele 404, und der Zurück-Knopf lief im Kreis.
+  Deshalb heißen die Zwischenstände jetzt `bau/fwdv3.html` und
+  `bau/brennen-loeschen.html`. Wer sie nach `dist/` zurückbenennt, holt einen
+  stillen Fehlschlag zurück, den man erst im Netz sieht.
 - **`hub/vorschau/` liegt bewusst neben `hub/dist/`** und nicht darin: was in
   `dist/` liegt, lädt der Worker mit hoch.

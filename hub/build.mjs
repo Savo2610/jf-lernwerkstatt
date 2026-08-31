@@ -58,11 +58,11 @@ console.log(`hub/${ziel} geschrieben – ${(html.length / 1024).toFixed(0)} KB`)
 // baut dieses Skript das Spiel gleich mit und legt es daneben – sonst wuerde
 // man versehentlich einen alten Stand veroeffentlichen.
 // Ein Spiel bauen und neben die Startseite legen. `quelle` ist das Bauskript,
-// `dist` sein Ergebnis, `unter` der Ordner unter hub/dist/.
-async function spielUebernehmen(quelle, dist, unter) {
+// `roh` sein Ergebnis in bau/, `unter` der Ordner unter hub/dist/.
+async function spielUebernehmen(quelle, roh, unter) {
   await import(pathToFileURL(join(ROOT, quelle)).href);
-  const datei = join(ROOT, dist);
-  if (!existsSync(datei)) throw new Error(`${dist} fehlt – Spiel nicht gebaut?`);
+  const datei = join(ROOT, roh);
+  if (!existsSync(datei)) throw new Error(`${roh} fehlt – Spiel nicht gebaut?`);
   mkdirSync(join(ROOT, 'dist', unter), { recursive: true });
   const inhalt = readFileSync(datei);
   writeFileSync(join(ROOT, 'dist', unter, 'index.html'), inhalt);
@@ -70,6 +70,6 @@ async function spielUebernehmen(quelle, dist, unter) {
 }
 
 if (!alsArtifact) {
-  await spielUebernehmen('../build.mjs', '../dist/index.html', 'fwdv3');
-  await spielUebernehmen('../brennen/build.mjs', '../brennen/dist/index.html', 'brennen-loeschen');
+  await spielUebernehmen('../build.mjs', '../bau/fwdv3.html', 'fwdv3');
+  await spielUebernehmen('../brennen/build.mjs', '../bau/brennen-loeschen.html', 'brennen-loeschen');
 }

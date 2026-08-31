@@ -1,10 +1,11 @@
 {
   // Ein Worker fuer alles:
   //   jf.veerka.mp/         Startseite (hub/dist/index.html)
-  //   jf.veerka.mp/fwdv3/   das Spiel  (hub/dist/fwdv3/index.html)
+  //   jf.veerka.mp/fwdv3/   Einsatzbereit (hub/dist/fwdv3/index.html)
+  //   jf.veerka.mp/brennen-loeschen/  Brennen & Loeschen
   //   fwdv3.veerka.mp/*     alte Adresse, leitet dauerhaft um
   //
-  // Beide Seiten liegen damit auf derselben Domain – nur so teilen sie sich
+  // Alle Seiten liegen damit auf derselben Domain – nur so teilen sie sich
   // den Browserspeicher, und ein gemeinsamer Fortschritt ueber mehrere Themen
   // hinweg ist ueberhaupt moeglich.
   //
@@ -17,6 +18,11 @@
   "compatibility_date": "2026-08-01",
   "workers_dev": false,
   "assets": {
+    // Relativ zu DIESER Datei, also hub/dist – dem einzigen dist/ im Repo.
+    // Es gab hier schon einmal ein zweites dist/ in der Wurzel (das rohe
+    // Spiel); ein Deploy, der "./dist" von der Wurzel aus auflöst, hat dann
+    // still die falsche Seite veröffentlicht. Die Zwischenstände liegen
+    // deshalb in bau/. Wer das rückgängig macht, holt die Falle zurück.
     "directory": "./dist",
     "binding": "ASSETS",
     "run_worker_first": true,
