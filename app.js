@@ -95,6 +95,7 @@ function load(){
       history: Array.isArray(d.history) ? d.history : [],
       sound: !!d.sound,
     });
+    sortKids();
   }catch(e){ /* egal */ }
 }
 
@@ -105,6 +106,8 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const present = () => state.kids.filter(k => k.present);
 const byId = id => state.kids.find(k => k.id === id);
 const initials = n => n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase() || '?';
+const collator = new Intl.Collator('de', {sensitivity:'base', numeric:true});
+const sortKids = () => state.kids.sort((a,b) => collator.compare(a.name, b.name));
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const plural = (n, one, many) => `${n} ${n===1?one:many}`;
 
@@ -185,6 +188,7 @@ function addNames(str){
   const names = str.split(/[,;\n]/).map(s=>s.trim()).filter(Boolean);
   if(!names.length) return;
   for(const name of names) state.kids.push({id:uid(), name, present:true});
+  sortKids();
   state.slotsTouched = false;
   save(); renderRoster();
   toast(names.length===1 ? `${names[0]} ist dabei.` : `${names.length} Namen eingetragen.`);
@@ -472,6 +476,9 @@ function slotMachine(rows){
       el.textContent = final;
       row.classList.remove('rolling');
       row.style.animationDelay = '0ms';
+      /* Endzustand fest verdrahten – keine Animation darf ihn wieder wegnehmen. */
+      row.style.opacity = '1';
+      row.style.transform = 'none';
       row.classList.add('locked');
       blip(520 + i * 40);
       if(i === rows.length - 1){ setTimeout(() => { confetti(); horn(); }, 160); }
@@ -639,6 +646,7 @@ $('#btn-edit').addEventListener('click', e => {
   e.currentTarget.textContent = editMode ? 'Fertig' : 'Bearbeiten';
   e.currentTarget.classList.toggle('on', editMode);
   state.kids = state.kids.filter(k => k.name.trim());
+  if(!editMode){ sortKids(); save(); }
   renderRoster();
   if(editMode) setTimeout(()=>$('#new-name')?.focus(), 80);
 });
@@ -732,6 +740,7 @@ $('#btn-import').addEventListener('click', () => {
       if(!Array.isArray(d.kids)) throw 0;
       state.kids = d.kids.map(k => ({id:k.id||uid(), name:String(k.name||''), present:!!k.present}));
       if(Array.isArray(d.history)) state.history = d.history;
+      sortKids();
       state.slotsTouched = false; roundOpen = false; save();
       renderRoster(); $('#help-dlg').close(); go(0);
       toast(`${plural(state.kids.length,'Name','Namen')} geladen.`);
