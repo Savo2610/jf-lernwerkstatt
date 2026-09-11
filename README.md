@@ -1,0 +1,72 @@
+# 🚒 Löschlos
+
+**Die Truppauslosung für die Jugendfeuerwehr.**
+Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA, komplett offline, ohne Konto und ohne Server.
+
+![Positionen: Angriffstrupp rot, Wassertrupp blau, Schlauchtrupp grün](icons/icon-192.png)
+
+## Was die App kann
+
+* **Namensliste** – einmal eintragen, bleibt auf dem Gerät. Bearbeiten nur, wenn man will; im Alltag tippt man nur an, wer da ist.
+* **Plätze wählen** – alle neun Funktionen der Gruppe, gruppiert nach Trupps. Der Vorschlag für die aktuelle Kopfzahl ist automatisch gesetzt:
+
+  | Anwesend | Vorschlag |
+  |---|---|
+  | 1–2 | AT |
+  | 3 | AT, Melder |
+  | 4 | AT, WT |
+  | 5 | AT, WT, Melder |
+  | 6 | AT, WT, ST |
+  | 7 | AT, WT, ST, Melder |
+  | 8 | + Einheitsführer |
+  | 9 | + Maschinist |
+  | 10 | + zweiter Angriffstruppmann |
+  | 11 | + zweiter Wassertruppmann |
+
+* **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar, dann werden zwei Sets besetzt.
+* **Reservebank** – wer über die gewählten Plätze hinaus da ist, landet automatisch auf der Bank (und kommt beim nächsten Mal bevorzugt dran).
+* **Faires Neu mischen** – Löschlos merkt sich die letzten acht Runden und verteilt so, dass möglichst niemand dieselbe Position, denselben Trupp, dieselbe Rolle (führen/anpacken) oder denselben Trupppartner erneut bekommt.
+* **Taktische Zeichen** – Raute mit A/W/S für die Trupps (gefüllt = Truppführer, offen = Truppmann), Schild für den Einheitsführer, Zahnrad für den Maschinisten, Kreis für den Melder.
+* **Spaß** – Blaulicht, einarmiger Bandit beim Aufdecken, Konfetti und auf Wunsch ein kleines Martinshorn.
+
+## Starten
+
+Einfach `index.html` über einen Webserver ausliefern – es gibt keinen Build-Schritt.
+
+```bash
+python3 -m http.server 4173
+```
+
+Dann `http://localhost:4173` öffnen.
+
+### Auf GitHub Pages veröffentlichen
+
+Repo auf GitHub pushen, dann unter *Settings → Pages* als Quelle `main` / `/ (root)` wählen.
+Die App läuft mit relativen Pfaden und funktioniert deshalb auch in einem Unterverzeichnis.
+
+### Installieren
+
+Im Browser über „Zum Startbildschirm hinzufügen“ bzw. das Installieren-Symbol in der Adresszeile. Danach läuft alles offline.
+
+## Icons neu bauen
+
+```bash
+node tools/make-icons.mjs
+```
+
+## Daten
+
+Alles liegt in `localStorage` dieses Geräts – Namensliste, Einstellungen und das Runden-Gedächtnis.
+Sichern und Laden gehen über das **?**-Menü (JSON-Datei).
+
+## Aufbau
+
+```
+index.html   Grundgerüst der drei Schritte
+styles.css   Dunkles Gerätehaus-Theme, Signalfarben, Animationen
+app.js       Zustand, Rollenlogik, Losalgorithmus, Effekte
+sw.js        Service Worker (offline)
+tools/       Icon-Generator
+```
+
+MIT-Lizenz.

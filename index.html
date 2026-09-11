@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LÖSCHLOS – Truppauslosung für die Jugendfeuerwehr</title>
+<meta name="description" content="Anwesenheit abhaken, Plätze wählen, fair auslosen. Die Positions-Lotterie für die Jugendfeuerwehr.">
+<meta name="theme-color" content="#0d1017">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="alarmlight" id="alarmlight" aria-hidden="true"><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M50 8 L74 32 L50 56 L26 32Z" class="m-at"/>
+      <path d="M30 50 L50 70 L30 90 L10 70Z" class="m-wt"/>
+      <path d="M70 50 L90 70 L70 90 L50 70Z" class="m-st"/>
+    </svg>
+    <div class="brand-txt">
+      <b>Löschlos</b>
+      <small>Truppauslosung</small>
+    </div>
+  </div>
+  <div class="tools">
+    <button class="icon-btn" id="btn-sound" title="Sound an/aus" aria-pressed="false">
+      <span class="ico" data-on="🔊" data-off="🔇">🔇</span>
+    </button>
+    <button class="icon-btn" id="btn-help" title="Hilfe &amp; Legende">?</button>
+  </div>
+</header>
+
+<nav class="stepper" id="stepper">
+  <button data-step="0"><span class="num">1</span><span class="lbl">Antreten</span></button>
+  <button data-step="1"><span class="num">2</span><span class="lbl">Plätze</span></button>
+  <button data-step="2"><span class="num">3</span><span class="lbl">Auslosung</span></button>
+  <div class="bar"><i id="stepbar"></i></div>
+</nav>
+
+<main id="main">
+
+  <!-- ============ SCHRITT 1 : ANWESENHEIT ============ -->
+  <section class="screen" id="screen-0" data-title="Wer ist heute da?">
+    <div class="sec-head">
+      <div>
+        <h1>Wer ist heute da?</h1>
+        <p class="sub" id="roster-sub">Tippe die Namen an, die antreten.</p>
+      </div>
+      <button class="ghost-btn" id="btn-edit">Bearbeiten</button>
+    </div>
+
+    <div class="quickrow" id="quickrow">
+      <button class="chip-btn" id="btn-all">Alle da</button>
+      <button class="chip-btn" id="btn-none">Alle weg</button>
+      <button class="chip-btn" id="btn-invert">Umdrehen</button>
+    </div>
+
+    <div id="roster" class="roster"></div>
+
+    <div class="addbox" id="addbox" hidden>
+      <input id="new-name" type="text" placeholder="Name eintragen … (mehrere mit Komma)" autocomplete="off" enterkeyhint="done">
+      <button id="btn-add" class="add-btn">＋</button>
+    </div>
+
+    <div class="empty" id="roster-empty" hidden>
+      <div class="empty-art">🚒</div>
+      <h3>Noch keiner gemeldet</h3>
+      <p>Trag deine Jugendfeuerwehr ein – die Liste bleibt auf diesem Gerät gespeichert.</p>
+      <button class="ghost-btn" id="btn-demo">Beispielnamen laden</button>
+    </div>
+  </section>
+
+  <!-- ============ SCHRITT 2 : PLÄTZE ============ -->
+  <section class="screen" id="screen-1" data-title="Welche Plätze werden besetzt?">
+    <div class="sec-head">
+      <div>
+        <h1>Welche Plätze?</h1>
+        <p class="sub">Vorschlag ist schon gesetzt – tippen zum Ändern.</p>
+      </div>
+      <button class="ghost-btn" id="btn-preset">Vorschlag</button>
+    </div>
+
+    <div class="balance" id="balance"></div>
+
+    <div id="vehicles" class="vehicles"></div>
+
+    <label class="switchrow" id="veh2row">
+      <span>
+        <b>Zweites Fahrzeug</b>
+        <small>Zwei Sets zum Besetzen – ab 8 Leuten sinnvoll.</small>
+      </span>
+      <input type="checkbox" id="veh2" class="switch">
+      <i class="switch-ui" aria-hidden="true"></i>
+    </label>
+  </section>
+
+  <!-- ============ SCHRITT 3 : ERGEBNIS ============ -->
+  <section class="screen" id="screen-2" data-title="Die Auslosung">
+    <canvas id="confetti" aria-hidden="true"></canvas>
+    <div class="sec-head">
+      <div>
+        <h1 id="result-title">Aufsitzen!</h1>
+        <p class="sub" id="result-sub">Frisch gelost.</p>
+      </div>
+      <button class="ghost-btn" id="btn-copy">Teilen</button>
+    </div>
+    <div id="result" class="result"></div>
+  </section>
+
+</main>
+
+<footer class="actionbar" id="actionbar">
+  <button class="back-btn" id="btn-back" aria-label="Zurück">‹</button>
+  <button class="cta" id="btn-next"><span id="cta-label">Weiter</span></button>
+</footer>
+
+<dialog id="help-dlg">
+  <div class="dlg-inner">
+    <h2>Legende &amp; Kleingedrucktes</h2>
+
+    <h3>Die Zeichen</h3>
+    <div id="legend" class="legend"></div>
+    <p class="hint"><b>Gefüllte Raute</b> = Truppführer · <b>Offene Raute</b> = Truppmann.</p>
+
+    <h3>Das faire Mischen</h3>
+    <p class="hint">Löschlos merkt sich die letzten acht Runden. Beim Neu&nbsp;mischen bekommt möglichst
+      jedes Kind eine andere Position, einen anderen Trupppartner und wechselt zwischen
+      Führen und Mannschaft – so gut es mit der Truppstärke eben geht.</p>
+
+    <h3>Daten</h3>
+    <p class="hint">Alles bleibt lokal auf diesem Gerät. Kein Server, kein Konto, offline nutzbar.</p>
+
+    <div class="dlg-actions">
+      <button class="ghost-btn" id="btn-export">Liste sichern</button>
+      <button class="ghost-btn" id="btn-import">Liste laden</button>
+      <button class="ghost-btn danger" id="btn-forget">Gedächtnis leeren</button>
+    </div>
+    <button class="cta small" id="btn-close-help">Alles klar</button>
+    <p class="version">Löschlos v1.0 · <span id="hist-count"></span></p>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
