@@ -198,36 +198,49 @@ function addNames(str){
 function slotCount(v){ return Object.values(state.slots[v]||{}).reduce((a,b)=>a+b,0); }
 function totalSlots(){ return slotCount(0) + (state.twoVehicles ? slotCount(1) : 0); }
 
-function applyPreset(){
-  const n = present().length;
-  if(!state.twoVehicles){
-    state.slots[0] = {...(PRESETS[Math.min(n, MAX_PER_VEH)] || {})};
+/* Zwei Fahrzeuge gibt es erst ab acht Anwesenden. Fällt die Zahl darunter,
+   muss der Schalter zurück – sonst bleibt er unerreichbar eingeschaltet,
+   weil seine Zeile dann gar nicht mehr angezeigt wird. */
+const VEH2_AB = 8;
+function normalizeVehicles(){
+  if(state.twoVehicles && present().length < VEH2_AB){
+    state.twoVehicles = false;
     state.slots[1] = {};
-  }else{
-    const a = Math.min(n, 9);          // erstes Fahrzeug voll besetzen, Rest ins zweite
-    const b = Math.min(n - a, MAX_PER_VEH);
-    state.slots[0] = {...(PRESETS[Math.min(a, MAX_PER_VEH)] || {})};
-    state.slots[1] = {...(PRESETS[b] || {})};
+    state.slotsTouched = false;
+    save();
+    return true;
   }
+  return false;
+}
+
+/* Vorschlag je Fahrzeug. Bei zwei Fahrzeugen wird die Mannschaft
+   gleichmäßig geteilt; ein übriges Kind geht aufs erste Fahrzeug.
+   8 → 4+4 (je AT und WT), 9 → 5+4, 11 → 6+5 und so weiter. */
+function presetSplit(){
+  const n = present().length;
+  if(!state.twoVehicles) return [{...(PRESETS[Math.min(n, MAX_PER_VEH)] || {})}, {}];
+  const a = Math.min(Math.ceil(n / 2), MAX_PER_VEH);
+  const b = Math.min(n - a, MAX_PER_VEH);
+  return [{...(PRESETS[a] || {})}, {...(PRESETS[b] || {})}];
+}
+
+function applyPreset(){
+  state.slots = presetSplit();
   state.slotsTouched = false;
   save(); renderSlots();
 }
 
 function renderSlots(){
+  normalizeVehicles();
   const n = present().length;
   if(!state.slotsTouched) {
     // stiller Abgleich, ohne Rekursion
     const before = JSON.stringify(state.slots);
-    if(!state.twoVehicles){
-      state.slots = [{...(PRESETS[Math.min(n, MAX_PER_VEH)] || {})}, {}];
-    }else{
-      const a = Math.min(n, 9), b = Math.min(n - a, MAX_PER_VEH);
-      state.slots = [{...(PRESETS[Math.min(a,MAX_PER_VEH)]||{})}, {...(PRESETS[b]||{})}];
-    }
+    state.slots = presetSplit();
     if(before !== JSON.stringify(state.slots)) save();
   }
 
-  $('#veh2row').classList.toggle('hidden', n < 8);
+  $('#veh2row').classList.toggle('hidden', n < VEH2_AB);
   $('#veh2').checked = state.twoVehicles;
 
   const vehCount = state.twoVehicles ? 2 : 1;
@@ -635,6 +648,7 @@ function go(step){
 }
 
 function updateFooter(){
+  normalizeVehicles();
   const n = present().length, s = totalSlots();
   const cta = $('#btn-next'), lbl = $('#cta-label'), back = $('#btn-back');
   back.hidden = state.step === 0;

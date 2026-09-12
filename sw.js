@@ -1,7 +1,7 @@
 /* Löschlos – Service Worker.
    Netz zuerst, Cache als Rückfallebene: Updates sind sofort da,
    offline funktioniert trotzdem alles. */
-const VERSION = 'loeschlos-v4';
+const VERSION = 'loeschlos-v5';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './icons/favicon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png',

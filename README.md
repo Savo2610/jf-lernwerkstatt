@@ -23,7 +23,7 @@ Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA
   | 10 | + zweiter Angriffstruppmann |
   | 11 | + zweiter Wassertruppmann |
 
-* **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar, dann werden zwei Sets besetzt.
+* **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar. Die Mannschaft wird dann gleichmäßig geteilt, ein übriges Kind geht aufs erste Fahrzeug: 8 → 4+4 (je Angriffs- und Wassertrupp), 9 → 5+4 (Melder aufs erste), 11 → 6+5, 16 → 8+8. Sinkt die Zahl der Anwesenden wieder unter acht, schaltet sich das zweite Fahrzeug von selbst ab.
 * **Reservebank** – wer über die gewählten Plätze hinaus da ist, landet automatisch auf der Bank (und kommt beim nächsten Mal bevorzugt dran).
 * **Faires Neu mischen** – drei Dinge fließen in die Bewertung ein:
   * *Erinnerung* – was jemand zuletzt hatte, ist am teuersten; das klingt über rund vierzehn Runden ab.
