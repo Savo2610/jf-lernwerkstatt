@@ -158,7 +158,9 @@ function renderRoster(){
   const has = state.kids.length > 0;
   box.hidden = !has;
   empty.hidden = has;
-  $('#quickrow').hidden = !has;
+  // Im Bearbeitenmodus zeigen die Kacheln keine Anwesenheit an – dann wäre
+  // „Alle da" ein Knopf, dessen Wirkung man nicht sieht.
+  $('#quickrow').hidden = !has || editMode;
   $('#addbox').hidden = !(editMode || !has);
   if(!has){ box.innerHTML = ''; updateFooter(); return; }
 
@@ -184,12 +186,28 @@ function renderRoster(){
 }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-function addNames(str){
+/* Knopf, Beschriftung und Liste gehören zusammen – sonst steht „Bearbeiten"
+   auf dem Knopf, während man längst bearbeitet. */
+function bearbeiten(an){
+  editMode = an;
+  const b = $('#btn-edit');
+  b.textContent = an ? 'Fertig' : 'Bearbeiten';
+  b.classList.toggle('on', an);
+}
+
+/* `weiterTippen` schaltet den Bearbeitenmodus ein. Wer den ersten Namen
+   einträgt, will gleich den zweiten eintragen – ohne das verschwände das
+   Eingabefeld nach dem ersten Namen, weil es sonst nur im leeren Zustand
+   steht, und man müsste für jedes weitere Kind erst wieder auf Bearbeiten.
+   Der Debug-Haken lässt es weg: der schüttet zwölf Namen auf einmal aus und
+   will danach die Kacheln sehen, nicht zwölf Eingabefelder. */
+function addNames(str, weiterTippen){
   const names = str.split(/[,;\n]/).map(s=>s.trim()).filter(Boolean);
   if(!names.length) return;
   for(const name of names) state.kids.push({id:uid(), name, present:true});
   sortKids();
   state.slotsTouched = false;
+  if(weiterTippen) bearbeiten(true);
   save(); renderRoster();
   toast(names.length===1 ? `${names[0]} ist dabei.` : `${names.length} Namen eingetragen.`);
 }
@@ -801,20 +819,18 @@ $('#roster').addEventListener('input', ev => {
   clearTimeout(save._t); save._t = setTimeout(save, 400);
 });
 
-$('#btn-edit').addEventListener('click', e => {
-  editMode = !editMode;
-  e.currentTarget.textContent = editMode ? 'Fertig' : 'Bearbeiten';
-  e.currentTarget.classList.toggle('on', editMode);
+$('#btn-edit').addEventListener('click', () => {
+  bearbeiten(!editMode);
   state.kids = state.kids.filter(k => k.name.trim());
   if(!editMode){ sortKids(); save(); }
   renderRoster();
   if(editMode) setTimeout(()=>$('#new-name')?.focus(), 80);
 });
 $('#btn-add').addEventListener('click', () => {
-  const i = $('#new-name'); addNames(i.value); i.value=''; i.focus();
+  const i = $('#new-name'); addNames(i.value, true); i.value=''; i.focus();
 });
 $('#new-name').addEventListener('keydown', e => {
-  if(e.key === 'Enter'){ addNames(e.target.value); e.target.value=''; }
+  if(e.key === 'Enter'){ addNames(e.target.value, true); e.target.value=''; }
 });
 /* ------------------------------ Debug-Haken ------------------------------
    Beispielnamen sind zum Ausprobieren da, nicht zum Anbieten: wer die App
