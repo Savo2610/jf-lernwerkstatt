@@ -1,6 +1,6 @@
 # Prüfen, ohne sich durchzuklicken
 
-Alle drei Seiten haben Haken für die Konsole. Wer sie nicht kennt, klickt sich
+Alle Seiten haben Haken für die Konsole. Wer sie nicht kennt, klickt sich
 für jede Kleinigkeit durch acht Level oder scrollt eine halbe Seite weit — und
 gibt dann irgendwann auf und prüft gar nicht mehr.
 
@@ -167,3 +167,28 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
 6. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen
    Ersatzweg geben, nicht nur weniger Bewegung
 7. Zurück-Knopf des Browsers, wenn du an einem Übergang warst
+
+## Löschlos
+
+Liegt unter `/loeschlos/` und hat kein Level, durch das man sich klicken
+müsste — nur eine Namensliste, die beim ersten Öffnen leer ist. Damit man zum
+Ausprobieren nicht jedes Mal neun Namen tippt, liegen zwölf in der Konsole:
+
+```js
+__loeschlos.beispiele()   // zwölf Namen eintragen, alle anwesend
+__loeschlos.state         // Namen, Plätze, Gedächtnis der letzten Runden
+__loeschlos.ziehen()      // eine Runde auslosen, ohne zu klicken
+```
+
+Die Beispielnamen stehen bewusst **nicht** als Knopf in der Oberfläche: wer
+die App zum ersten Mal öffnet, soll seine eigene Gruppe eintragen und nicht
+erst zwölf fremde Kinder wieder löschen.
+
+Was beim Prüfen gern hängt, ist der **Service Worker**. Er liefert zuerst aus
+dem Netz und fällt nur offline auf den Cache zurück, ein Neuladen reicht also
+normalerweise. Wenn doch ein alter Stand klebt:
+
+```js
+(await navigator.serviceWorker.getRegistrations()).forEach(r => r.unregister());
+(await caches.keys()).forEach(k => caches.delete(k));
+```

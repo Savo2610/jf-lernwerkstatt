@@ -748,7 +748,20 @@ $('#btn-add').addEventListener('click', () => {
 $('#new-name').addEventListener('keydown', e => {
   if(e.key === 'Enter'){ addNames(e.target.value); e.target.value=''; }
 });
-$('#btn-demo').addEventListener('click', () => { addNames(DEMO.join(',')); });
+/* ------------------------------ Debug-Haken ------------------------------
+   Beispielnamen sind zum Ausprobieren da, nicht zum Anbieten: wer die App
+   zum ersten Mal öffnet, soll seine eigene Gruppe eintragen und nicht erst
+   zwölf fremde Kinder wieder löschen. Über die Konsole bleiben sie greifbar:
+
+       __loeschlos.beispiele()   zwölf Namen eintragen, alle anwesend
+       __loeschlos.state         Namen, Plätze, Gedächtnis
+       __loeschlos.ziehen()      eine Runde auslosen, ohne zu klicken
+                                                                            */
+window.__loeschlos = {
+  beispiele: () => addNames(DEMO.join(',')),
+  get state(){ return state; },
+  ziehen: () => doDraw(false),
+};
 $('#btn-all').addEventListener('click', () => {
   state.kids.forEach(k=>k.present=true); state.slotsTouched=false; newRound(); save(); renderRoster(); buzz();
 });

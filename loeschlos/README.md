@@ -59,6 +59,19 @@ Im Browser über „Zum Startbildschirm hinzufügen“ bzw. das Installieren-Sym
 node tools/make-icons.mjs
 ```
 
+## Zum Ausprobieren
+
+Die Namensliste ist beim ersten Öffnen leer, und Beispielnamen gibt es
+absichtlich nicht als Knopf — wer die App zum ersten Mal aufmacht, soll seine
+eigene Gruppe eintragen statt zwölf fremde Kinder wieder zu löschen. In der
+Konsole liegen sie trotzdem:
+
+```js
+__loeschlos.beispiele()   // zwölf Namen eintragen, alle anwesend
+__loeschlos.state         // Namen, Plätze, Gedächtnis der letzten Runden
+__loeschlos.ziehen()      // eine Runde auslosen, ohne zu klicken
+```
+
 ## Daten
 
 Alles liegt in `localStorage` dieses Geräts – Namensliste, Einstellungen und das Runden-Gedächtnis.
