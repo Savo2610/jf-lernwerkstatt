@@ -797,11 +797,69 @@ $$('#stepper button').forEach(b => b.addEventListener('click', () => {
 }));
 $('#btn-copy').addEventListener('click', copyResult);
 
+/* --------------------------- Aufs Handy holen ---------------------------
+   Chrome fragt von sich aus, aber nur einmal und leicht zu uebersehen. Wir
+   fangen die Frage ab und stellen sie in der Legende noch einmal, wo man sie
+   wiederfindet. Safari fragt nie – dort bleibt nur der Weg ueber das
+   Teilen-Menue, und den muss man erklaeren.                                 */
+let installRuf = null;
+addEventListener('beforeinstallprompt', ev => { ev.preventDefault(); installRuf = ev; renderPwa(); });
+addEventListener('appinstalled', () => { installRuf = null; renderPwa(); toast('Liegt jetzt auf dem Startbildschirm.'); });
+
+const laeuftAlsApp = () =>
+  matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+function renderPwa(){
+  const box = $('#pwa'); if(!box) return;
+
+  if(laeuftAlsApp()){
+    box.innerHTML = '<p class="hint">Läuft schon als App – nichts weiter zu tun.</p>';
+    return;
+  }
+  if(installRuf){
+    box.innerHTML = '<p class="hint">Dann liegt Löschlos als Symbol auf dem Startbildschirm ' +
+      'und startet auch ohne Netz.</p>' +
+      '<button class="cta small" id="btn-install">Auf dem Startbildschirm ablegen</button>';
+    $('#btn-install').addEventListener('click', async () => {
+      const ruf = installRuf; installRuf = null;
+      ruf.prompt();
+      await ruf.userChoice;
+      renderPwa();
+    });
+    return;
+  }
+
+  /* Kein Angebot vom Browser: dann die Schritte von Hand. iPadOS meldet sich
+     als Mac – dort hilft nur die Kombination aus Safari, MacIntel und echten
+     Touchpunkten. Ohne die Safari-Prüfung hält sich jedes Chromium auf einem
+     MacBook für ein iPad und erklärt das Teilen-Menü, das es gar nicht hat. */
+  const ua = navigator.userAgent;
+  const safari = /^((?!chrome|chromium|android|crios|fxios|edg|opr).)*safari/i.test(ua);
+  const apfel = /iPad|iPhone|iPod/.test(ua) ||
+                (safari && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const handy = apfel || /Android/.test(ua);
+  const schritte = apfel
+    ? ['Unten auf das <b>Teilen</b>-Symbol tippen – das Kästchen mit dem Pfeil nach oben',
+       'In der Liste <b>„Zum Home-Bildschirm"</b> wählen',
+       'Oben rechts auf <b>Hinzufügen</b>']
+    : handy
+    ? ['Oben rechts auf die <b>drei Punkte</b> tippen',
+       '<b>„App installieren"</b> wählen – je nach Gerät heißt es „Zum Startbildschirm zufügen"',
+       'Bestätigen']
+    : ['In der Adresszeile auf das <b>Installieren</b>-Symbol klicken',
+       'oder im Browsermenü <b>„Löschlos installieren"</b> wählen'];
+
+  box.innerHTML = '<p class="hint">Dann liegt Löschlos als Symbol auf dem Startbildschirm ' +
+    'und startet auch ohne Netz.</p><ol class="schritte">' +
+    schritte.map(t => `<li>${t}</li>`).join('') + '</ol>';
+}
+
 /* ------------------------------- Dialog --------------------------------- */
 $('#btn-help').addEventListener('click', () => {
   $('#legend').innerHTML = [...ORDER,'RES'].map(k =>
     `<div>${sign(k)}<span>${ROLES[k].name}</span></div>`).join('');
   $('#hist-count').textContent = `${plural(state.history.length,'Runde','Runden')} im Gedächtnis`;
+  renderPwa();
   $('#help-dlg').showModal();
 });
 $('#btn-close-help').addEventListener('click', () => $('#help-dlg').close());

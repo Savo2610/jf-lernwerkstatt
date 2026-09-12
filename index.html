@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -80,7 +80,6 @@
     <div class="sec-head">
       <div>
         <h1>Welche Plätze?</h1>
-        <p class="sub">Vorschlag ist schon gesetzt – tippen zum Ändern.</p>
       </div>
       <button class="ghost-btn" id="btn-preset">Vorschlag</button>
     </div>
@@ -92,7 +91,6 @@
     <label class="switchrow" id="veh2row">
       <span>
         <b>Zweites Fahrzeug</b>
-        <small>Ab 8 Anwesenden – die Mannschaft wird gleichmäßig geteilt.</small>
       </span>
       <input type="checkbox" id="veh2" class="switch">
       <i class="switch-ui" aria-hidden="true"></i>
@@ -134,8 +132,23 @@
     <p class="hint" style="margin-top:8px">So bekommt möglichst jedes Kind eine andere Position, einen anderen
       Trupppartner und wechselt zwischen Führen und Mannschaft – so gut es mit der Truppstärke eben geht.</p>
 
+    <h3>Aufs Handy holen</h3>
+    <div id="pwa"></div>
+
     <h3>Daten</h3>
     <p class="hint">Alles bleibt lokal auf diesem Gerät. Kein Server, kein Konto, offline nutzbar.</p>
+
+    <h3>Woher das kommt</h3>
+    <a class="herkunft" href="https://jf.veerka.mp/">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M4 22c0-7.2 5.4-13 12-13s12 5.8 12 13z" fill="#ff4433"/>
+        <path d="M14 9.3V4.6h4v4.7z" fill="#f7b733"/>
+        <rect x="2" y="21" width="28" height="4.4" rx="2.2" fill="#96150c"/>
+      </svg>
+      <span><b>Lernwerkstatt der Jugendfeuerwehr</b>
+        <small>FwDV 3, Brennen &amp; Löschen und mehr – Jugendfeuerwehr Harheim</small></span>
+      <i aria-hidden="true">›</i>
+    </a>
 
     <div class="dlg-actions">
       <button class="ghost-btn" id="btn-export">Liste sichern</button>
@@ -143,12 +156,13 @@
       <button class="ghost-btn danger" id="btn-forget">Gedächtnis leeren</button>
     </div>
     <button class="cta small" id="btn-close-help">Alles klar</button>
-    <p class="version">Löschlos v1.0 · <span id="hist-count"></span></p>
+    <p class="version">Löschlos v1.1 · <span id="hist-count"></span><br>
+      Gebaut von Julian · <a href="https://veerka.mp">veerka.mp</a></p>
   </div>
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=5"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

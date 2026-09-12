@@ -406,8 +406,31 @@ dialog::backdrop{background:rgba(5,7,11,.72); backdrop-filter:blur(4px)}
 .legend{display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:8px}
 .legend div{display:flex; align-items:center; gap:9px; font-size:12px; font-weight:700}
 .legend svg{width:30px; height:30px; flex:0 0 auto}
+/* Rueckweg zur Lernwerkstatt. Loeschlos haengt dort unter /loeschlos/ und
+   soll auch erkennbar von dort kommen – ohne dass die Herkunft den ganzen
+   Bildschirm beansprucht. Deshalb steckt sie in der Legende, nicht im Kopf. */
+.herkunft{
+  display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
+  padding:12px 13px; border-radius:var(--r-md);
+  background:var(--surface); border:1.5px solid var(--line);
+  transition:transform .12s, border-color .2s;
+}
+.herkunft:active{transform:scale(.98)}
+.herkunft:hover{border-color:var(--at)}
+.herkunft svg{width:32px; height:32px; flex:0 0 auto}
+.herkunft span{flex:1; min-width:0}
+.herkunft b{display:block; font-size:13.5px}
+.herkunft small{display:block; font-size:11.5px; color:var(--txt-mute); margin-top:2px; line-height:1.35}
+.herkunft i{font-style:normal; font-size:21px; color:var(--txt-mute)}
+
+/* Installationsanleitung, wenn der Browser von sich aus nichts anbietet */
+.schritte{margin:8px 0 0; padding-left:20px; color:var(--txt-dim); font-size:13px; line-height:1.6}
+.schritte li{margin-bottom:3px}
+.schritte b{color:var(--txt)}
+
 .dlg-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:18px}
-.version{font-size:11px; color:var(--txt-mute); text-align:center; margin:12px 0 0}
+.version{font-size:11px; color:var(--txt-mute); text-align:center; margin:14px 0 0; line-height:1.7}
+.version a{color:var(--txt-dim); text-decoration:none; border-bottom:1px solid var(--line)}
 
 /* ---------- Toast ---------- */
 .toast{
