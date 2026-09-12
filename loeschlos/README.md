@@ -31,6 +31,8 @@ Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA
   * *Quote* – wie oft jemand eine Position bisher hatte, gemessen an dem, was rechnerisch auf ihn entfällt. Damit gleicht sich auch über viele Abende aus, wer den Einheitsführer schon dreimal hatte und wer noch nie.
   * *Verworfenes* – jeder Vorschlag, den man in derselben Runde weggemischt hat, wird ebenfalls teuer. Ohne das pendelt das Neu mischen nur zwischen zwei Lösungen hin und her.
 
+  **Neu mischen** ersetzt dabei die laufende Runde (`state.history[0]`), erst **Neue Runde** legt einen neuen Eintrag an. Zwanzigmal mischen zählt also als ein Abend – im Gedächtnis steht die Aufstellung, die am Ende stehen bleibt.
+
   Ergebnis bei neun Leuten über vierzig Abende: keine einzige Positions- oder Partnerwiederholung in aufeinanderfolgenden Runden, und acht verschiedene Einheitsführer bei neun Mal Neu mischen.
 * **Taktische Zeichen** – Raute mit A/W/S für die Trupps (gefüllt = Truppführer, offen = Truppmann), Schild für den Einheitsführer, Zahnrad für den Maschinisten, Kreis für den Melder.
 * **Spaß** – Blaulicht, einarmiger Bandit beim Aufdecken, Konfetti und auf Wunsch ein kleines Martinshorn.
