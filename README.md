@@ -25,7 +25,12 @@ Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA
 
 * **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar, dann werden zwei Sets besetzt.
 * **Reservebank** – wer über die gewählten Plätze hinaus da ist, landet automatisch auf der Bank (und kommt beim nächsten Mal bevorzugt dran).
-* **Faires Neu mischen** – Löschlos merkt sich die letzten acht Runden und verteilt so, dass möglichst niemand dieselbe Position, denselben Trupp, dieselbe Rolle (führen/anpacken) oder denselben Trupppartner erneut bekommt.
+* **Faires Neu mischen** – drei Dinge fließen in die Bewertung ein:
+  * *Erinnerung* – was jemand zuletzt hatte, ist am teuersten; das klingt über rund vierzehn Runden ab.
+  * *Quote* – wie oft jemand eine Position bisher hatte, gemessen an dem, was rechnerisch auf ihn entfällt. Damit gleicht sich auch über viele Abende aus, wer den Einheitsführer schon dreimal hatte und wer noch nie.
+  * *Verworfenes* – jeder Vorschlag, den man in derselben Runde weggemischt hat, wird ebenfalls teuer. Ohne das pendelt das Neu mischen nur zwischen zwei Lösungen hin und her.
+
+  Ergebnis bei neun Kindern über vierzig Abende: keine einzige Positions- oder Partnerwiederholung in aufeinanderfolgenden Runden, und acht verschiedene Einheitsführer bei neun Mal Neu mischen.
 * **Taktische Zeichen** – Raute mit A/W/S für die Trupps (gefüllt = Truppführer, offen = Truppmann), Schild für den Einheitsführer, Zahnrad für den Maschinisten, Kreis für den Melder.
 * **Spaß** – Blaulicht, einarmiger Bandit beim Aufdecken, Konfetti und auf Wunsch ein kleines Martinshorn.
 

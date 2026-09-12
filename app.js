@@ -278,18 +278,33 @@ function renderBalance(){
 }
 
 /* ========================= DIE LOSTROMMEL (fair) ========================= */
-/* Bewertet wird, wie sehr eine Verteilung an die letzten Runden erinnert:
-   gleiche Position, gleicher Trupp, gleiche Rolle (führen/anpacken),
-   gleicher Trupppartner und zweimal hintereinander Reserve kosten Punkte. */
+/* Drei Dinge fließen in die Bewertung ein:
+   1. Erinnerung  – was war zuletzt? Je frischer, desto teurer die Wiederholung.
+   2. Quote       – wie oft hatte jemand diese Position bisher, verglichen mit
+                    dem, was rechnerisch auf ihn entfallen müsste?
+   3. Verworfenes – jeder Vorschlag, den man in dieser Runde weggemischt hat,
+                    wird ebenfalls teuer. Sonst pendelt das Neu-Mischen nur
+                    zwischen zwei Lösungen hin und her.                        */
 
-const HIST_DEPTH = 8;
-const W = { role:8, group:3.5, rank:2, partner:6, reserve:9 };
+const HIST_DEPTH  = 14;   // gewichtete Erinnerung
+const COUNT_DEPTH = 40;   // Zählstatistik für die Quote
+const W = {
+  role:8, group:3.5, rank:2, partner:6, reserve:9,
+  roleQuote:4.5, rankQuote:3,
+  again:11, againPartner:7,
+};
+
+/* In dieser Runde bereits gezeigte und wieder verworfene Auslosungen. */
+let discarded = [];
 
 function buildStats(){
-  const st = {role:{}, group:{}, rank:{}, partner:{}, reserve:{}};
+  const st = {role:{}, group:{}, rank:{}, partner:{}, reserve:{},
+              cntRole:{}, cntRank:{}, rounds:{}, again:{}, againP:{}};
   const ensure = (o,id) => (o[id] = o[id] || {});
+
+  /* 1. Erinnerung – klingt langsam ab, statt nach acht Runden abzureißen. */
   state.history.slice(0, HIST_DEPTH).forEach((round, i) => {
-    const w = 1 / (i + 1);
+    const w = 1 / (1 + i * 0.6);
     const byGroup = {};
     round.entries.forEach(e => {
       const r = ROLES[e.role]; if(!r) return;
@@ -307,6 +322,38 @@ function buildStats(){
         const P1 = ensure(st.partner,ids[a]), P2 = ensure(st.partner,ids[b]);
         P1[ids[b]] = (P1[ids[b]]||0) + w;
         P2[ids[a]] = (P2[ids[a]]||0) + w;
+      }
+    });
+  });
+
+  /* 2. Quote – ungewichtete Zählung über viele Runden. Damit fällt auf,
+        wenn jemand den Einheitsführer schon dreimal hatte und ein anderer
+        noch nie, auch wenn das alles länger her ist. */
+  state.history.slice(0, COUNT_DEPTH).forEach(round => {
+    round.entries.forEach(e => {
+      const r = ROLES[e.role]; if(!r) return;
+      st.rounds[e.id] = (st.rounds[e.id]||0) + 1;
+      const R = ensure(st.cntRole,e.id); R[e.role] = (R[e.role]||0) + 1;
+      const K = ensure(st.cntRank,e.id); K[r.rank] = (K[r.rank]||0) + 1;
+    });
+  });
+
+  /* 3. Verworfenes aus dieser Runde. */
+  discarded.slice(-10).forEach(round => {
+    const byGroup = {};
+    round.entries.forEach(e => {
+      const r = ROLES[e.role]; if(!r) return;
+      const A = ensure(st.again,e.id); A[e.role] = (A[e.role]||0) + 1;
+      if(GROUPS[r.group]){
+        const key = e.veh + '|' + r.group;
+        (byGroup[key] = byGroup[key] || []).push(e.id);
+      }
+    });
+    Object.values(byGroup).forEach(ids => {
+      for(let a=0;a<ids.length;a++) for(let b=a+1;b<ids.length;b++){
+        const P1 = ensure(st.againP,ids[a]), P2 = ensure(st.againP,ids[b]);
+        P1[ids[b]] = (P1[ids[b]]||0) + 1;
+        P2[ids[a]] = (P2[ids[a]]||0) + 1;
       }
     });
   });
@@ -331,8 +378,23 @@ function draw(){
   while(slots.length < people.length) slots.push({role:'RES', veh:-1});
   if(slots.length > people.length || !people.length) return null;
 
+  /* Was gerade auf dem Bildschirm steht, wandert beim Neu-Mischen auf den
+     Stapel der verworfenen Vorschläge – sonst kommt es sofort wieder. */
+  if(roundOpen && state.history[0]){
+    discarded.push(state.history[0]);
+    if(discarded.length > 10) discarded.shift();
+  }
+
   const st = buildStats();
   const n = people.length;
+
+  /* Erwartungswert je Rolle und je Rang: so viel entfällt rechnerisch
+     auf jedes Kind, wenn alles gleichmäßig zugeht. */
+  const expRole = {}, expRank = {F:0, M:0};
+  slots.forEach(s2 => {
+    expRole[s2.role] = (expRole[s2.role] || 0) + 1 / n;
+    expRank[ROLES[s2.role].rank] += 1 / n;
+  });
 
   /* Zufallsrauschen bricht Gleichstände – pro Ziehung fix, damit die
      Bergsteiger-Suche nicht im Kreis läuft. */
@@ -348,17 +410,33 @@ function draw(){
   const slotCost = (si, pi) => {
     const s = slots[si], id = people[pi], r = ROLES[s.role];
     let c = noise[si][pi];
+
+    /* frische Erinnerung */
     c += W.role    * ((st.role[id]||{})[s.role]   || 0);
     c += W.group   * ((st.group[id]||{})[r.group] || 0);
     c += W.rank    * ((st.rank[id]||{})[r.rank]   || 0);
     if(s.role === 'RES') c += W.reserve * (st.reserve[id] || 0);
+
+    /* Quote: Anteil an den bisherigen Runden, gemessen am Erwartungswert.
+       Zwei Pseudo-Runden glätten das, solange kaum Historie da ist. */
+    const runden = st.rounds[id] || 0;
+    const eRole = expRole[s.role] || 1 / n;
+    const eRank = expRank[r.rank] || 1 / n;
+    const hatRole = (st.cntRole[id]||{})[s.role] || 0;
+    const hatRank = (st.cntRank[id]||{})[r.rank] || 0;
+    c += W.roleQuote * ((hatRole + 2 * eRole) / (runden + 2)) / eRole;
+    c += W.rankQuote * ((hatRank + 2 * eRank) / (runden + 2)) / eRank;
+
+    /* in dieser Runde schon vorgeschlagen und weggemischt */
+    c += W.again * ((st.again[id]||{})[s.role] || 0);
     return c;
   };
   const pairCost = perm => {
     let c = 0;
     for(const [i,j] of pairs){
       const a = people[perm[i]], b = people[perm[j]];
-      c += W.partner * ((st.partner[a]||{})[b] || 0);
+      c += W.partner      * ((st.partner[a]||{})[b] || 0);
+      c += W.againPartner * ((st.againP[a] ||{})[b] || 0);
     }
     return c;
   };
@@ -390,7 +468,7 @@ function draw(){
   const round = {ts: Date.now(), entries};
   if(roundOpen) state.history[0] = round;
   else { state.history.unshift(round); roundOpen = true; }
-  state.history = state.history.slice(0, 20);
+  state.history = state.history.slice(0, COUNT_DEPTH);
   save();
   return round;
 }
@@ -606,7 +684,7 @@ function copyResult(){
 }
 
 /* ------------------------------- Events --------------------------------- */
-function newRound(){ roundOpen = false; }
+function newRound(){ roundOpen = false; discarded = []; }
 
 $('#roster').addEventListener('click', ev => {
   const kid = ev.target.closest('.kid'); if(!kid) return;
