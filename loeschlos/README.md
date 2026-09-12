@@ -1,6 +1,6 @@
 # 🚒 Löschlos
 
-**Die Truppauslosung für die Jugendfeuerwehr.**
+**Die Truppauslosung für den Übungsdienst.**
 Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA, komplett offline, ohne Konto und ohne Server.
 
 ![Positionen: Angriffstrupp rot, Wassertrupp blau, Schlauchtrupp grün](icons/icon-192.png)
@@ -25,12 +25,13 @@ Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA
 
 * **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar. Die Mannschaft wird dann gleichmäßig geteilt, ein übriges Kind geht aufs erste Fahrzeug: 8 → 4+4 (je Angriffs- und Wassertrupp), 9 → 5+4 (Melder aufs erste), 11 → 6+5, 16 → 8+8. Sinkt die Zahl der Anwesenden wieder unter acht, schaltet sich das zweite Fahrzeug von selbst ab.
 * **Reservebank** – wer über die gewählten Plätze hinaus da ist, landet automatisch auf der Bank (und kommt beim nächsten Mal bevorzugt dran).
+* **Jugend- wie Einsatzabteilung** – die Oberfläche redet von Feuerwehrleuten, nicht von Kindern.
 * **Faires Neu mischen** – drei Dinge fließen in die Bewertung ein:
   * *Erinnerung* – was jemand zuletzt hatte, ist am teuersten; das klingt über rund vierzehn Runden ab.
   * *Quote* – wie oft jemand eine Position bisher hatte, gemessen an dem, was rechnerisch auf ihn entfällt. Damit gleicht sich auch über viele Abende aus, wer den Einheitsführer schon dreimal hatte und wer noch nie.
   * *Verworfenes* – jeder Vorschlag, den man in derselben Runde weggemischt hat, wird ebenfalls teuer. Ohne das pendelt das Neu mischen nur zwischen zwei Lösungen hin und her.
 
-  Ergebnis bei neun Kindern über vierzig Abende: keine einzige Positions- oder Partnerwiederholung in aufeinanderfolgenden Runden, und acht verschiedene Einheitsführer bei neun Mal Neu mischen.
+  Ergebnis bei neun Leuten über vierzig Abende: keine einzige Positions- oder Partnerwiederholung in aufeinanderfolgenden Runden, und acht verschiedene Einheitsführer bei neun Mal Neu mischen.
 * **Taktische Zeichen** – Raute mit A/W/S für die Trupps (gefüllt = Truppführer, offen = Truppmann), Schild für den Einheitsführer, Zahnrad für den Maschinisten, Kreis für den Melder.
 * **Spaß** – Blaulicht, einarmiger Bandit beim Aufdecken, Konfetti und auf Wunsch ein kleines Martinshorn.
 
@@ -63,7 +64,7 @@ node tools/make-icons.mjs
 
 Die Namensliste ist beim ersten Öffnen leer, und Beispielnamen gibt es
 absichtlich nicht als Knopf — wer die App zum ersten Mal aufmacht, soll seine
-eigene Gruppe eintragen statt zwölf fremde Kinder wieder zu löschen. In der
+eigene Gruppe eintragen statt zwölf fremde Namen wieder zu löschen. In der
 Konsole liegen sie trotzdem:
 
 ```js

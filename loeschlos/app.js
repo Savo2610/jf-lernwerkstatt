@@ -110,6 +110,11 @@ const collator = new Intl.Collator('de', {sensitivity:'base', numeric:true});
 const sortKids = () => state.kids.sort((a,b) => collator.compare(a.name, b.name));
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const plural = (n, one, many) => `${n} ${n===1?one:many}`;
+/* „Kinder" schließt die Einsatzabteilung aus, die dieselbe Auslosung benutzt.
+   Im Plural steht deshalb „Feuerwehrleute". Ein geschlechtsneutrales Einzelwort
+   dafür gibt es nicht, das nicht gestelzt klingt – im Einzelfall also schlicht
+   „Person". Der tritt beim Antreten ohnehin selten auf. */
+const leute = n => n === 1 ? '1 Person' : `${n} Feuerwehrleute`;
 
 function toast(msg){
   const t = $('#toast');
@@ -181,7 +186,7 @@ function renderRoster(){
   const n = present().length;
   $('#roster-sub').textContent = editMode
     ? 'Namen ändern, löschen oder unten neue eintragen.'
-    : (n ? `${plural(n,'Kind ist','Kinder sind')} angetreten.` : 'Tippe die Namen an, die antreten.');
+    : (n ? `${leute(n)} ${n===1?'ist':'sind'} angetreten.` : 'Tippe die Namen an, die antreten.');
   updateFooter();
 }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -198,7 +203,7 @@ function bearbeiten(an){
 /* `weiterTippen` schaltet den Bearbeitenmodus ein. Wer den ersten Namen
    einträgt, will gleich den zweiten eintragen – ohne das verschwände das
    Eingabefeld nach dem ersten Namen, weil es sonst nur im leeren Zustand
-   steht, und man müsste für jedes weitere Kind erst wieder auf Bearbeiten.
+   steht, und man müsste für jeden weiteren Namen erst wieder auf Bearbeiten.
    Der Debug-Haken lässt es weg: der schüttet zwölf Namen auf einmal aus und
    will danach die Kacheln sehen, nicht zwölf Eingabefelder. */
 function addNames(str, weiterTippen){
@@ -232,7 +237,7 @@ function normalizeVehicles(){
 }
 
 /* Vorschlag je Fahrzeug. Bei zwei Fahrzeugen wird die Mannschaft
-   gleichmäßig geteilt; ein übriges Kind geht aufs erste Fahrzeug.
+   gleichmäßig geteilt; wer übrig bleibt, geht aufs erste Fahrzeug.
    8 → 4+4 (je AT und WT), 9 → 5+4, 11 → 6+5 und so weiter. */
 function presetSplit(){
   const n = present().length;
@@ -301,7 +306,7 @@ function renderBalance(){
   const el = $('#balance');
   let cls = 'ok', msg = 'Passt – alle haben einen Platz.';
   if(s > n){ cls = 'over'; msg = `${plural(s-n,'Platz','Plätze')} zu viel – nimm welche raus.`; }
-  else if(diff > 0){ cls = ''; msg = `${plural(diff,'Kind','Kinder')} auf der Reservebank.`; }
+  else if(diff > 0){ cls = ''; msg = `${leute(diff)} auf der Reservebank.`; }
   if(n === 0){ cls = 'over'; msg = 'Niemand da – zurück zu Schritt 1.'; }
   el.className = `balance ${cls}`;
   el.innerHTML = `<span class="big">${s}</span><span>von ${n} besetzt</span>
@@ -420,7 +425,7 @@ function draw(){
   const n = people.length;
 
   /* Erwartungswert je Rolle und je Rang: so viel entfällt rechnerisch
-     auf jedes Kind, wenn alles gleichmäßig zugeht. */
+     auf jede Person, wenn alles gleichmäßig zugeht. */
   const expRole = {}, expRank = {F:0, M:0};
   slots.forEach(s2 => {
     expRole[s2.role] = (expRole[s2.role] || 0) + 1 / n;
@@ -695,92 +700,24 @@ function doDraw(isRedraw){
   if(isRedraw) toast('Neu gemischt – andere Plätze, andere Partner.');
 }
 
-/* -------------------------------- Teilen ---------------------------------
-   Drei Wege, und nur einer davon kann Formatierung:
-
-   1. Das Teilen-Blatt des Systems kennt ausschliesslich reinen Text. Ein Wort
-      laesst sich dort nicht verlinken – die Adresse geht deshalb als eigenes
-      Feld mit, und Messenger machen aus einer nackten Adresse von selbst
-      einen Link samt Vorschau. Nicht in den Text schreiben, sonst steht sie
-      bei den meisten Zielen zweimal drin.
-   2. Die Zwischenablage kann beides tragen. Wer in Mail, Notizen oder ein
-      Textprogramm einfuegt, bekommt „Löschlos" als echten Link.
-   3. Wer nur Text einfuegt – jeder Messenger am Rechner – bekommt die
-      Adresse als letzte Zeile. Anklickbar macht sie dort wieder der Messenger.
-                                                                            */
-const TEILEN_URL = 'https://jf.veerka.mp/loeschlos/';
-
-/* Die Einteilung einmal als Zeilen, aus denen beide Fassungen entstehen. */
-function ergebnisZeilen(){
+function copyResult(){
+  if(!result) return;
   const vehs = state.twoVehicles ? [0,1] : [0];
-  const bloecke = [];
+  let out = '🚒 Löschlos – ' + new Date().toLocaleDateString('de-DE') + '\n';
   for(const v of vehs){
     const mine = result.entries.filter(e => e.veh === v)
       .sort((a,b)=>ORDER.indexOf(a.role)-ORDER.indexOf(b.role));
     if(!mine.length) continue;
-    bloecke.push({
-      kopf: state.twoVehicles ? (v===0 ? 'Fahrzeug 1' : 'Fahrzeug 2') : '',
-      zeilen: mine.map(e => [ROLES[e.role].name, (byId(e.id)||{}).name || '?']),
-    });
+    if(state.twoVehicles) out += `\n— ${v===0?'Fahrzeug 1':'Fahrzeug 2'} —\n`; else out += '\n';
+    out += mine.map(e => `${ROLES[e.role].name}: ${(byId(e.id)||{}).name}`).join('\n') + '\n';
   }
   const res = result.entries.filter(e => e.role === 'RES');
-  if(res.length) bloecke.push({
-    kopf: '', zeilen: [['Reserve', res.map(e => (byId(e.id)||{}).name).join(', ')]],
-  });
-  return bloecke;
-}
+  if(res.length) out += `\nReserve: ${res.map(e=>(byId(e.id)||{}).name).join(', ')}\n`;
 
-function ergebnisText(mitAdresse){
-  const datum = new Date().toLocaleDateString('de-DE');
-  let out = `Löschlos – Einteilung vom ${datum}\n`;
-  for(const b of ergebnisZeilen()){
-    out += '\n' + (b.kopf ? `— ${b.kopf} —\n` : '');
-    out += b.zeilen.map(([rolle, wer]) => `${rolle}: ${wer}`).join('\n') + '\n';
-  }
-  if(mitAdresse) out += `\n${TEILEN_URL}\n`;
-  return out;
-}
-
-function ergebnisHtml(){
-  const datum = new Date().toLocaleDateString('de-DE');
-  let out = `<p><a href="${TEILEN_URL}"><b>Löschlos</b></a> – Einteilung vom ${datum}</p>`;
-  for(const b of ergebnisZeilen()){
-    out += '<p>' + (b.kopf ? `<b>${esc(b.kopf)}</b><br>` : '');
-    out += b.zeilen.map(([rolle, wer]) => `${esc(rolle)}: <b>${esc(wer)}</b>`).join('<br>') + '</p>';
-  }
-  return out;
-}
-
-/* Beide Fassungen in einem Rutsch in die Ablage. Firefox konnte `text/html`
-   lange nicht und wirft dann – deshalb der Rückfall auf reinen Text, statt
-   den Nutzer mit leerer Ablage stehen zu lassen. */
-async function inDieAblage(text, html){
-  try{
-    if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
-      await navigator.clipboard.write([new ClipboardItem({
-        'text/plain': new Blob([text], {type: 'text/plain'}),
-        'text/html':  new Blob([html], {type: 'text/html'}),
-      })]);
-      return true;
-    }
-  }catch(e){ /* kann kein HTML – dann eben nur Text */ }
-  try{ await navigator.clipboard.writeText(text); return true; }
-  catch(e){ return false; }
-}
-
-function copyResult(){
-  if(!result) return;
-
-  if(navigator.share){
-    navigator.share({
-      title: 'Löschlos – Einteilung',
-      text: ergebnisText(false),
-      url: TEILEN_URL,
-    }).catch(() => {});
-    return;
-  }
-  inDieAblage(ergebnisText(true), ergebnisHtml()).then(
-    ok => toast(ok ? 'Kopiert – fertig zum Einfügen.' : 'Kopieren hat nicht geklappt.'));
+  if(navigator.share){ navigator.share({text: out}).catch(()=>{}); return; }
+  navigator.clipboard?.writeText(out).then(
+    () => toast('In die Zwischenablage kopiert.'),
+    () => toast('Kopieren hat nicht geklappt.'));
 }
 
 /* ------------------------------- Events --------------------------------- */
@@ -801,7 +738,7 @@ $('#roster').addEventListener('click', ev => {
   state.slotsTouched = false; newRound(); save();
   buzz(8); blip(k.present ? 760 : 380);
   $('#roster-sub').textContent = present().length
-    ? `${plural(present().length,'Kind ist','Kinder sind')} angetreten.`
+    ? `${leute(present().length)} ${present().length===1?'ist':'sind'} angetreten.`
     : 'Tippe die Namen an, die antreten.';
   updateFooter();
 });
@@ -835,7 +772,7 @@ $('#new-name').addEventListener('keydown', e => {
 /* ------------------------------ Debug-Haken ------------------------------
    Beispielnamen sind zum Ausprobieren da, nicht zum Anbieten: wer die App
    zum ersten Mal öffnet, soll seine eigene Gruppe eintragen und nicht erst
-   zwölf fremde Kinder wieder löschen. Über die Konsole bleiben sie greifbar:
+   zwölf fremde Namen wieder löschen. Über die Konsole bleiben sie greifbar:
 
        __loeschlos.beispiele()   zwölf Namen eintragen, alle anwesend
        __loeschlos.state         Namen, Plätze, Gedächtnis
