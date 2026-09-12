@@ -677,24 +677,92 @@ function doDraw(isRedraw){
   if(isRedraw) toast('Neu gemischt – andere Plätze, andere Partner.');
 }
 
-function copyResult(){
-  if(!result) return;
+/* -------------------------------- Teilen ---------------------------------
+   Drei Wege, und nur einer davon kann Formatierung:
+
+   1. Das Teilen-Blatt des Systems kennt ausschliesslich reinen Text. Ein Wort
+      laesst sich dort nicht verlinken – die Adresse geht deshalb als eigenes
+      Feld mit, und Messenger machen aus einer nackten Adresse von selbst
+      einen Link samt Vorschau. Nicht in den Text schreiben, sonst steht sie
+      bei den meisten Zielen zweimal drin.
+   2. Die Zwischenablage kann beides tragen. Wer in Mail, Notizen oder ein
+      Textprogramm einfuegt, bekommt „Löschlos" als echten Link.
+   3. Wer nur Text einfuegt – jeder Messenger am Rechner – bekommt die
+      Adresse als letzte Zeile. Anklickbar macht sie dort wieder der Messenger.
+                                                                            */
+const TEILEN_URL = 'https://jf.veerka.mp/loeschlos/';
+
+/* Die Einteilung einmal als Zeilen, aus denen beide Fassungen entstehen. */
+function ergebnisZeilen(){
   const vehs = state.twoVehicles ? [0,1] : [0];
-  let out = '🚒 Löschlos – ' + new Date().toLocaleDateString('de-DE') + '\n';
+  const bloecke = [];
   for(const v of vehs){
     const mine = result.entries.filter(e => e.veh === v)
       .sort((a,b)=>ORDER.indexOf(a.role)-ORDER.indexOf(b.role));
     if(!mine.length) continue;
-    if(state.twoVehicles) out += `\n— ${v===0?'Fahrzeug 1':'Fahrzeug 2'} —\n`; else out += '\n';
-    out += mine.map(e => `${ROLES[e.role].name}: ${(byId(e.id)||{}).name}`).join('\n') + '\n';
+    bloecke.push({
+      kopf: state.twoVehicles ? (v===0 ? 'Fahrzeug 1' : 'Fahrzeug 2') : '',
+      zeilen: mine.map(e => [ROLES[e.role].name, (byId(e.id)||{}).name || '?']),
+    });
   }
   const res = result.entries.filter(e => e.role === 'RES');
-  if(res.length) out += `\nReserve: ${res.map(e=>(byId(e.id)||{}).name).join(', ')}\n`;
+  if(res.length) bloecke.push({
+    kopf: '', zeilen: [['Reserve', res.map(e => (byId(e.id)||{}).name).join(', ')]],
+  });
+  return bloecke;
+}
 
-  if(navigator.share){ navigator.share({text: out}).catch(()=>{}); return; }
-  navigator.clipboard?.writeText(out).then(
-    () => toast('In die Zwischenablage kopiert.'),
-    () => toast('Kopieren hat nicht geklappt.'));
+function ergebnisText(mitAdresse){
+  const datum = new Date().toLocaleDateString('de-DE');
+  let out = `Löschlos – Einteilung vom ${datum}\n`;
+  for(const b of ergebnisZeilen()){
+    out += '\n' + (b.kopf ? `— ${b.kopf} —\n` : '');
+    out += b.zeilen.map(([rolle, wer]) => `${rolle}: ${wer}`).join('\n') + '\n';
+  }
+  if(mitAdresse) out += `\n${TEILEN_URL}\n`;
+  return out;
+}
+
+function ergebnisHtml(){
+  const datum = new Date().toLocaleDateString('de-DE');
+  let out = `<p><a href="${TEILEN_URL}"><b>Löschlos</b></a> – Einteilung vom ${datum}</p>`;
+  for(const b of ergebnisZeilen()){
+    out += '<p>' + (b.kopf ? `<b>${esc(b.kopf)}</b><br>` : '');
+    out += b.zeilen.map(([rolle, wer]) => `${esc(rolle)}: <b>${esc(wer)}</b>`).join('<br>') + '</p>';
+  }
+  return out;
+}
+
+/* Beide Fassungen in einem Rutsch in die Ablage. Firefox konnte `text/html`
+   lange nicht und wirft dann – deshalb der Rückfall auf reinen Text, statt
+   den Nutzer mit leerer Ablage stehen zu lassen. */
+async function inDieAblage(text, html){
+  try{
+    if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+      await navigator.clipboard.write([new ClipboardItem({
+        'text/plain': new Blob([text], {type: 'text/plain'}),
+        'text/html':  new Blob([html], {type: 'text/html'}),
+      })]);
+      return true;
+    }
+  }catch(e){ /* kann kein HTML – dann eben nur Text */ }
+  try{ await navigator.clipboard.writeText(text); return true; }
+  catch(e){ return false; }
+}
+
+function copyResult(){
+  if(!result) return;
+
+  if(navigator.share){
+    navigator.share({
+      title: 'Löschlos – Einteilung',
+      text: ergebnisText(false),
+      url: TEILEN_URL,
+    }).catch(() => {});
+    return;
+  }
+  inDieAblage(ergebnisText(true), ergebnisHtml()).then(
+    ok => toast(ok ? 'Kopiert – fertig zum Einfügen.' : 'Kopieren hat nicht geklappt.'));
 }
 
 /* ------------------------------- Events --------------------------------- */
