@@ -110,11 +110,11 @@ const collator = new Intl.Collator('de', {sensitivity:'base', numeric:true});
 const sortKids = () => state.kids.sort((a,b) => collator.compare(a.name, b.name));
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const plural = (n, one, many) => `${n} ${n===1?one:many}`;
-/* „Kinder" schließt die Einsatzabteilung aus, die dieselbe Auslosung benutzt.
-   Im Plural steht deshalb „Feuerwehrleute". Ein geschlechtsneutrales Einzelwort
-   dafür gibt es nicht, das nicht gestelzt klingt – im Einzelfall also schlicht
-   „Person". Der tritt beim Antreten ohnehin selten auf. */
-const leute = n => n === 1 ? '1 Person' : `${n} Feuerwehrleute`;
+/* „Kinder" allein stimmt nicht – die Älteren in der Jugendfeuerwehr sind
+   Jugendliche und hören das auch so. Für den Einzelfall gibt es kein Wort, das
+   beides abdeckt und nicht gestelzt klingt; dort steht darum schlicht
+   „Person". Der Fall tritt beim Antreten ohnehin selten auf. */
+const leute = n => n === 1 ? '1 Person' : `${n} Kinder und Jugendliche`;
 
 function toast(msg){
   const t = $('#toast');
@@ -332,6 +332,7 @@ const W = {
 
 /* In dieser Runde bereits gezeigte und wieder verworfene Auslosungen. */
 let discarded = [];
+let abzeichen = {};   // id → Abzeichentext der aktuellen Runde
 
 function buildStats(){
   const st = {role:{}, group:{}, rank:{}, partner:{}, reserve:{},
@@ -512,6 +513,7 @@ function draw(){
 /* ========================= SCHRITT 3: ERGEBNIS ========================== */
 function renderResult(animate){
   if(!result){ $('#result').innerHTML = ''; return; }
+  abzeichenBestimmen();
   const vehs = state.twoVehicles ? [0,1] : [0];
   const reserve = result.entries.filter(e => e.role === 'RES');
 
@@ -556,23 +558,51 @@ function renderResult(animate){
 function slotRow(e){
   const r = ROLES[e.role];
   const k = byId(e.id) || {name:'?'};
-  const fresh = isFirstTime(e.id, e.role);
+  const abz = abzeichen[e.id];
   return `<div class="slot" style="--c:var(--${r.color})" data-name="${esc(k.name)}">
     ${sign(e.role)}
     <div class="who">
       <div class="name">${esc(k.name)}</div>
       <span class="role">${r.name}</span>
     </div>
-    ${fresh ? '<span class="badge new">Premiere</span>' : ''}
+    ${abz ? `<span class="badge new">${abz}</span>` : ''}
   </div>`;
 }
 
-/* „Premiere“ nur, wenn es auch etwas zu vergleichen gibt. */
-function isFirstTime(id, role){
-  if(role === 'RES') return false;
-  const past = state.history.slice(1).filter(rd => rd.entries.some(e => e.id === id));
-  if(past.length < 4) return false;
-  return !past.some(rd => rd.entries.some(e => e.id === id && e.role === role));
+/* Ein Abzeichen taugt nur etwas, wenn es selten ist. „Zum ersten Mal auf
+   diesem Platz" reicht dafür nicht: die Auslosung strebt ja gerade an, dass
+   jeder etwas bekommt, was lange nicht dran war – in den ersten Abenden ist
+   deshalb fast jeder Platz ein erstes Mal. Gemessen über vierzig Abende mit
+   zwölf Namen und neun Anwesenden: sechzig Abzeichen, in einzelnen Runden alle
+   neun gleichzeitig, danach nie wieder eins. Eine höhere Schwelle hilft nicht,
+   sie verschiebt das Fenster nur – ab neun Runden gibt es überhaupt keine mehr.
+
+   Es zählt deshalb, wie viel noch fehlt, statt wie lange jemand dabei ist: bei
+   den letzten beiden Plätzen steht „Premiere", beim allerletzten „Alle neun".
+   Zusammen mit dem Deckel unten sind das über dieselben vierzig Abende noch elf
+   bis sechzehn Abzeichen in sechs bis zehn Runden – der Rest der Abende hat
+   keins, und genau das macht es zu einem.                                    */
+function abzeichenBestimmen(){
+  abzeichen = {};
+  if(!result) return;
+  const kandidaten = [];
+  result.entries.forEach(e => {
+    if(e.role === 'RES') return;
+    const gehabt = new Set();
+    state.history.slice(1).forEach(rd => rd.entries.forEach(x => {
+      if(x.id === e.id && x.role !== 'RES') gehabt.add(x.role);
+    }));
+    if(gehabt.has(e.role)) return;
+    const fehlen = ORDER.filter(r => !gehabt.has(r)).length;
+    if(fehlen <= 2) kandidaten.push({id: e.id, fehlen});
+  });
+  /* Höchstens zwei pro Runde, der knappste zuerst. Auch mit dem Zuschnitt oben
+     landen alle ungefähr gleichzeitig am Ende ihrer Sammlung – ohne Deckel
+     stünde es in der Spitze bei zwei Dritteln der Aufstellung, und ein Orden,
+     den die halbe Gruppe gleichzeitig bekommt, ist keiner.                    */
+  kandidaten.sort((a,b) => a.fehlen - b.fehlen)
+            .slice(0, 2)
+            .forEach(k => abzeichen[k.id] = k.fehlen === 1 ? 'Alle neun' : 'Premiere');
 }
 function pick(a){ return a[(Math.random()*a.length)|0]; }
 

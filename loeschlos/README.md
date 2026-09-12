@@ -1,6 +1,6 @@
 # 🚒 Löschlos
 
-**Die Truppauslosung für den Übungsdienst.**
+**Die Truppauslosung für den Gruppenabend der Jugendfeuerwehr.**
 Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA, komplett offline, ohne Konto und ohne Server.
 
 ![Positionen: Angriffstrupp rot, Wassertrupp blau, Schlauchtrupp grün](icons/icon-192.png)
@@ -23,9 +23,9 @@ Anwesenheit abhaken → Plätze wählen → fair auslosen. Installierbar als PWA
   | 10 | + zweiter Angriffstruppmann |
   | 11 | + zweiter Wassertruppmann |
 
-* **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar. Die Mannschaft wird dann gleichmäßig geteilt, ein übriges Kind geht aufs erste Fahrzeug: 8 → 4+4 (je Angriffs- und Wassertrupp), 9 → 5+4 (Melder aufs erste), 11 → 6+5, 16 → 8+8. Sinkt die Zahl der Anwesenden wieder unter acht, schaltet sich das zweite Fahrzeug von selbst ab.
+* **Zweites Fahrzeug** – ab acht Anwesenden zuschaltbar. Die Mannschaft wird dann gleichmäßig geteilt, wer übrig bleibt, geht aufs erste Fahrzeug: 8 → 4+4 (je Angriffs- und Wassertrupp), 9 → 5+4 (Melder aufs erste), 11 → 6+5, 16 → 8+8. Sinkt die Zahl der Anwesenden wieder unter acht, schaltet sich das zweite Fahrzeug von selbst ab.
 * **Reservebank** – wer über die gewählten Plätze hinaus da ist, landet automatisch auf der Bank (und kommt beim nächsten Mal bevorzugt dran).
-* **Jugend- wie Einsatzabteilung** – die Oberfläche redet von Feuerwehrleuten, nicht von Kindern.
+* **Kinder und Jugendliche** – so heißen sie in der Oberfläche. Wer älter ist, wird nicht als Kind angesprochen; für die Einsatzabteilung taugt dieselbe Auslosung trotzdem.
 * **Faires Neu mischen** – drei Dinge fließen in die Bewertung ein:
   * *Erinnerung* – was jemand zuletzt hatte, ist am teuersten; das klingt über rund vierzehn Runden ab.
   * *Quote* – wie oft jemand eine Position bisher hatte, gemessen an dem, was rechnerisch auf ihn entfällt. Damit gleicht sich auch über viele Abende aus, wer den Einheitsführer schon dreimal hatte und wer noch nie.
