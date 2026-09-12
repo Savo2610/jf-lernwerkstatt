@@ -6,13 +6,14 @@ Handbuch ist [README.md](README.md) — lies dort mindestens „Aufbau" und
 
 ## Was das ist
 
-Drei Seiten, ein Worker, eine Domain:
+Vier Seiten, ein Worker, eine Domain:
 
 | Adresse | Was | Quelle |
 |---|---|---|
 | `jf.veerka.mp/` | Startseite („Lernwerkstatt"), 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
 | `jf.veerka.mp/fwdv3/` | das Spiel „Einsatzbereit" (FwDV 3), 3D mit Three.js | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | das Spiel „Brennen & Löschen" (Brandlehre), 3D | `brennen/src/` |
+| `jf.veerka.mp/loeschlos/` | „Löschlos", Truppauslosung für den Gruppenabend, PWA | `loeschlos/` |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart, nirgends verlinkt | `hub/src/nachweis.*` |
 
 Beide Spiele stehen auf derselben Basis in `gemeinsam/`: Bühne, Spielstand,
@@ -39,7 +40,10 @@ Code sofort auf.
   eingebettet. Kein npm-Paket zur Laufzeit, kein CDN, kein Framework. Der
   einzige externe Verweis ist Google Fonts.
 - **Eine Datei am Ende.** Der Build fasst alles zu einer HTML-Datei zusammen.
-  Nichts wird zur Laufzeit nachgeladen.
+  Nichts wird zur Laufzeit nachgeladen. **Ausnahme ist `loeschlos/`**: eine PWA
+  braucht Service Worker und Manifest als eigene Dateien, der Ordner wird
+  deshalb kopiert statt gebaut. Dort gilt auch die Deutschpflicht bei den
+  Bezeichnern nicht — es ist zugewandert und hat seine eigene Historie.
 - **Kommentare erklären das Warum.** Der Bestand ist voll von „das steht so da,
   weil sonst …". Halte das durch — die Fallen sind selten offensichtlich.
 - **Kein Wegwerf-Code stehen lassen.** Keine `console.log`, keine auskommentierten
@@ -107,6 +111,16 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 - **Die Antreteordnung ist an einer Stelle definiert** (`ANTRETEN.gruppe` in
   `src/three/vehicles.js`) und wird von vier Leveln benutzt. Änderst du sie,
   ändert sich alles Vier.
+- **Löschlos wird kopiert, nicht gebaut** (`loeschlosUebernehmen` in
+  `hub/build.mjs`). Kopiert wird alles ausser `README.md`, `LICENSE` und
+  `tools/` — also andersherum als eine Liste der gewollten Dateien. Das ist
+  Absicht: fehlt der PWA beim Installieren eine einzige Datei, die ihr Service
+  Worker vorab einsammelt, bricht er ganz ab. Eine vergessene Zeile in einer
+  Positivliste wäre dieser Fehler, und man sähe ihn erst im Netz.
+- **Der lokale Server braucht Dateitypen** (`hub/server.mjs`). Die Spiele sind
+  je eine HTML-Datei, Löschlos nicht: mit `text/html` für alles lädt der
+  Browser das Stylesheet nicht und verweigert den Service Worker. Im Netz macht
+  das der Worker richtig, lokal muss es dieser Server nachstellen.
 - **Die Baustelle ist die letzte Station** (`hub/src/themen.js`). Die
   Absperrung am Straßenende setzt `welt.js` automatisch dahinter. Wer ein
   Thema anhängt, schiebt die Baustelle eins weiter nach rechts, statt sie zu

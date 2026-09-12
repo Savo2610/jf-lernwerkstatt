@@ -306,6 +306,81 @@ function kulisseBaustelle(x) {
   </g>`;
 }
 
+/* ---------- Kulisse 5: das Losrad -----------------------------------------
+   Auf dem Hof steht ein Glueckrad mit neun Feldern – eines je Platz in der
+   Gruppe, in genau den Farben, die Loeschlos benutzt: rot Angriffstrupp, blau
+   Wassertrupp, gruen Schlauchtrupp, dazu Gold fuer den Einheitsfuehrer,
+   Orange fuer den Melder und Stahl fuer den Maschinisten. Wer das Rad antippt,
+   landet in der Auslosung; derselbe Weg steht als Knopf auf der Karte.
+
+   Das Rad dreht sich langsam von allein (`.losrad`). Steht es still, weil
+   jemand Bewegung abbestellt hat, sieht man an den Feldern trotzdem, was es
+   ist – der Ersatzweg kostet hier also nichts.
+
+   Der drehende Teil liegt in einer eigenen Gruppe ohne eigenes
+   transform-Attribut: CSS-transform wuerde es sonst ueberschreiben und das
+   Rad sprungweise in die Bildecke setzen.                                    */
+function kulisseLosrad(x) {
+  const HOCH = -150, R = 68;
+  // Reihenfolge wie die Sitzordnung: Einheitsfuehrer, Maschinist, Melder,
+  // dann die drei Trupps mit je zwei Feldern.
+  const FELDER = ['gelb', 'metall', 'flamme2', 'rot', 'rot', 'blau', 'blau', 'gruen', 'gruen'];
+  const punkt = (grad) => {
+    const b = (grad - 90) * Math.PI / 180;
+    return zahl(Math.cos(b) * R) + ' ' + zahl(Math.sin(b) * R);
+  };
+  let felder = '', naegel = '';
+  FELDER.forEach((farbe, i) => {
+    felder += `<path d="M0 0 L${punkt(i * 40)} A${R} ${R} 0 0 1 ${punkt((i + 1) * 40)} Z" fill="var(--${farbe})"/>`;
+    const b = (i * 40 - 90) * Math.PI / 180;
+    naegel += `<circle cx="${zahl(Math.cos(b) * (R - 7))}" cy="${zahl(Math.sin(b) * (R - 7))}" r="3.2" fill="var(--metall)"/>`;
+  });
+  // Die Rauten am Schild sagen, worum es geht – am Rad selbst stuenden sie
+  // nach einer halben Umdrehung auf dem Kopf.
+  const raute = (cx, farbe, zeichen) => `<g transform="translate(${cx},0)">
+    <path d="M0 -11 L11 0 L0 11 L-11 0 Z" fill="var(--${farbe})"/>
+    <text class="t-text" x="0" y="4.2" text-anchor="middle" font-size="11" fill="#fff">${zeichen}</text></g>`;
+
+  // Wie der Schaukasten an der Wache: ein Link mitten in der Kulisse, also
+  // ohne Tabstopp. Den tastaturgaengigen Weg gibt es auf der Karte und im Fuss.
+  return `<a class="aushang" data-fahrt href="https://jf.veerka.mp/loeschlos/"
+     tabindex="-1" aria-label="Löschlos öffnen – die Truppauslosung">
+    <title>Löschlos: Positionen auslosen</title>
+    <g transform="translate(${zahl(x)},0)">
+    <ellipse cx="0" cy="2" rx="74" ry="9" fill="rgba(0,0,0,.18)"/>
+    <!-- Bock: zwei Beine und ein Querholz, darauf sitzt die Nabe -->
+    <path d="M-46 0 L-6 ${HOCH} M46 0 L6 ${HOCH}" stroke="var(--metall)" stroke-width="8" stroke-linecap="round"/>
+    <rect x="-38" y="${HOCH + 96}" width="76" height="6.5" rx="3.2" fill="var(--metall)"/>
+    <g transform="translate(0,${HOCH})">
+      <g class="losrad">
+        ${felder}
+        <circle r="${R}" fill="none" stroke="var(--metall)" stroke-width="7"/>
+        ${naegel}
+        <circle r="13" fill="var(--metall)"/>
+        <circle r="5" fill="var(--schild)"/>
+      </g>
+      <!-- Zeiger: haengt fest ueber dem Rad und dreht sich nicht mit -->
+      <path d="M0 ${-R + 16} L-11 ${-R - 13} L11 ${-R - 13} Z" fill="var(--gelb)"/>
+      <path d="M0 ${-R + 16} L-11 ${-R - 13} L11 ${-R - 13} Z" fill="none"
+        stroke="var(--rot-t)" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- Schild links vom Rad: rechts liegt auf breiten Bildschirmen die
+         Themenkarte, dort saehe man davon nur die Haelfte. -->
+    <g transform="translate(-186,0)">
+      <ellipse cx="0" cy="1" rx="16" ry="4" fill="rgba(0,0,0,.18)"/>
+      <rect x="-5" y="-100" width="10" height="100" rx="4" fill="var(--metall)"/>
+      <rect x="-64" y="-182" width="128" height="88" rx="8" fill="var(--schild)"/>
+      <text class="t-display" x="0" y="-149" text-anchor="middle" font-size="21"
+        fill="var(--schild-txt)">LÖSCHLOS</text>
+      <text class="t-text" x="0" y="-133" text-anchor="middle" font-size="8.5"
+        letter-spacing="1.5" fill="var(--gelb)">WER MACHT HEUTE WAS?</text>
+      <g transform="translate(0,-114)">
+        ${raute(-30, 'rot', 'A')}${raute(0, 'blau', 'W')}${raute(30, 'gruen', 'S')}
+      </g>
+    </g>
+  </g></a>`;
+}
+
 /* ---------- Strassenende: hier geht es spaeter weiter ---------------------- */
 function kulisseEnde(x) {
   let streifen = '';
@@ -328,6 +403,7 @@ const KULISSEN = {
   wache: kulisseWache,
   uebungshof: kulisseUebungshof,
   brandhaus: kulisseBrandhaus,
+  losrad: kulisseLosrad,
   baustelle: kulisseBaustelle,
 };
 

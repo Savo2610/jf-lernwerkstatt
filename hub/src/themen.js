@@ -100,6 +100,36 @@ const THEMEN = [
     },
   },
   {
+    id: 'loeschlos',
+    kulisse: 'losrad',
+    status: 'offen',
+    kurz: 'Löschlos',
+    // Kein „Thema": Loeschlos lehrt nichts, es nimmt dem Gruppenabend eine
+    // Entscheidung ab. Deshalb steht hier Werkzeug, und die Baustelle bleibt
+    // Thema 3.
+    ober: 'Werkzeug',
+    chip: 'Für den Gruppenabend',
+    titel: 'Löschlos',
+    zeile: 'Wer ist heute da, und wer macht was? Anwesenheit abhaken, Plätze wählen, auslosen — und keiner diskutiert mehr über den Melder.',
+    punkte: [
+      'Alle neun Plätze der Gruppe mit ihren taktischen Zeichen',
+      'Besetzungsvorschlag je nach Kopfzahl, zweites Fahrzeug ab acht',
+      'Faires Mischen: andere Position, anderer Trupppartner als letztes Mal',
+      'Läuft offline und lässt sich aufs Handy legen',
+    ],
+    ziel: 'https://jf.veerka.mp/loeschlos/',
+    knopf: 'Auslosen',
+    // Loeschlos macht in Nachtfarben auf, fast wie „Einsatzbereit" – nur eine
+    // Spur kuehler. Das Zeichen sind die drei Trupprauten aus der App.
+    uebergang: {
+      grund: '#0b0e14', schrift: '#eef2fa',
+      zeichen: '<svg viewBox="0 0 32 32" aria-hidden="true">' +
+        '<path d="M16 3 L23.5 10.5 L16 18 L8.5 10.5 Z" fill="#ff4433"/>' +
+        '<path d="M9.5 16 L16 22.5 L9.5 29 L3 22.5 Z" fill="#3b8cff"/>' +
+        '<path d="M22.5 16 L29 22.5 L22.5 29 L16 22.5 Z" fill="#22c55e"/></svg>',
+    },
+  },
+  {
     id: 'baustelle',
     kulisse: 'baustelle',
     status: 'bald',

@@ -22,11 +22,13 @@ welche nicht — hier hängen Inhalte dran, die Kinder als richtig lernen.
 
 ## Was *nicht* darunter fällt
 
-Drei Dinge im Repo gehören uns nicht, die können wir also auch nicht
-weitergeben:
+Löschlos ist als eigenes Projekt entstanden und steht deshalb weiter unter
+MIT — großzügiger als CC BY 4.0, aber eben anders. Die übrigen Dinge gehören
+uns nicht, die können wir also auch nicht weitergeben:
 
 | Ort | Was | Wie es lizenziert ist |
 |---|---|---|
+| `loeschlos/` | Löschlos, die Truppauslosung | MIT, © Julian — der Wortlaut steht in [loeschlos/LICENSE](loeschlos/LICENSE) |
 | `vendor/three.module.min.js` | Three.js | MIT, © Three.js Authors — der Lizenzkopf steht in der Datei |
 | `referenz/FwDV3-2008-volltext.txt` | Feuerwehr-Dienstvorschrift 3, Stand Februar 2008 (AFKzV) | amtlicher Text, nur als Arbeitsgrundlage abgelegt |
 | `referenz/bilder/`, `FwDV3-Julian.pptx` | Sitz- und Antreteordnung aus den Unterlagen der Jugendfeuerwehr Harheim | Unterlagen der Wehr, nicht zur Weitergabe |

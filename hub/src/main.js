@@ -164,6 +164,22 @@ karten.forEach((k, i) => {
   });
 });
 
+/* Das Losrad in der Kulisse fuehrt dorthin, wo auch sein Knopf hinfuehrt –
+   also soll es dieselbe Fahrt ausloesen und nicht hart umschalten. Der Link
+   steckt im SVG, das oben schon gebaut wurde. In SVG ist `href` ein
+   SVGAnimatedString, die Adresse steht deshalb in `baseVal`.                */
+const radLink = svg.querySelector('a[data-fahrt]');
+const radStation = STATIONEN.find(t => t.id === 'loeschlos');
+if (radLink && radStation && !RUHIG) {
+  const radZiel = radLink.href.baseVal;
+  radLink.addEventListener('pointerenter', () => vorladen(radZiel));
+  radLink.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    losfahren(radZiel, radStation);
+  });
+}
+
 STATIONEN.forEach((s, i) => {
   if (i) planBox.appendChild(Object.assign(document.createElement('span'), { className: 'plan-strich' }));
   const b = document.createElement('button');

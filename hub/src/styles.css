@@ -25,6 +25,9 @@
 
   /* --- Marke --- */
   --rot:#d92d20; --rot-t:#96150c; --gelb:#f5b301; --blau:#1e7fd4;
+  /* Gruen fuer den Schlauchtrupp – kommt aus Loeschlos und gehoert wie Rot
+     und Blau zur Marke, wechselt also nicht zwischen Tag und Nacht. */
+  --gruen:#1f9e4d;
   --flamme1:#ffb302; --flamme2:#ff6a13;
 
   /* --- Oberflaeche --- */
@@ -346,17 +349,24 @@ body.ruhig .fuss{padding-top:clamp(26px,4vw,44px)}
 @keyframes pendeln{0%,100%{transform:rotate(-1.1deg)} 50%{transform:rotate(1.1deg)}}
 .haken{transform-box:fill-box; transform-origin:center top; animation:pendeln 5.4s ease-in-out infinite}
 
-/* Schaukasten an der Wache: der versteckte Weg zum Team Zukunft. Kein Rahmen,
-   kein Pfeil – nur der Zeiger verraet, dass da etwas ist. */
+/* Anfassbares in der Kulisse: der Schaukasten an der Wache (Team Zukunft) und
+   das Losrad. Kein Rahmen, kein Pfeil – nur der Zeiger verraet, dass da etwas
+   ist. */
 .aushang{cursor:pointer; transition:filter .2s var(--ease)}
 .aushang:hover{filter:brightness(1.14)}
+
+/* Das Losrad dreht sich gemaechlich – schnell genug, dass man es sieht, zu
+   langsam, um vom Lesen abzulenken. transform-box, weil der Drehpunkt sonst
+   im SVG-Ursprung saesse und das Rad ueber die ganze Strasse kreisen wuerde. */
+@keyframes losrad{to{transform:rotate(360deg)}}
+.losrad{transform-box:fill-box; transform-origin:center; animation:losrad 26s linear infinite}
 
 /* Wolken ziehen langsam */
 @keyframes ziehen{from{transform:translateX(0)} to{transform:translateX(-140px)}}
 .wolkenzug{animation:ziehen 90s linear infinite alternate}
 
 @media (prefers-reduced-motion:reduce){
-  .bl-a,.bl-b,.flamme,.blinker,.haken,.wolkenzug{animation:none}
+  .bl-a,.bl-b,.flamme,.blinker,.haken,.wolkenzug,.losrad{animation:none}
   .bl-b{opacity:1}
 }
 

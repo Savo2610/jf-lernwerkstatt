@@ -1,7 +1,13 @@
 # Veröffentlichen
 
 Alles hängt an **einem** Cloudflare Worker namens `jf`. Er liefert die
-Startseite, das Spiel und die Umleitung der alten Adresse.
+Startseite, die Spiele, Löschlos und die Umleitung der alten Adresse.
+
+Löschlos ist dabei der einzige Pfad, unter dem **mehrere** Dateien liegen: als
+PWA braucht es CSS, JS, Manifest und Symbole einzeln. Wenn dort etwas fehlt,
+zeigt sich das nicht als 404 im Bild, sondern daran, dass die App sich nicht
+mehr installieren lässt — der Service Worker sammelt seine Dateien vorab ein
+und gibt beim ersten Fehlschlag ganz auf.
 
 ## Der normale Weg: push auf `main`
 
@@ -79,11 +85,13 @@ falsche Seite zu veröffentlichen. Diese Trennung bitte so lassen.
 | `jf.veerka.mp/` | Startseite (`hub/dist/index.html`) |
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit (`hub/dist/fwdv3/index.html`) |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen (`hub/dist/brennen-loeschen/index.html`) |
+| `jf.veerka.mp/loeschlos/` | Löschlos (`hub/dist/loeschlos/`, mehrere Dateien) |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart (`hub/dist/nachweis/index.html`) |
 | `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` |
+| `jf.veerka.mp/löschlos` | 301 auf `/loeschlos/` — der Umlaut kommt als `%C3%B6` an |
 | `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query und Fragment bleiben |
 
-Der Code dafür ist `hub/src/worker.js` — fünfzehn Zeilen, mehr braucht es
+Der Code dafür ist `hub/src/worker.js` — zwanzig Zeilen, mehr braucht es
 nicht.
 
 ## DNS und Routen

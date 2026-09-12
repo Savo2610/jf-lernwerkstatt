@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Baut die Startseite zu einer einzigen HTML-Datei. Gleiche Bauweise wie beim
 // Spiel: nichts wird zur Laufzeit nachgeladen ausser der Schrift.
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, cpSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -69,10 +69,39 @@ async function spielUebernehmen(quelle, roh, unter) {
   console.log(`hub/dist/${unter}/index.html übernommen – ${(inhalt.length / 1024).toFixed(0)} KB`);
 }
 
+// --- Loeschlos gehoert genauso mit hinein ----------------------------------
+// Loeschlos ist keins der Spiele: es hat keinen Build, sondern ist schon
+// fertiges HTML, CSS und JS – und als PWA braucht es seine Dateien einzeln,
+// nicht in eine Datei gefaltet. Ein Service Worker und ein Manifest lassen
+// sich nicht einbetten. Deshalb wird hier kopiert statt gebaut; die Regel
+// „eine Datei am Ende" gilt fuer die Startseite und die Spiele.
+//
+// Kopiert wird alles ausser dem, was nur zum Entwickeln da ist. Andersherum –
+// eine Liste der gewollten Dateien – waere ein vergessenes Symbol still weg,
+// und dann bricht die Installation der PWA, weil ihr Service Worker seine
+// Dateien vorab einsammelt und beim ersten Fehlschlag ganz aufgibt.
+const LOESCHLOS_AUSSEN = ['README.md', 'LICENSE', 'tools'];
+
+function loeschlosUebernehmen() {
+  const von = join(ROOT, '..', 'loeschlos');
+  if (!existsSync(join(von, 'index.html'))) throw new Error('loeschlos/index.html fehlt');
+  cpSync(von, join(ROOT, 'dist', 'loeschlos'), {
+    recursive: true,
+    filter: (quelle) => {
+      const rest = quelle.slice(von.length + 1);
+      if (!rest) return true;
+      const erstes = rest.split(/[\\/]/)[0];
+      return !erstes.startsWith('.') && !LOESCHLOS_AUSSEN.includes(erstes);
+    },
+  });
+  console.log('hub/dist/loeschlos/ übernommen');
+}
+
 if (!alsArtifact) {
   await spielUebernehmen('../build.mjs', '../bau/fwdv3.html', 'fwdv3');
   await spielUebernehmen('../brennen/build.mjs', '../bau/brennen-loeschen.html', 'brennen-loeschen');
   nachweisseiteBauen();
+  loeschlosUebernehmen();
 }
 
 // --- Nachweisseite fuer den Jugendwart -------------------------------------

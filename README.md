@@ -8,12 +8,14 @@ läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit
 | `jf.veerka.mp/` | Startseite, 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
 | `jf.veerka.mp/fwdv3/` | **Einsatzbereit** — FwDV 3, Ausgabe Februar 2008 | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | **Brennen & Löschen** — Brandlehre | `brennen/src/` |
+| `jf.veerka.mp/loeschlos/` | **Löschlos** — Truppauslosung für den Gruppenabend | `loeschlos/` |
 
-Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um.
+Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um, `/löschlos` mit
+Umlaut auf `/loeschlos/`.
 
 **Live:** Startseite https://jf.veerka.mp · Einsatzbereit
 https://jf.veerka.mp/fwdv3/ · Brennen & Löschen
-https://jf.veerka.mp/brennen-loeschen/
+https://jf.veerka.mp/brennen-loeschen/ · Löschlos https://jf.veerka.mp/loeschlos/
 
 ## Wo was steht
 
@@ -23,6 +25,7 @@ https://jf.veerka.mp/brennen-loeschen/
 | [docs/deploy.md](docs/deploy.md) | Autodeploy, Worker, Routen, DNS |
 | [docs/pruefen.md](docs/pruefen.md) | Konsolen-Haken, Direktsprünge, was vor dem Veröffentlichen dran ist |
 | [docs/verwandte-projekte.md](docs/verwandte-projekte.md) | die Absprache mit veerka.mp (`?einfahrt=1`) |
+| [loeschlos/README.md](loeschlos/README.md) | Löschlos: Positionen, Vorschläge, das faire Mischen |
 | [LIZENZ.md](LIZENZ.md) | CC BY 4.0, und was nicht darunter fällt |
 | dieses README | das ausführliche Handbuch — Inhalte, Aufbau, Stellschrauben |
 
@@ -114,6 +117,33 @@ Aufgabe 2 eine eigene Runde.
 
 Beides steht so in den Unterlagen der Hessischen Landesfeuerwehrschule, siehe
 [Quellen](#quellen).
+
+## Löschlos (`loeschlos/`)
+
+Kein Lernspiel, sondern ein Werkzeug für den Gruppenabend: eintragen, wer da
+ist, die Plätze wählen, auslosen. Neun Funktionen der Gruppe mit ihren
+taktischen Zeichen, ein Besetzungsvorschlag je nach Kopfzahl, ab acht
+Anwesenden ein zweites Fahrzeug — und ein Mischen, das sich merkt, wer zuletzt
+welche Position und welchen Trupppartner hatte. Alles Weitere steht in
+[loeschlos/README.md](loeschlos/README.md).
+
+**Löschlos fällt aus drei Regeln dieses Repos heraus** — das ist bewusst so:
+
+- **Es wird nicht gebaut, sondern kopiert.** Als PWA braucht es seine Dateien
+  einzeln: ein Service Worker und ein Manifest lassen sich nicht in eine
+  HTML-Datei falten. `hub/build.mjs` kopiert den Ordner deshalb nur nach
+  `hub/dist/loeschlos/`, ohne alles ausser `README.md`, `LICENSE` und `tools/`.
+- **Die Bezeichner sind nicht durchweg deutsch.** Es ist als eigenes Projekt
+  entstanden und per `git subtree` hierher gezogen, mitsamt seiner Historie.
+  Die Oberfläche und die Kommentare sind deutsch, der Code streckenweise nicht.
+- **Es steht unter MIT**, nicht unter CC BY 4.0 — siehe [LIZENZ.md](LIZENZ.md).
+
+Auf der Startseite steht es als Glücksrad an vierter Station
+(`kulisseLosrad` in `hub/src/szene.js`). Die neun Felder sind die neun Plätze
+der Gruppe, in den Farben der App: rot Angriffstrupp, blau Wassertrupp, grün
+Schlauchtrupp, Gold für den Einheitsführer, Orange für den Melder, Stahl für
+den Maschinisten. Das Rad ist anklickbar und löst dieselbe Ausfahrt aus wie
+der Knopf auf der Karte.
 
 ## Startseite (`hub/`)
 
