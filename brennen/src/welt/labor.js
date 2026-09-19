@@ -78,6 +78,13 @@ function glockeFahren(g, wert) {
    Glassaeule aus der letzten Reihe nicht zu lesen.
 
    `saeuleFuellen(s, 0..1)`
+
+   `kugel: true` macht aus der Saeule ein Thermometer: eine gefuellte Kugel
+   unten, eine feinere Skala und ein Schild. Ohne die Kugel ist ein roter
+   Balken in einem Glasrohr fuer Kinder ein Behaelter, der vollaeuft – und
+   dann ist die ganze Vorfuehrung eine ueber Fuellstaende statt ueber Waerme.
+   Die Kugel ist das Zeichen, an dem ein Thermometer haengt; deshalb bleibt sie
+   auch bei Wert 0 voll, so wie in Wirklichkeit.
    -------------------------------------------------------------------------*/
 function baueAnzeigesaeule(opt) {
   const o = opt || {};
@@ -104,10 +111,33 @@ function baueAnzeigesaeule(opt) {
 
   // Striche als Skala – nur Andeutung, keine Zahlen
   const strichMat = Mat.matt(LABOR.skala, .9);
-  for (let i = 1; i < 5; i++) {
-    const st = new THREE.Mesh(new THREE.BoxGeometry(.34, .025, .025), strichMat);
-    st.position.set(.16, .14 + (h * i) / 5, 0);
+  const teilung = o.kugel ? 12 : 5;
+  for (let i = 1; i < teilung; i++) {
+    // Beim Thermometer jeder dritte Strich lang: Das liest sich als Skala,
+    // gleich lange Striche als Leiter.
+    const lang = !o.kugel || i % 3 === 0;
+    const st = new THREE.Mesh(new THREE.BoxGeometry(lang ? .34 : .21, .025, .025), strichMat);
+    st.position.set(lang ? .16 : .1, .14 + (h * i) / teilung, 0);
     g.add(st);
+  }
+
+  if (o.kugel) {
+    // Die Kugel: innen die Fluessigkeit, aussen dieselbe Glashuelle wie am
+    // Rohr. Sie sitzt auf dem Fuss und schluckt das untere Stueck des Rohrs –
+    // genau wie bei einem echten Thermometer.
+    const inhalt = new THREE.Mesh(new THREE.SphereGeometry(.24, 16, 12), Mat.leucht(farbe, .55));
+    inhalt.position.y = .34;
+    g.add(inhalt);
+    const glas = new THREE.Mesh(new THREE.SphereGeometry(.27, 16, 12),
+      new THREE.MeshStandardMaterial({ color: LABOR.glas, transparent: true, opacity: .3,
+        roughness: .1, side: THREE.DoubleSide }));
+    glas.position.y = .34;
+    g.add(glas);
+
+    const schild = textSchild(o.schild || '°C', {
+      gross: 64, bg: 'rgba(255,253,249,.96)', farbe: '#2a2018', skala: .6 });
+    schild.position.set(.42, .14 + h * .96, 0);
+    g.add(schild);
   }
 
   g.userData.saeule = { hoehe: h, fuellung };

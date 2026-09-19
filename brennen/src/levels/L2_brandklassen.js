@@ -89,6 +89,14 @@ LEVELS.push({
     feuerStaerke(probeFeuer, 0, true);
     buehne.add(probeFeuer);
 
+    /* Metall gluht weiss, alles andere rot. Ohne den Unterschied sieht der
+       Magnesiumbrand aus wie ein mattes Kohlefeuer – dabei ist genau das
+       grelle, fast flammenlose Leuchten das, woran man ihn erkennt. Wer es
+       einmal gesehen hat, sucht bei Metall nicht mehr nach einer Flamme. */
+    const glutFarbeFuer = (klasse) => klasse === 'D'
+      ? feuerGlutFarbe(probeFeuer, FEUERFARBEN.weissglut, 1)
+      : feuerGlutFarbe(probeFeuer, null, 0);
+
     [[-8.5, 6.5], [8.5, 6.5]].forEach(([x, z]) => {
       const k = baueKegel(); k.position.set(x, 0, z); Stage.welt.add(k);
     });
@@ -171,11 +179,18 @@ LEVELS.push({
         feuerAnteileSetzen(probeFeuer,
           bk.erscheinungIds.includes('flamme') ? 1 : 0,
           bk.erscheinungIds.includes('glut') ? .9 : 0);
+        glutFarbeFuer(bk.id);
         feuerStaerke(probeFeuer, .8);
 
         UI.zeige('l2-sortieren-' + i, (s) => {
           HotSpots.starten(s);
           let vergeben = false;
+
+          // Dieselbe Zeile traegt die Frage und die Fehlermeldung. Zwei Zeilen
+          // uebereinander waeren hoeher als die Auftragskarte hergibt – und
+          // die Hoehe fehlt unten der Buehne.
+          const frageZeile = el('p', { class: 'hinweis',
+            text: 'In welche Brandklasse gehört das? Tipp den Buchstaben auf der Tonne an.' });
 
           tonnen.forEach(t => {
             const bkT = t.userData.klasse;
@@ -187,7 +202,13 @@ LEVELS.push({
               if (bkT.id !== eintrag.klasse) {
                 fehlerSortieren++;
                 Audio3.falsch();
-                UI.toast(`${bkT.id} ist für ${bkT.braende}. ${eintrag.name} gehört woanders hin.`, 'schlecht', 3200);
+                // Kein Toast: Der lief nach drei Sekunden weg, und genau wer
+                // gerade danebengegriffen hat, liest langsam. Die Zeile steht
+                // in der Auftragskarte und bleibt, bis das naechste Stueck
+                // kommt.
+                frageZeile.className = 'hinweistext schlecht';
+                frageZeile.textContent =
+                  `${bkT.id} ist die Brandklasse für ${bkT.braende}. ${eintrag.name} gehört woanders hin.`;
                 return;
               }
               vergeben = true;
@@ -205,7 +226,7 @@ LEVELS.push({
           const auftrag = el('div', { class: 'auftrag' },
             el('div', { class: 'dienstvorschrift', text: `Stück ${i + 1} von ${RUNDE.length}` }),
             el('h2', { text: eintrag.name }),
-            el('p', { class: 'hinweis', text: 'In welche Tonne gehört das? Tipp den Buchstaben an.' }),
+            frageZeile,
             UI.schritte(RUNDE.length, i));
           s.appendChild(auftrag);
 
@@ -322,6 +343,7 @@ LEVELS.push({
         if (i >= reihe.length) return setTimeout(phaseFragen, 400);
         const bk = reihe[i];
         stueckSetzen(RUNDE.find(r => r.klasse === bk.id).art);
+        glutFarbeFuer(bk.id);
         feuerStaerke(probeFeuer, 0, true);
 
         UI.zeige('l2-erscheinung-' + i, (s) => {
@@ -357,7 +379,8 @@ LEVELS.push({
                   Audio3.falsch();
                   b.classList.add('falsch', 'wackeln');
                   setTimeout(() => b.classList.remove('wackeln'), 450);
-                  unten.hinweis(`Nicht ganz. ${bk.braende.charAt(0).toUpperCase() + bk.braende.slice(1)} brennen mit: ${bk.erscheinung}.`, 'schlecht');
+                  // 0 = bleibt stehen, bis die richtige Antwort kommt
+                  unten.hinweis(`Nicht ganz. ${bk.braende.charAt(0).toUpperCase() + bk.braende.slice(1)} brennen mit: ${bk.erscheinung}.`, 'schlecht', 0);
                   return;
                 }
                 beantwortet = true;
@@ -462,10 +485,12 @@ LEVELS.push({
         el('div', { class: 'panel glas', style: { width: 'min(620px,94vw)', textAlign: 'center' } },
           el('div', { class: 'dienstvorschrift', text: 'Aufgabe 2' }),
           el('h2', { text: 'Was brennt denn da?' }),
-          el('p', { style: { margin: '.5em 0 0' }, text:
-            'Ein brennender Strohballen und eine brennende Fritteuse haben wenig gemeinsam. Damit man weiß, womit man löschen darf, teilt man Brände nach dem ein, was da brennt: in Brandklassen.' }),
+          el('p', { style: { margin: '.5em 0 0' }, html:
+            'Ein brennender Strohballen und eine brennende Fritteuse haben wenig gemeinsam. Deshalb werden Brände eingeteilt – nach dem, was da brennt. Diese Schubladen heißen <b>Brandklassen</b>.' }),
+          el('p', { style: { margin: '.5em 0 0' }, html:
+            'Fünf gibt es: <b>A, B, C, D</b> und <b>F</b>. Sie stehen nicht dafür, wie gefährlich ein Brand ist, sondern allein dafür, <b>womit man ihn löschen darf</b> – auf jedem Feuerlöscher stehen genau diese Buchstaben.' }),
           el('p', { class: 'hinweis', text:
-            'Fünf Tonnen stehen bereit. Sortier ein, was gleich vorbeikommt – und pass auf, es sind zwei Fallen dabei.' }),
+            'Fünf Tonnen stehen bereit, eine je Klasse. Sortier ein, was gleich vorbeikommt – und pass auf, es sind zwei Fallen dabei.' }),
           el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); phaseSortieren(); } }, 'Los →'))));
     });
   },

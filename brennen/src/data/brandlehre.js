@@ -271,7 +271,11 @@ const LOESCHMITTEL = [
     ],
   },
   {
-    id: 'fett', name: 'Fettbrand-Löschmittel', kurzname: 'Fettbrand', icon: '🍳', farbe: '#e0a83f',
+    // Der Kurzname hiess frueher „Fettbrand“ – und stand damit als einziger
+    // in einer Reihe von Loeschmitteln fuer einen Brand statt fuer ein Mittel.
+    // Das weiche Trennzeichen (\u00ad) laesst das lange Wort auf schmalen
+    // Karten umbrechen, statt sie zu sprengen.
+    id: 'fett', name: 'Fettbrand-Löschmittel', kurzname: 'Fettbrand­löschmittel', icon: '🍳', farbe: '#e0a83f',
     haupt: 'trennen', neben: ['abkuehlen'],
     klassen: ['F', 'A', 'B'],
     wirkung: 'Reagiert mit dem heißen Fett zu einer gasdichten Schaumdecke (Verseifung) und kühlt dabei.',
@@ -491,11 +495,18 @@ const ZUENDQUELLEN = [
 
 /* --- Temperaturbegriffe ---------------------------------------------------
    Die drei werden gern verwechselt. Der Unterschied zwischen Flamm- und
-   Brennpunkt ist genau einer: ob die Flamme bleibt.                       */
+   Brennpunkt ist genau einer: ob die Flamme bleibt.
+
+   `merkwort` und `eselsbruecke` gehoeren zusammen: Alle drei Woerter sagen
+   vorne schon, was passiert – flammt auf, brennt weiter, zuendet von selbst.
+   Level 4 zeigt das nach den drei Vorfuehrungen als Merkhilfe. Wer die
+   Schreibweise hier aendert, muss das im Kopf behalten: Das Merkwort ist
+   wirklich der Anfang des Namens und darf nicht daneben liegen.          */
 const TEMPERATUREN = [
   {
     id: 'flammpunkt', name: 'Flammpunkt', farbe: '#e0a021',
-    kurz: 'Es zündet – und geht gleich wieder aus.',
+    merkwort: 'Flamm', eselsbruecke: 'es flammt kurz auf – und ist gleich wieder weg',
+    kurz: 'Es flammt kurz auf und geht sofort wieder aus.',
     text: 'Die niedrigste Temperatur, bei der über einer Flüssigkeit so viele Dämpfe stehen, dass eine Zündquelle sie entzünden kann. Danach erlischt die Flamme wieder, weil zu wenig nachkommt.',
     braucht: 'Zündquelle',
     beispiele: [
@@ -505,14 +516,16 @@ const TEMPERATUREN = [
   },
   {
     id: 'brennpunkt', name: 'Brennpunkt', farbe: '#e8531a',
-    kurz: 'Es zündet – und bleibt.',
-    text: 'Die niedrigste Temperatur, bei der so viele Dämpfe nachkommen, dass die Verbrennung von selbst weiterläuft.',
+    merkwort: 'Brenn', eselsbruecke: 'es brennt – und zwar weiter',
+    kurz: 'Es fängt Feuer und brennt von allein weiter.',
+    text: 'Etwas wärmer als der Flammpunkt: Jetzt kommen so viele Dämpfe nach, dass die Flamme sich selbst versorgt. Sie geht nicht mehr aus, wenn man die Zündquelle wegnimmt.',
     braucht: 'Zündquelle',
   },
   {
     id: 'zuendtemperatur', name: 'Zündtemperatur', farbe: '#c8241a',
-    kurz: 'Es zündet ganz von allein.',
-    text: 'Der Wärmezustand, bei dem sich ein Stoff in Gegenwart von Luft ohne jede Zündquelle entzündet.',
+    merkwort: 'Zünd', eselsbruecke: 'es zündet selbst – ohne dass jemand zündet',
+    kurz: 'Es zündet von selbst, ganz ohne Streichholz.',
+    text: 'So heiß, dass der Stoff an der Luft von allein zu brennen anfängt. Hier braucht es keine Zündquelle mehr – die Wärme ist die Zündenergie.',
     braucht: 'keine Zündquelle',
   },
 ];

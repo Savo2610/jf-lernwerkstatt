@@ -21,10 +21,16 @@
    (also `unterbau` uebergeben, nicht das Antwortfeld) – sonst rechnet die
    Kamera mit einer freien Flaeche, in die die Leiste hineinragt.
 
+   `dauer` ist die Standzeit in Millisekunden. `0` heisst: bleibt stehen, bis
+   die naechste Meldung kommt oder der Bildschirm wechselt. Das ist fuer
+   Fehlermeldungen gedacht – wer gerade falsch geraten hat, liest langsamer als
+   jemand, der es wusste, und eine Erklaerung, die nach vier Sekunden
+   verschwindet, hat man genau dann verpasst, wenn man sie braucht.
+
    Aufruf:
      const unten = unterbau(feld);
      s.appendChild(unten);
-     unten.hinweis('Nicht ganz. …', 'schlecht');
+     unten.hinweis('Nicht ganz. …', 'schlecht', 0);
    -------------------------------------------------------------------------*/
 function unterbau(...kinder) {
   const leiste = el('div', { class: 'hinweisleiste' });
@@ -37,6 +43,7 @@ function unterbau(...kinder) {
     if (!text) return;
     const t = el('div', { class: 'hinweistext ' + (art || ''), text });
     leiste.appendChild(t);
+    if (dauer === 0) return;
     ab = setTimeout(() => {
       t.classList.add('weg');
       // erst nach der Ausblendung raeumen, sonst springt sie weg statt zu gehen

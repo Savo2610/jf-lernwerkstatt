@@ -284,7 +284,12 @@ LEVELS.push({
     const BRANDBILD = {
       holz:      { flammeXY: [1.0, 1.0], flamme: 1,   glut: .85, y: .55, skala: 1.5 },
       kanister:  { flammeXY: [1.1, .8],  flamme: 1,   glut: 0,   y: .26, skala: 1.4 },
-      metall:    { flammeXY: [.85, .5],  flamme: .35, glut: 1,   y: .26, skala: 1.5 },
+      // Magnesium ohne Flamme: Es gluht blendend weiss, und genau daran
+      // erkennt man einen Metallbrand. Eine Flamme daraufzusetzen waere
+      // huebscher und falsch – und Kinder, die hier eine Flamme sehen,
+      // suchen im Ernstfall nach einer.
+      metall:    { flammeXY: [.85, .5],  flamme: 0,   glut: 1,   y: .26, skala: 1.5,
+                   glutFarbe: FEUERFARBEN.weissglut, schein: 1 },
       fritteuse: { flammeXY: [.8, .7],   flamme: 1,   glut: 0,   y: .50, skala: 1.4 },
     };
 
@@ -328,6 +333,7 @@ LEVELS.push({
       basisSkala = b.flammeXY;
       brandFeuer.scale.set(b.flammeXY[0], b.flammeXY[1], b.flammeXY[0]);
       feuerAnteileSetzen(brandFeuer, b.flamme, b.glut);
+      feuerGlutFarbe(brandFeuer, b.glutFarbe, b.schein);
       feuerStaerke(brandFeuer, 1, true);
     };
 

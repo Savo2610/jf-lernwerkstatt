@@ -303,9 +303,90 @@ LEVELS.push({
           el('p', { class: 'hinweis', style: { marginTop: '.6em', textAlign: 'center' }, text:
             'Ersticken heißt immer: am Mengenverhältnis drehen. Man kann dafür am Sauerstoff ansetzen, am brennbaren Stoff – oder beides voneinander trennen.' }),
           el('button', { class: 'btn gross', style: { marginTop: '.5em' },
-            onclick: () => { Audio3.klick(); phaseWasser(); } }, 'Weiter →'));
+            onclick: () => { Audio3.klick(); wandeffekt(); } }, 'Weiter →'));
         s.appendChild(panel);
         return motivWache(MOTIV, panel, { hoch: .5, weit: .9, anteil: .9, rand: .5, panelUnten: true });
+      });
+    };
+
+    /* --- Der Wandeffekt ---------------------------------------------------
+       Vier Verfahren nehmen etwas weg, und man sieht es: kein Wasser mehr im
+       Bild, keine Flamme mehr. Hemmen nimmt nichts weg – Stoff, Sauerstoff,
+       Wärme und Mengenverhältnis bleiben vollzählig, und trotzdem ist Schluss.
+       Das ist der eine Löschvorgang, den man nicht sehen kann, und deshalb der
+       einzige, der ein Schaubild braucht.
+
+       Die Kinder bedienen es selbst: erst das Gewusel, dann auf Knopfdruck das
+       Pulver hinein. Wer den Knopf gedrückt hat, hat den Satz „durch den
+       Aufprall auf eine Wand ihre Energie verlieren" einmal gesehen, statt ihn
+       zu lesen.                                                            */
+    const wandeffekt = () => {
+      UI.zeige('l5-wandeffekt', (s) => {
+        // Feste Plätze statt Zufall: So verteilen sich die Punkte auch dann
+        // ordentlich, wenn `prefers-reduced-motion` die Bewegung abschaltet –
+        // dann stehen sie genau hier.
+        // Die Werte bleiben mit Absicht in der Mitte des Feldes: Zu den
+        // Prozentwerten kommt der Ausschlag der Bewegung, und was ueber den
+        // Rand hinauslaeuft, schneidet die Zone ab.
+        const PLAETZE = [[16, 26], [34, 58], [50, 22], [64, 50], [78, 34], [28, 62], [60, 40]];
+        const KOERNER = [[24, 44], [44, 26], [56, 64], [72, 22], [82, 58], [38, 74]];
+
+        const zone = el('div', { class: 'wandzone' },
+          PLAETZE.map(([x, y], i) => el('span', {
+            class: 'laeufer',
+            style: {
+              left: x + '%', top: y + '%',
+              // ungerade Zeiten und Versätze: sonst schwingen alle im Takt,
+              // und aus dem Gewusel wird eine Welle
+              animationDuration: (2.1 + i * .27) + 's',
+              animationDelay: (-i * .43) + 's',
+            },
+          }, el('i', {
+            style: {
+              animationDuration: (1.5 + ((i * 7) % 5) * .21) + 's',
+              animationDelay: (-i * .31) + 's',
+            },
+          }))),
+          KOERNER.map(([x, y], i) => el('span', {
+            class: 'korn',
+            style: { left: x + '%', top: y + '%', transitionDelay: (i * .07) + 's' },
+          })));
+
+        const schau = el('div', { class: 'wandschau' }, zone);
+
+        const folge = el('p', { class: 'klein', style: { margin: '.6em 0 0', minHeight: '4.6em' },
+          text: 'Solange die Teilchen in Fahrt sind, geben sie die Reaktion immer weiter – und es brennt.' });
+
+        // Bis das Pulver drin ist, steht der Knopf als Umriss da: Ein voller
+        // roter Knopf neben dem roten Pulverknopf sieht aus wie zwei Wege,
+        // von denen einer klemmt.
+        const weiter = el('button', { class: 'btn geist', style: { marginTop: '.4em' },
+          onclick: () => { Audio3.klick(); phaseWasser(); } }, 'Erst das Pulver …');
+        weiter.disabled = true;
+
+        const pulverKnopf = el('button', { class: 'btn' }, '🧯 Pulver hineingeben');
+        pulverKnopf.addEventListener('click', () => {
+          if (schau.classList.contains('gebremst')) return;
+          Audio3.whoosh();
+          schau.classList.add('gebremst');
+          pulverKnopf.disabled = true;
+          folge.innerHTML = '';
+          folge.appendChild(el('span', { html:
+            'Jedes Pulverkörnchen ist eine <b>Wand</b>. Wer dagegenprallt, verliert seine Energie und gibt nichts mehr weiter – die Kette reißt. ' +
+            'Brennbarer Stoff, Sauerstoff, Wärme und Mengenverhältnis sind alle noch da. Es brennt trotzdem nicht mehr.' }));
+          weiter.disabled = false;
+          weiter.className = 'btn gross';
+          weiter.textContent = 'Weiter →';
+        });
+
+        const panel = el('div', { class: 'panel glas',
+          style: { width: 'min(620px,94vw)', textAlign: 'center' } },
+          el('div', { class: 'dienstvorschrift', text: 'Hemmen der Reaktion' }),
+          el('h2', { text: '🧱 Warum die Flamme?' }),
+          el('p', { style: { margin: '.4em 0 0' }, text:
+            'In der Flamme läuft eine Kettenreaktion: winzige Teilchen rasen umher, stoßen zusammen und reichen die Verbrennung immer weiter.' }),
+          schau, folge, pulverKnopf, weiter);
+        s.appendChild(el('div', { class: 'mitte' }, panel));
       });
     };
 

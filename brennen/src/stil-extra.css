@@ -506,3 +506,64 @@ body:has(.ergebnis) .toast.weg{animation:toastRaus .32s ease-in both}
   .vorratreihe .vorrat .ic{font-size:1.1em}
   .vorratreihe .klein{font-size:.68em}
 }
+
+
+/* --- Wandeffekt (Level 5) --------------------------------------------------
+   Die Kettenreaktion in der Flamme als kleines Schaubild: Punkte, die durch
+   die Reaktionszone rasen, und Pulverkörner, an denen sie hängen bleiben.
+
+   Warum überhaupt ein Schaubild? „Reaktionshemmend" ist der einzige
+   Löschvorgang, den man nicht sehen kann. Bei allen anderen fällt sichtbar
+   etwas weg – hier bleibt alles da, und es brennt trotzdem nicht mehr. Ohne
+   Bild bleibt das ein Satz zum Auswendiglernen.
+
+   Zwei Ebenen, weil ein Punkt sonst nur auf einer Geraden hin und her fährt:
+   die Hülle schiebt ihn waagerecht, der Punkt darin senkrecht – mit
+   unterschiedlichen Zeiten sieht das aus wie ein Gewusel. Beim Pulver wird
+   `animation:none` gesetzt statt nur angehalten: Angehalten friert der Punkt
+   irgendwo ein, ohne Animation fällt er auf seinen Platz zurück, und genau
+   das soll man sehen – die Teilchen sind noch da, sie tun nur nichts mehr. */
+.wandschau{width:min(440px,100%); margin:.7em auto .2em}
+.wandzone{
+  position:relative; height:132px; border-radius:var(--r); overflow:hidden;
+  border:2px solid color-mix(in srgb,var(--glut) 40%,transparent);
+  background:radial-gradient(120% 90% at 50% 100%,
+    color-mix(in srgb,var(--glut) 34%,#fff), color-mix(in srgb,var(--gelb) 18%,#fff));
+  transition:background .6s var(--ease), border-color .6s var(--ease);
+}
+.laeufer{position:absolute; width:14px; height:14px; animation:laeuferQuer 2.4s linear infinite alternate}
+.laeufer i{
+  display:block; width:100%; height:100%; border-radius:999px;
+  background:#fff8e8; box-shadow:0 0 10px 2px color-mix(in srgb,var(--glut) 70%,transparent);
+  animation:laeuferHoch 1.7s linear infinite alternate;
+  transition:background .5s, box-shadow .5s, opacity .5s;
+}
+/* Der Weg ist kurz gehalten: Die Zone ist am Handy nur gut 300 Punkte breit
+   und 132 hoch, und ein Punkt, der am Rand verschwindet, sieht aus, als waere
+   er weg – dabei soll er ja gerade noch da sein. */
+@keyframes laeuferQuer{from{transform:translateX(-40px)} to{transform:translateX(40px)}}
+@keyframes laeuferHoch{from{transform:translateY(-22px)} to{transform:translateY(22px)}}
+/* Die Koerner sind eckig und die Laeufer rund – sonst liegen am Ende nur
+   zwei Sorten grauer Punkte im Kasten, und dann ist nicht mehr zu sehen, wer
+   hier gegen wen prallt. */
+.korn{
+  position:absolute; width:22px; height:22px; border-radius:6px;
+  background:#c3baa7; border:2px solid #8d8474;
+  opacity:0; transform:rotate(12deg) scale(.4);
+  transition:opacity .45s var(--ease), transform .45s var(--ease);
+}
+.wandschau.gebremst .wandzone{
+  background:linear-gradient(180deg,var(--panel2),color-mix(in srgb,#cfc7b4 30%,var(--panel2)));
+  border-color:var(--linie2);
+}
+.wandschau.gebremst .korn{opacity:1; transform:rotate(12deg) scale(1)}
+.wandschau.gebremst .laeufer, .wandschau.gebremst .laeufer i{animation:none}
+/* Die Laeufer bleiben hell – sie sind ja noch da. Nur ihr Schein geht aus,
+   und mehr sagt der Wandeffekt auch nicht. */
+.wandschau.gebremst .laeufer i{background:#fff; box-shadow:0 0 0 1px #b6ad9c inset; opacity:.55}
+@media (prefers-reduced-motion:reduce){
+  /* Die Punkte stehen dann ohnehin still. Damit sie nicht alle aufeinander
+     sitzen, verteilt sie das Level über `left`/`top` – hier bleibt nur, der
+     Zone ihre Höhe zu lassen. */
+  .laeufer, .laeufer i{animation:none}
+}

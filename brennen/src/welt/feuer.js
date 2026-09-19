@@ -19,6 +19,11 @@ const FEUERFARBEN = {
   mitte:   0xff8a15,
   hoch:    0xffc23d,
   spitze:  0xffe89a,
+  // Weissglut: Magnesium und die anderen Metalle gluehen so hell, dass man
+  // nicht hineinsehen darf – das Rotorange der Holzglut waere hier schlicht
+  // falsch. Leicht ins Gelbe gezogen, damit es auf hellem Beton noch leuchtet
+  // und nicht wie ein Loch im Bild aussieht.
+  weissglut: 0xfff6d8,
   rauch:   0x8c8378,
   dampf:   0xf2f6f7,
   wasser:  0x1e9fc0,
@@ -92,6 +97,31 @@ function baueFeuer(opt) {
   glut.position.y = 0.015;
   g.add(glut);
 
+  // Der Kern der Weissglut: eine kleine, sehr helle Scheibe, die zur Kamera
+  // schaut. Die flache Glutscheibe am Boden liegt aus der Spielperspektive
+  // fast waagerecht und ist auf hellem Beton kaum zu sehen – der Kern steht
+  // aufrecht im Hof des Scheins und macht daraus ein gluehendes Stueck Metall.
+  const kern = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: wolkenTextur(), color: 0xffffff,
+    transparent: true, opacity: 0, depthWrite: false,
+  }));
+  kern.position.y = breite * .42;
+  kern.visible = false;
+  g.add(kern);
+
+  // Der Schein ueber der Glut. Aus bleibt er fast immer: Rotgluehendes Holz
+  // leuchtet nicht in seine Umgebung, ein Metallbrand schon – und der ist der
+  // einzige Fall, in dem man die Glut auch dann sieht, wenn gar keine Flamme
+  // da ist. Wird mit `feuerGlutFarbe(f, farbe, staerke)` eingeschaltet.
+  const schein = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: wolkenTextur(), color: FEUERFARBEN.weissglut,
+    transparent: true, opacity: 0, depthWrite: false,
+  }));
+  schein.position.y = breite * .5;
+  schein.scale.setScalar(breite * 3.4);
+  schein.visible = false;
+  g.add(schein);
+
   // Licht: nur wenn ausdruecklich gewuenscht. Bei Tageslicht faellt es kaum
   // auf und kostet Schattenrechnung – lieber sparsam.
   let licht = null;
@@ -102,7 +132,8 @@ function baueFeuer(opt) {
   }
 
   g.userData.feuer = {
-    kegel, fetzen, glut, licht, hoehe, breite,
+    kegel, fetzen, glut, schein, kern, licht, hoehe, breite,
+    scheinStaerke: 0,
     staerke: 1, ziel: 1,
     // Wie stark die Glut gegenueber der Flamme ist. 1 = Glutbrand (Metall,
     // Holzkohle), 0 = reiner Flammenbrand (Gas, Fluessigkeit).
@@ -128,6 +159,29 @@ function feuerAnteileSetzen(f, flamme, glut) {
   if (glut != null) d.glutAnteil = clamp(glut, 0, 1);
   d.kegel.forEach(k => k.visible = d.flammenAnteil > .02);
   d.glut.visible = d.glutAnteil > .02;
+}
+
+/* Farbe der Glut umstellen – und mit ihr den Schein darueber.
+
+   `farbe` leer setzt beides zurueck auf die gewoehnliche Rotglut, `staerke`
+   (0..1) schaltet den Schein ein. Gebraucht wird das fuer die Brandklasse D:
+   Magnesium brennt fast ohne Flamme und gluht dabei blendend hell. Ohne diesen
+   Unterschied sieht ein Metallbrand aus wie ein mattes Lagerfeuer – dabei ist
+   genau das grelle Weiss sein Erkennungszeichen.
+
+   Der Schein ist absichtlich NICHT weiss, sondern warmgelb: Vor dem hellen
+   Himmel und auf hellem Beton verschwindet weiss auf weiss. Ein weisser Kern
+   in einem gelben Hof liest sich als „gluehend heiss" – die gleiche Luege, mit
+   der Zeichner seit jeher Helligkeit malen, die es auf Papier nicht gibt. */
+function feuerGlutFarbe(f, farbe, staerke, scheinFarbe) {
+  const d = f.userData && f.userData.feuer;
+  if (!d) return;
+  d.glut.material.color.setHex(farbe == null ? FEUERFARBEN.glut : farbe);
+  d.schein.material.color.setHex(scheinFarbe == null ? FEUERFARBEN.hoch : scheinFarbe);
+  d.scheinStaerke = staerke == null ? 0 : clamp(staerke, 0, 1);
+  d.schein.visible = d.scheinStaerke > .02;
+  d.kern.visible = d.schein.visible;
+  d.kern.material.color.setHex(farbe == null ? FEUERFARBEN.glut : farbe);
 }
 
 function feuerUpdate(f, dt, t) {
@@ -169,6 +223,16 @@ function feuerUpdate(f, dt, t) {
     const puls = .72 + Math.sin(t * 3.1) * .1 + Math.sin(t * 5.9) * .06;
     d.glut.material.opacity = clamp(puls * s * d.glutAnteil, 0, 1);
     d.glut.scale.setScalar(clamp(.85 + s * .2, .1, 2));
+  }
+
+  if (d.schein.visible) {
+    // schneller flackern als die Glut darunter: Ein Metallbrand zuckt, er
+    // atmet nicht.
+    const zucken = .8 + Math.sin(t * 9.7) * .12 + Math.sin(t * 17.3) * .08;
+    d.schein.material.opacity = clamp(zucken * s * d.scheinStaerke, 0, 1);
+    d.schein.scale.setScalar(d.breite * (3.6 + Math.sin(t * 6.1) * .3) * clamp(s, .2, 1));
+    d.kern.material.opacity = clamp(zucken * s * d.scheinStaerke, 0, 1);
+    d.kern.scale.setScalar(d.breite * (1.5 + Math.sin(t * 9.7) * .12) * clamp(s, .2, 1));
   }
 
   if (d.licht) {

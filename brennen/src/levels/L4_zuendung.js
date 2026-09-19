@@ -63,7 +63,7 @@ LEVELS.push({
     feuerStaerke(probeFeuer, 0, true);
     Stage.welt.add(probeFeuer);
 
-    const thermo = baueAnzeigesaeule({ hoehe: 2.4, farbe: 0xd93a12 });
+    const thermo = baueAnzeigesaeule({ hoehe: 2.4, farbe: 0xd93a12, kugel: true, schild: '°C' });
     thermo.position.set(2.0, 0, 0);
     thermo.visible = false;
     Stage.welt.add(thermo);
@@ -221,7 +221,7 @@ LEVELS.push({
       let i = 0;
 
       const naechste = () => {
-        if (i >= VORFUEHRUNG.length) { setTimeout(phaseQuellen, 400); return; }
+        if (i >= VORFUEHRUNG.length) { setTimeout(punkteMerken, 400); return; }
         const v = VORFUEHRUNG[i];
         const begriff = TEMPERATUREN.find(t => t.id === v.id);
 
@@ -259,7 +259,8 @@ LEVELS.push({
                   Audio3.falsch();
                   b.classList.add('falsch', 'wackeln');
                   setTimeout(() => b.classList.remove('wackeln'), 450);
-                  unten.hinweis(`${t.name}: ${t.kurz}`, 'schlecht', 3400);
+                  // 0 = bleibt stehen, bis die richtige Antwort ihn ersetzt
+                  unten.hinweis(`${t.name}: ${t.kurz}`, 'schlecht', 0);
                   return;
                 }
                 beantwortet = true;
@@ -286,6 +287,43 @@ LEVELS.push({
         });
       };
       naechste();
+    };
+
+    /* --- Merkhilfe: das Wort sagt es selbst -------------------------------
+       Die drei auseinanderzuhalten, waehrend die Vorfuehrung noch laeuft, ist
+       das eine. Sie eine Woche spaeter noch auseinanderzuhalten das andere.
+       Dafuer gibt es keine bessere Eselsbruecke als die Woerter selbst – sie
+       steht nur nirgends, weil sie so nahe liegt.                         */
+    const punkteMerken = () => {
+      feuerStaerke(probeFeuer, 0);
+      saeuleFuellen(thermo, 0);
+      heizplatteGluehen(platte, 0);
+
+      UI.zeige('l4-merkhilfe', (s) => {
+        const zeile = (t) => el('div', {
+          style: { display: 'flex', alignItems: 'baseline', gap: '.6em', textAlign: 'left',
+                   padding: '.5em .8em', borderRadius: 'var(--r)', flexWrap: 'wrap',
+                   background: `color-mix(in srgb, ${t.farbe} 12%, transparent)`,
+                   borderLeft: `4px solid ${t.farbe}` },
+        },
+          el('b', { style: { whiteSpace: 'nowrap' } },
+            el('span', { style: { color: t.farbe }, text: t.merkwort }),
+            el('span', { style: { opacity: .55 }, text: t.name.slice(t.merkwort.length) })),
+          el('span', { class: 'klein', text: '→ ' + t.eselsbruecke }));
+
+        const panel = el('div', { class: 'panel glas',
+          style: { width: 'min(660px,94vw)', textAlign: 'center' } },
+          el('h2', { text: '🌡️ Das Wort verrät es dir' }),
+          el('p', { style: { margin: '.4em 0 0' }, text:
+            'Drei Begriffe, die man leicht verwechselt – dabei steht vorne in jedem schon drin, was passiert:' }),
+          el('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '.6em' } },
+            TEMPERATUREN.map(zeile)),
+          el('p', { class: 'hinweis', style: { marginTop: '.6em' }, text:
+            'In dieser Reihenfolge wird es auch heißer. Und nur ganz oben, ab der Zündtemperatur, braucht es überhaupt keine Zündquelle mehr.' }),
+          el('button', { class: 'btn gross', style: { marginTop: '.6em' },
+            onclick: () => { Audio3.klick(); phaseQuellen(); } }, 'Weiter →'));
+        s.appendChild(el('div', { class: 'mitte' }, panel));
+      });
     };
 
     /* --- Runde 3: Was ist eine Zündquelle? -------------------------------- */
