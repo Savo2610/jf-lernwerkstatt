@@ -448,6 +448,7 @@ src/                 Einsatzbereit (jf.veerka.mp/fwdv3/)
     vehicles.js      KLF und LF inklusive Sitz- und Antreteordnung
     fx.js            Feuer, Wasser, Schläuche, Verteiler, Hydrant
     scenery.js       Boden, Straße, Häuser, Laternen, Bäume
+  bausteine.js       Fachwörterkarte aus BEGRIFFE (Rohr, Verteiler, B-Leitung …)
   levels/            ein Level je Datei, trägt sich selbst in LEVELS ein
   beamer.js          Gruppenabend-Modus
   main.js            Start, Menüs, Levelaufruf
@@ -523,7 +524,21 @@ ansehen, nicht nur eines.
   nur einmal vorkommen, sonst wird geraten statt gelernt.
 - **Verteiler:** `VERTEILER_ABGANG` in `src/three/fx.js`. Links und rechts
   sind aus der Sicht dessen gemeint, der hinter dem Verteiler steht und zum
-  Brand schaut.
+  Brand schaut. Wo die B-Leitung ankommt, sagt `verteiler.userData.eingang()` –
+  die Leitung dort enden lassen und nicht auf die Mitte des Bauteils zielen,
+  sonst hängt sie seitlich am Gehäuse statt im Kupplungsstutzen.
+- **Unterflurhydrant:** `baueHydrant()` in `src/three/fx.js` ist im Ruhezustand
+  nur eine Straßenkappe. `userData.deckelOeffnen(true)`, dann
+  `userData.standrohrSetzen(true)` – das Standrohr wächst aus dem Boden, und
+  erst dann gibt `userData.anschluss()` den Punkt, an dem gekuppelt wird. Wer
+  das Standrohr von Anfang an stehen lässt, zeigt eine Wasserentnahme, die es
+  so nicht gibt.
+- **Fachwörter:** `BEGRIFFE` in `src/data/fwdv3.js`, dargestellt mit
+  `begriffeKarte(ids, opt)` und `begriffKasten(id)` aus `src/bausteine.js`.
+  Dort stehen „1. Rohr", „Verteiler", „B-Leitung" und die anderen Wörter, die
+  in den Leveln vorkommen, bevor jemand sie erklärt hat. Jedes Wort steht an
+  genau einer Stelle – wer es im Level noch einmal ausschreibt, bekommt beim
+  nächsten Mal zwei verschiedene Erklärungen.
 - **Schlauchreserve:** `baueSchlauchreserve(wellen, art)` in `src/three/fx.js`
   legt Serpentinen. Die Leitung davor endet genau dort, wo die Buchten
   anfangen (`schlauchreserveLaenge()`) – die Reserve ist die letzte
@@ -542,7 +557,16 @@ In **Brennen & Löschen**:
   vier ineinandergesteckte Kegel; jeder innere ist **höher** als der äußere,
   sonst verdeckt die deckende Hülle ihn vollständig. `feuerAnteileSetzen(f,
   flamme, glut)` stellt Flammen- gegen Glutbrand ein – das braucht Level 2.
+  `feuerGlutFarbe(f, farbe, staerke)` stellt die Glut auf eine andere Farbe um
+  und schaltet den Schein darüber ein: gebraucht für die Brandklasse D, weil
+  Magnesium fast ohne Flamme und dafür blendend hell glüht. Der Schein ist
+  warmgelb und nicht weiß – auf hellem Beton verschwindet Weiß auf Weiß.
 - **Brandgut:** `baueBrandgut(art)` in `brennen/src/welt/platz.js`.
+- **Versuchsgerät:** `brennen/src/welt/labor.js` — Glasglocke, Gaskasten,
+  Heizplatte und die Anzeigesäule. `baueAnzeigesaeule({ kugel: true, schild:
+  '°C' })` macht aus der Säule ein Thermometer: Ohne die Kugel unten ist ein
+  roter Balken im Glasrohr ein Behälter, der vollläuft, und Level 4 handelt
+  plötzlich von Füllständen statt von Wärme.
 - **Löschgerät:** `brennen/src/welt/loeschen.js` — Wanne mit brennender
   Flüssigkeit, Schaumdecke (`schaumFuellen`), tragbarer Feuerlöscher, Gasfackel
   mit Handrad (`fackelAbsperren`). Der Wasserstrahl selbst steht bei der Flamme
@@ -552,7 +576,10 @@ In **Brennen & Löschen**:
   Bildrand; ein `UI.toast` liegt dann genau auf ihnen, und man muss vier
   Sekunden warten, bis man weitertippen kann. `unterbau` setzt die Rückmeldung
   stattdessen in den Fluss darüber und hält ihren Platz frei. Wichtig: dem
-  `motivWache` den Unterbau übergeben, nicht das Antwortfeld darin.
+  `motivWache` den Unterbau übergeben, nicht das Antwortfeld darin. Die Dauer
+  `0` lässt die Meldung stehen, bis die nächste kommt – das ist für
+  Fehlermeldungen gedacht, denn wer gerade falsch geraten hat, liest langsamer
+  als jemand, der es wusste.
 - **Regler:** `regler(opt)` in `brennen/src/bausteine.js`, innen ein
   `input type=range` – damit funktionieren Finger, Maus und Pfeiltasten ohne
   eigenes Zutun. `zonen` färbt die Schiene ein.
