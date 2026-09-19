@@ -72,6 +72,9 @@ LEVELS.push({
     verteiler.rotation.y = Math.atan2(EO.tuer[0] - EO.verteiler[0], EO.tuer[2] - EO.verteiler[2]);
     verteiler.visible = false;
     Stage.welt.add(verteiler);
+    // Der B-Eingang sitzt mittig hinten – dort endet die Leitung vom Fahrzeug.
+    const eingangWelt = () => verteiler.localToWorld(verteiler.userData.eingang());
+    const alsPunkt = (v) => [v.x, v.y, v.z];
 
     const feuer = baueFeuer({ anzahl: 54, breite: 1.5, hoehe: 3.0 });
     feuer.position.set(EO.brand[0], EO.brand[1] - .55, EO.brand[2] + .12);
@@ -125,6 +128,10 @@ LEVELS.push({
       });
       verteiler.visible = false;
       hydrant.visible = false;
+      // beim zweiten Durchgang faengt der Hydrant wieder zu: Kappe geschlossen,
+      // Standrohr noch auf dem Fahrzeug
+      hydrant.userData.standrohrSetzen(false);
+      hydrant.userData.deckelOeffnen(false);
       feuer.userData.staerke = 1;
       strahl.userData.an = false; strahl.visible = false;
     };
@@ -358,7 +365,7 @@ LEVELS.push({
               setTimeout(() => {
                 truppLaufen('W', [[-4.6, 2.6], [-3.8, 2.9]], () => {
                   schlauchLegen('b1', [heckPunkt(0), [-5.0, .16, 2.4], [-2.0, .16, .6],
-                                       [EO.verteiler[0] - .35, .16, EO.verteiler[2]]], 'B', 1.8);
+                                       alsPunkt(eingangWelt())], 'B', 1.8);
                 });
               }, 700);
             },
@@ -384,10 +391,19 @@ LEVELS.push({
             danach: (gut) => {
               Audio3.kommando('Verteiler Wasser marsch!');
               Audio3.wasser();
-              // um das Fahrzeug herum zum Hydranten – nicht hindurch
-              schlauchLegen('b2', [heckPunkt(.9), [-8.6, .16, EO.gasse],
-                                   [-16.5, .16, EO.gasse], [EO.hydrant[0] + .7, .18, EO.hydrant[2]]], 'B', 1.8);
-              truppLaufen('W', [[-17.8, EO.gasse], [-16.9, EO.gasse - .5]]);
+              /* Um das Fahrzeug herum zum Hydranten – nicht hindurch. Und dort
+                 erst arbeiten: Kappe auf, Standrohr einschrauben, dann
+                 ankuppeln. Ein Unterflurhydrant gibt ohne Standrohr nichts her. */
+              truppLaufen('W', [[EO.hydrant[0] + 1.4, EO.gasse - .4], [EO.hydrant[0] + .6, EO.gasse - 1.1]], () => {
+                hydrant.userData.deckelOeffnen(true);
+                Audio3.treffer();
+                hydrant.userData.standrohrSetzen(true);
+                setTimeout(() => {
+                  const an = hydrant.position.clone().add(hydrant.userData.anschluss());
+                  schlauchLegen('b2', [heckPunkt(.9), [-8.6, .16, EO.gasse],
+                                       [-16.5, .16, EO.gasse], alsPunkt(an)], 'B', 1.8);
+                }, 700);
+              });
               naechsterSchritt();
             },
           }) },

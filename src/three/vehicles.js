@@ -17,10 +17,14 @@ const FAHRZEUGE = {
     sitze: [
       { id:'ef', x:  .55, z: -2.00, reihe:'Fahrerhaus', soll:'EF',  label:'Einheitsführer' },
       { id:'ma', x: -.55, z: -2.00, reihe:'Fahrerhaus', soll:'MA',  label:'Maschinist' },
-      { id:'b1', x:  .72, z:  -.55, reihe:'4er-Bank',   soll:'ATM', pa:true },
-      { id:'b2', x:  .24, z:  -.55, reihe:'4er-Bank',   soll:'WTM', pa:true },
-      { id:'b3', x: -.24, z:  -.55, reihe:'4er-Bank',   soll:'WTF', pa:true },
-      { id:'b4', x: -.72, z:  -.55, reihe:'4er-Bank',   soll:'ATF', pa:true },
+      // `pa` fehlt hier auf allen Plaetzen, und das ist keine Nachlaessigkeit:
+      // Unser KLF fuehrt keine Atemschutzgeraete mit. Wer hier welche in die
+      // Lehnen baut, zeigt ein Fahrzeug, das es bei uns nicht gibt – und
+      // begruendet die Sitzordnung mit etwas, das nicht da ist.
+      { id:'b1', x:  .72, z:  -.55, reihe:'4er-Bank',   soll:'ATM' },
+      { id:'b2', x:  .24, z:  -.55, reihe:'4er-Bank',   soll:'WTM' },
+      { id:'b3', x: -.24, z:  -.55, reihe:'4er-Bank',   soll:'WTF' },
+      { id:'b4', x: -.72, z:  -.55, reihe:'4er-Bank',   soll:'ATF' },
     ],
   },
 
@@ -32,23 +36,38 @@ const FAHRZEUGE = {
     sitze: [
       { id:'ef', x:  .62, z: -2.90, reihe:'Fahrerhaus', soll:'EF',  label:'Gruppenführer' },
       { id:'ma', x: -.62, z: -2.90, reihe:'Fahrerhaus', soll:'MA',  label:'Maschinist' },
+      // `pa` tragen genau die beiden Plaetze des Angriffstrupps: Nur in
+      // seinen Lehnen stecken bei uns Atemschutzgeraete. Genau daran haengt
+      // die Begruendung der Sitzordnung ein paar Zeilen weiter unten – wer
+      // die Geraete auf weitere Plaetze verteilt, nimmt ihr den Sinn.
       { id:'d1', x:  .70, z: -1.50, reihe:'3er-Bank',   soll:'ATM', pa:true },
       { id:'d2', x:  .00, z: -1.50, reihe:'3er-Bank',   soll:'ME'  },
       { id:'d3', x: -.70, z: -1.50, reihe:'3er-Bank',   soll:'ATF', pa:true },
-      { id:'v1', x:  .85, z:  -.55, reihe:'4er-Bank',   soll:'WTM', pa:true },
+      { id:'v1', x:  .85, z:  -.55, reihe:'4er-Bank',   soll:'WTM' },
       { id:'v2', x:  .28, z:  -.55, reihe:'4er-Bank',   soll:'STM' },
       { id:'v3', x: -.28, z:  -.55, reihe:'4er-Bank',   soll:'STF' },
-      { id:'v4', x: -.85, z:  -.55, reihe:'4er-Bank',   soll:'WTF', pa:true },
+      { id:'v4', x: -.85, z:  -.55, reihe:'4er-Bank',   soll:'WTF' },
     ],
   },
 };
 
-/* Merksprüche unserer Wehr – genau dafür sind sie da */
+/* Merksprüche unserer Wehr – genau dafür sind sie da.
+   `warum` erklaert die Ordnung, statt sie nur abzufragen: Wer den Grund kennt,
+   muss den Spruch nicht auswendig lernen. Die beiden Gruende stehen so in
+   unserer Ausbildung und sind der Sinn der ganzen Sitzordnung.            */
 const MERKSPRUECHE = {
   lf:  { titel:'Merksatz', spruch:'Alle MEiden Atemgifte, Wasser Sucht Seinen Weg',
-         erklaert:'Die Anfangsbuchstaben geben die Sitzreihenfolge im Mannschaftsraum: erst die 3er-Bank (A – Me – A), dann die 4er-Bank gegenüber (W – S – S – W).' },
+         erklaert:'Die Anfangsbuchstaben geben die Sitzreihenfolge im Mannschaftsraum: erst die 3er-Bank (A – Me – A), dann die 4er-Bank gegenüber (W – S – S – W).',
+         warum:[
+           'Alle drei Truppführer sitzen links, auf der Fahrerseite – und damit schräg gegenüber vom Gruppenführer. Der sitzt vorne rechts: Dreht er sich um, schaut er genau auf diese Seite. Ein Blick genügt, und der Truppführer weiß, dass er gemeint ist.',
+           'Der Angriffstrupp sitzt in der vorderen Reihe, weil in den Lehnen genau dieser beiden Plätze die Atemschutzgeräte stecken – sonst nirgends im Fahrzeug. So kann er sich schon während der Fahrt ausrüsten und ist am Fahrzeug als Erster fertig; er ist ja auch der Trupp, der zuerst vorgeht.',
+         ] },
   klf: { titel:'So kannst du es dir merken', spruch:'Angriffstrupp außen, Wassertrupp innen',
-         erklaert:'Auf der 4er-Bank des KLF sitzt der Angriffstrupp ganz außen, der Wassertrupp in der Mitte. Truppführer sitzen jeweils auf der Fahrerseite.' },
+         erklaert:'Auf der 4er-Bank des KLF sitzt der Angriffstrupp ganz außen, der Wassertrupp in der Mitte. Truppführer sitzen jeweils auf der Fahrerseite.',
+         warum:[
+           'Auch hier sitzen beide Truppführer links – schräg gegenüber vom Staffelführer vorne rechts. Er dreht sich um und hat sie im Blick.',
+           'Atemschutzgeräte sind hier keine in den Lehnen – die gibt es bei uns nur im LF, und dort nur auf den beiden Plätzen des Angriffstrupps. Beim KLF sitzt der Angriffstrupp trotzdem außen: Dort ist er an der Tür und damit als Erster draußen, und er ist der Trupp, der zuerst vorgeht.',
+         ] },
   antreten: { titel:'Merkspruch', spruch:'AWS: Alle Wollen Spritzen',
          erklaert:'Am Fahrzeug stehen Maschinist und Melder. Rechts daneben die drei Trupps – immer in dieser Reihenfolge: Angriffstrupp, Wassertrupp, Schlauchtrupp. Vorne der Maschinist und die Truppführer, dahinter Melder und Truppmänner. Der Einheitsführer steht vor dem Angriffstrupp.' },
 };
@@ -251,6 +270,18 @@ function baueFahrzeug(typ) {
     const lehne = new THREE.Mesh(new THREE.BoxGeometry(breiteS, .30, .07), lehneMat);
     lehne.position.set(sp.x, bodenH + .50, sp.z + hinten * .23);
     g.add(lehne); sitzPads.push(lehne);
+    /* Atemschutzgeraet in der Lehne. Es ist der Grund, warum der Angriffstrupp
+       sitzt, wo er sitzt – also muss man es auch sehen koennen. Die Flasche
+       schaut oben aus der Lehne heraus, genau wie im echten Fahrzeug.
+       Welche Plaetze eines haben, steht in FAHRZEUGE[].sitze: bei uns nur die
+       beiden des Angriffstrupps im LF, im KLF gar keines.                 */
+    if (sp.pa) {
+      const flasche = new THREE.Mesh(new THREE.CapsuleGeometry(.068, .26, 4, 10),
+        Mat.glanz(0xd8dee9, .3, .7));
+      flasche.position.set(sp.x, bodenH + .66, sp.z + hinten * .26);
+      flasche.castShadow = true;
+      g.add(flasche); sitzPads.push(flasche);
+    }
   });
 
   /* Raeder ----------------------------------------------------------------- */

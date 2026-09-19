@@ -14,6 +14,7 @@ const State = {
   modus: null,              // 'solo' | 'beamer'
   name: '',
   helmfarbe: '#ffd23f',
+  jackenfarbe: '',          // leer = die Jacke des Bestands (siehe figures.js)
   xp: 0,
   levelStatus: {},          // { levelId: { best: 0..1, gespielt: n } }
   abzeichen: {},            // { key: tagNummer } – siehe abzeichenGeben
@@ -27,6 +28,7 @@ const State = {
       const d = JSON.parse(raw);
       Object.assign(this, {
         name: d.name || '', helmfarbe: d.helmfarbe || '#ffd23f',
+        jackenfarbe: d.jackenfarbe || '',
         xp: d.xp || 0, levelStatus: d.levelStatus || {},
         abzeichen: d.abzeichen || {},
         ton: d.ton !== false, sprache: d.sprache !== false,
@@ -38,7 +40,8 @@ const State = {
   sichern() {
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
-        name: this.name, helmfarbe: this.helmfarbe, xp: this.xp,
+        name: this.name, helmfarbe: this.helmfarbe, jackenfarbe: this.jackenfarbe,
+        xp: this.xp,
         levelStatus: this.levelStatus, abzeichen: this.abzeichen,
         ton: this.ton, sprache: this.sprache,
       }));

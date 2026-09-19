@@ -24,24 +24,45 @@ LEVELS.push({
       { id: 'W', rollen: ['WTF', 'WTM'], x: 0,    farbe: 0x35c8ff },
       { id: 'S', rollen: ['STF', 'STM'], x: 2.6,  farbe: 0x3ddc84 },
     ];
-    const figuren = [], truppFiguren = {};
+    /* Einheitsführer, Maschinist und Melder stehen vor den Trupps, in den
+       Lücken dazwischen: In der Vorstellung soll jede der sechs Funktionen
+       aufleuchten können, und drei davon sind keine Trupps. Weiter vorn und
+       seitlich versetzt, damit niemand hinter einem Vordermann verschwindet. */
+    const EINZELNE = [
+      { id: 'EF', x: -4.6, z: 2.2, farbe: 0xffd23f },
+      { id: 'MA', x: -1.1, z: 2.6, farbe: 0xb9c4dd },
+      { id: 'ME', x: 3.9,  z: 2.4, farbe: 0xc98bff },
+    ];
+
+    const figuren = [], rollenFiguren = {};
     TRUPPS.forEach(t => {
-      truppFiguren[t.id] = [];
+      rollenFiguren[t.id] = [];
       t.rollen.forEach((r, i) => {
         const f = figurFuerRolle(r, { pa: t.id !== 'S' });
         f.position.set(t.x + (i ? -.5 : 0), 0, i ? -1.25 : 0);
-        Stage.welt.add(f); figuren.push(f); truppFiguren[t.id].push(f);
+        Stage.welt.add(f); figuren.push(f); rollenFiguren[t.id].push(f);
       });
     });
+    EINZELNE.forEach(e => {
+      const f = figurFuerRolle(e.id);
+      f.position.set(e.x, 0, e.z);
+      f.rotation.y = -e.x * .06;     // alle schauen leicht zur Mitte
+      Stage.welt.add(f); figuren.push(f); rollenFiguren[e.id] = [f];
+    });
+
+    const farbeVon = (id) => {
+      const t = TRUPPS.find(x => x.id === id) || EINZELNE.find(x => x.id === id);
+      return t ? t.farbe : 0xffd23f;
+    };
+
     const ringe = [];
     Stage.anmelden((dt, t) => { belebeFiguren(figuren, dt, t); ringeUpdate(ringe, dt, t); });
 
     const ringeFuer = (ids) => {
       ringe.forEach(r => Stage.welt.remove(r)); ringe.length = 0;
       ids.forEach(id => {
-        const t = TRUPPS.find(x => x.id === id); if (!t) return;
-        truppFiguren[id].forEach(f => {
-          const ring = bodenRing(t.farbe);
+        (rollenFiguren[id] || []).forEach(f => {
+          const ring = bodenRing(farbeVon(id));
           ring.position.copy(f.position);
           Stage.welt.add(ring); ringe.push(ring);
         });
@@ -126,8 +147,69 @@ LEVELS.push({
           el('div', { class: 'feedback gut', style: { width: '100%' } },
             el('b', { text: 'Merk dir das so:' }),
             el('span', { text: 'Retten steht bei jedem Trupp an erster Stelle. Wer gerade Menschen retten kann, macht das – Schläuche können warten.' })),
-          el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); sortIntro(); } }, 'Weiter →'),
+          el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); vorstellung(0); } }, 'Weiter →'),
         ], { obenBreit: .04, obenSchmal: .48, rechtsBreit: .18 });
+      });
+    };
+
+    /* --- Phase A2: die sechs Funktionen vorstellen ------------------------
+       Vorher ging es direkt vom „alle drei retten" ins Zuordnen – und wer
+       noch nie am Fahrzeug stand, sortierte Karten auf Funktionen, von denen
+       er nur den Namen kannte. Hier stellt sich jede einmal selbst vor: wer
+       sie ist, wofür sie zuständig ist, und die Bühne zeigt dabei, wer
+       gemeint ist. Die vollständigen Aufgabenlisten stehen absichtlich NICHT
+       hier – sonst wäre das Zuordnen danach nur noch Abschreiben.         */
+    const VORSTELLUNG = [
+      { id: 'EF', punkte: 2 },
+      { id: 'MA', punkte: 2 },
+      { id: 'ME', punkte: 2 },
+      { id: 'A',  punkte: 3 },
+      { id: 'W',  punkte: 3 },
+      { id: 'S',  punkte: 3 },
+    ];
+
+    const vorstellung = (i) => {
+      if (i >= VORSTELLUNG.length) return woerterbuch();
+      const v = VORSTELLUNG[i];
+      const A = AUFGABEN[v.id];
+      schilderZeigen(null);
+      ringeFuer([v.id]);
+      // etwas weiter weg als bei der Rettungsfrage: Jetzt stehen auch
+      // Einheitsführer, Maschinist und Melder mit im Bild.
+      Stage.kameraFahren([0, 3.2, 12.2], [0, 1.1, .3], i === 0 ? 1.2 : .5);
+
+      UI.zeige('l5-vorstellung-' + i, (s) => {
+        seitenLayout(s, [
+          el('div', { class: 'klein', text: `Funktion ${i + 1} von ${VORSTELLUNG.length}` }),
+          UI.schritte(VORSTELLUNG.length, i),
+          el('div', { class: 'chip', style: { background: A.farbe + '22', borderColor: A.farbe },
+                      text: A.name }),
+          el('p', { class: 'hinweis', style: { margin: 0, fontSize: '1.06em' }, text: A.kurz }),
+          el('div', { class: 'liste', style: { width: '100%' } },
+            A.punkte.slice(0, v.punkte).map(t => el('div', { class: 'zeile', style: { textAlign: 'left' } },
+              el('span', { style: { color: A.farbe, fontWeight: '900' }, text: '•' }),
+              el('span', { class: 'klein', text: t })))),
+          A.rettet ? el('div', { class: 'klein', style: { color: 'var(--gruen)' },
+                                 text: '… und vor allem: rettet.' }) : null,
+          el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); vorstellung(i + 1); } },
+            i < VORSTELLUNG.length - 1 ? 'Nächste →' : 'Fachwörter →'),
+        ], { obenBreit: .04, obenSchmal: .42, rechtsBreit: .18 });
+      });
+    };
+
+    /* Und einmal die Wörter, die in den Aufgaben vorkommen. „Nimmt das erste
+       Rohr vor" ist kein Satz, den ein Kind von selbst versteht.          */
+    const woerterbuch = () => {
+      ringeFuer([]);
+      UI.zeige('l5-woerter', (s) => {
+        seitenLayout(s, [
+          el('div', { style: { fontSize: '2.2em' }, text: '📖' }),
+          el('h3', { text: 'Vier Wörter vorweg' }),
+          el('p', { class: 'klein', style: { margin: 0 },
+            text: 'Die kommen gleich in den Aufgaben vor – und im Einsatz jeden Tag.' }),
+          begriffeKarte(['rohr', 'verteiler', 'bleitung', 'cleitung']),
+          el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); sortIntro(); } }, 'Weiter →'),
+        ], { obenBreit: .04, obenSchmal: .5, rechtsBreit: .18 });
       });
     };
 
@@ -148,7 +230,7 @@ LEVELS.push({
           el('div', { style: { fontSize: '2.4em' }, text: '🗂️' }),
           el('h3', { text: 'Aufgaben zuordnen' }),
           el('p', { class: 'hinweis', style: { margin: 0 },
-            text: 'Zwölf Aufgaben fliegen dir entgegen. Tippe jeweils die Funktion an, die dafür zuständig ist. Serien geben Bonuspunkte.' }),
+            text: 'Zwölf Aufgaben fliegen dir entgegen. Tippe jeweils die Funktion an, die dafür zuständig ist. Serien geben Bonuspunkte – und wenn du danebengreifst, hältst du an und liest in Ruhe nach.' }),
           el('button', { class: 'btn gross gruen', onclick: () => { Audio3.klick(); sortStart(); } }, 'Los geht’s →'),
         ], { obenBreit: .04, obenSchmal: .3, rechtsBreit: .18 });
       });
@@ -199,12 +281,28 @@ LEVELS.push({
               serie = 0;
               Audio3.falsch();
               node.style.boxShadow = 'inset 0 0 0 3px var(--rot)';
+              // Den richtigen Knopf mitmarkieren: Wer danebengreift, soll
+              // sehen, wohin die Karte gehört hätte – nicht nur, dass es
+              // falsch war.
+              const richtigerKnopf = $$('.btn', knoepfe)[ROLLEN_KNOEPFE.findIndex(x => x.id === k.ziel)];
+              if (richtigerKnopf) {
+                richtigerKnopf.style.boxShadow = 'inset 0 0 0 3px var(--gruen)';
+                richtigerKnopf.style.background = 'rgba(61,220,132,.14)';
+              }
               rueck.appendChild(el('div', { class: 'feedback schlecht' },
                 el('b', { text: 'Das macht der ' + ziel.name + '.' }),
                 el('span', { text: k.hinweis || ziel.kurz })));
             }
             $$('.btn', knoepfe).forEach(b => b.style.pointerEvents = 'none');
-            setTimeout(() => { i++; naechste(); }, gut ? 950 : 1900);
+            /* Richtig geraten: weiter im Tempo, das macht die Serie aus.
+               Danebengegriffen: stehen bleiben. Die Erklärung nach knapp zwei
+               Sekunden wegzublenden hiess, dass genau die Karte, die man nicht
+               konnte, ungelesen vorbeizog. Jetzt entscheidet der Spieler. */
+            if (gut) setTimeout(() => { i++; naechste(); }, 950);
+            else rueck.appendChild(el('button', {
+              class: 'btn gross', style: { marginTop: '10px' },
+              onclick: () => { Audio3.klick(); i++; naechste(); },
+            }, i < karten.length - 1 ? 'Verstanden – nächste Karte →' : 'Verstanden →'));
           };
 
           seitenLayout(s, [

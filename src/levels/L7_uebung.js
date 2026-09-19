@@ -73,6 +73,10 @@ LEVELS.push({
     Stage.welt.add(verteiler);
     // Weltposition einer Verteilermuendung (0 = links, 1 = Mitte, 2 = rechts)
     const abgangWelt = (i) => verteiler.localToWorld(verteiler.userData.abgang(i));
+    // und die des B-Eingangs hinten. Dort endet die Leitung vom Fahrzeug –
+    // mittig und in Kupplungshoehe, nicht irgendwo neben dem Verteiler.
+    const eingangWelt = () => verteiler.localToWorld(verteiler.userData.eingang());
+    const alsPunkt = (v) => [v.x, v.y, v.z];
 
     const feuer1 = baueFeuer({ anzahl: 46, breite: 2.6, hoehe: 1.9 });
     feuer1.position.set(UO.rohr1[0] + 1.5, 0, UO.rohr1[2] - 1.8);
@@ -247,6 +251,10 @@ LEVELS.push({
           el('div', { class: 'feedback', style: { width: '100%' } },
             el('b', { text: 'Warum diese Übung?' }),
             el('span', { text: 'Kein Innenangriff, kein Atemschutz – dafür der komplette Aufbau: Verteiler, B-Leitung, Hydrant, zwei C-Rohre. Und weil der Wassertrupp hier nicht als Sicherheitstrupp gebunden ist, bekommt er das zweite Rohr und wiederholt seinen Befehl selbst.' })),
+          // Die beiden Wörter kommen gleich in jedem zweiten Satz vor. Verteiler
+          // und C-Leitung bekommen später ihre eigene Runde – dort stehen sie
+          // dann im Bild, und das erklärt mehr als jeder Satz hier.
+          begriffeKarte(['rohr', 'bleitung'], { titel: '📖 Die Wörter dazu' }),
           el('button', { class: 'btn gross gruen', onclick: () => { Audio3.klick(); Audio3.martinshorn(1); befehl1(); } }, 'Absitzen →'),
         ], { obenBreit: 0, obenSchmal: 0, rechtsBreit: 0 });
         return blickWache([UO.fzgVorn, UO.fzgHeck, UO.rohr1, UO.rohr2, UO.hydrant]
@@ -446,12 +454,23 @@ LEVELS.push({
           if (pos === 0) {
             truppLaufen('W', [[-3.4, 2.6], [-2.6, 1.9]], () => {
               schlauchLegen('b1', [UO.heck, [-3.6, .16, 2.6], [-1.6, .16, 1.0],
-                                   [UO.verteiler[0] - .35, .16, UO.verteiler[2]]], 'B', 1.8);
+                                   alsPunkt(eingangWelt())], 'B', 1.8);
             });
           } else {
-            schlauchLegen('b2', [[UO.heck[0], .45, UO.heck[2] + .8], [-7.2, .16, UO.gasse],
-                                 [-13.5, .16, UO.gasse], [UO.hydrant[0] + .8, .2, UO.hydrant[2]]], 'B', 2.0);
-            truppLaufen('W', [[-14.2, UO.gasse], [-15.3, UO.gasse - .5]]);
+            /* Zum Hydranten gehoert Arbeit: Kappe auf, Standrohr einschrauben,
+               erst dann ankuppeln. Deshalb laeuft der Trupp zuerst hin und die
+               Leitung waechst danach – vorher haengt sie an nichts.        */
+            truppLaufen('W', [[UO.hydrant[0] + 1.5, UO.hydrant[2] + .3],
+                              [UO.hydrant[0] + .7, UO.hydrant[2] + 1.2]], () => {
+              hydrant.userData.deckelOeffnen(true);
+              Audio3.treffer();
+              hydrant.userData.standrohrSetzen(true);
+              setTimeout(() => {
+                const an = hydrant.position.clone().add(hydrant.userData.anschluss());
+                schlauchLegen('b2', [[UO.heck[0], .45, UO.heck[2] + .8], [-7.2, .16, UO.gasse],
+                                     [-13.5, .16, UO.gasse], alsPunkt(an)], 'B', 1.8);
+              }, 700);
+            });
           }
           pos++;
           if (pos < SCHRITTE.length) { rueck.textContent = 'Und danach?'; return; }
@@ -467,6 +486,7 @@ LEVELS.push({
             text: 'Der Wassertrupp hat zwei Aufgaben. Tippe sie in der richtigen Reihenfolge an.' }),
           liste,
           rueck,
+          begriffKasten('hydrant'),
           UI.zitat('Die Wasserversorgung wird bei Löschfahrzeugen mit Löschwasserbehälter zuerst vom Löschfahrzeug zum Verteiler und danach zwischen Löschfahrzeug und Wasserentnahmestelle verlegt.'),
         ], { obenBreit: 0, obenSchmal: 0, rechtsBreit: 0 });
         return blickWache([UO.hydrant, UO.fzgVorn, UO.fzgHeck, UO.verteiler], panel, .84);
@@ -698,7 +718,7 @@ LEVELS.push({
             text: 'Jeder Trupp nimmt zwei C-Schläuche mit. Einer wird verlegt – der letzte wird gar nicht erst stramm gezogen, sondern bleibt komplett in Buchten liegen. Tippe die richtige Stelle an.' }),
           el('div', { class: 'feedback', style: { width: '100%' } },
             el('b', { text: 'Was ist eine Bucht?' }),
-            el('span', { text: 'Eine lose Schlaufe. Der Schlauch wird in Serpentinen abgelegt – zweimal nach links, zweimal nach rechts. Weil der ganze letzte Schlauch liegen bleibt, hat der Trupp gleich 15 Meter Luft: genug, um im Gelände oder im Gebäude weiterzugehen, ohne nachzukuppeln. Und genug, falls sich das Feuer ausbreitet.' })),
+            el('span', { text: 'Eine lose Schlaufe. Der Schlauch wird nicht stramm gezogen, sondern in Buchten abgelegt. Weil der ganze letzte Schlauch liegen bleibt, hat der Trupp gleich 15 Meter Luft: genug, um im Gelände oder im Gebäude weiterzugehen, ohne nachzukuppeln. Und genug, falls sich das Feuer ausbreitet.' })),
           rueck,
         ], { obenBreit: 0, obenSchmal: 0, rechtsBreit: 0 });
         s.appendChild(schicht);
@@ -716,6 +736,7 @@ LEVELS.push({
         wer: 'Angriffstruppführer → Verteiler',
         text: 'Strahlrohr angekuppelt, Reserve liegt. Der Angriffstruppführer fordert Wasser für sein Rohr an – der Schlauchtrupp öffnet den Abgang am Verteiler.',
         zitat: 'Der Angriffstruppführer gibt nun das Kommando: „1. Rohr Wasser Marsch!"',
+        merke: [BEGRIFFE.rohr.name + ' – was heißt das?', BEGRIFFE.rohr.text],
         dauer: 4.2,
         blick: [UO.verteiler, UO.rohr1, [9, 0, -6]],
         anteil: .82,
@@ -848,9 +869,29 @@ LEVELS.push({
         blick: [UO.verteiler, UO.rohr2, UO.rohr1],
         anteil: .82,
         tun: () => {
+          /* Genau wie beim ersten Rohr: Die Leitung endet dort, wo die Reserve
+             anfaengt, und die Reserve ist ihre letzte Laenge. Vorher lag sie
+             quer ueber dem schon verlegten Schlauch – und sie lag da, bevor
+             der Trupp ueberhaupt angefangen hatte zu verlegen. */
+          const knick = [5.6, -1.4];
+          const RES = schlauchreserveLaenge(2);
+          const dx = UO.rohr2[0] - knick[0], dz = UO.rohr2[2] - knick[1];
+          const laenge = Math.hypot(dx, dz), ux = dx / laenge, uz = dz / laenge;
+          const resStart = [UO.rohr2[0] - ux * RES, UO.rohr2[2] - uz * RES];
+          const resMitte = [UO.rohr2[0] - ux * RES / 2, UO.rohr2[2] - uz * RES / 2];
+
           truppLaufen('W', [[UO.rohr2[0] - .4, UO.rohr2[2] + .6], [UO.rohr2[0] + .5, UO.rohr2[2] + 1.0]], () => {
-            schlauchLegen('c2', [[abgangWelt(2).x, .16, abgangWelt(2).z], [5.6, .1, -1.4],
-                                 [UO.rohr2[0], .1, UO.rohr2[2]]], 'C', 1.6);
+            schlauchLegen('c2', [[abgangWelt(2).x, .16, abgangWelt(2).z], [knick[0], .1, knick[1]],
+                                 [resStart[0], .1, resStart[1]]], 'C', 1.6, () => {
+              // und jetzt erst die Reserve – als das, was sie ist: der letzte
+              // Schlauch, der in Buchten liegen bleibt
+              const res2 = baueSchlauchreserve(2, 'C');
+              res2.position.set(resMitte[0], 0, resMitte[1]);
+              res2.rotation.y = Math.atan2(-uz, ux);
+              res2.scale.setScalar(.01);
+              Stage.welt.add(res2);
+              Bewegung.neu(.6, (p) => res2.scale.setScalar(p), null, true);
+            });
           });
         },
         danach: zweitesRohrWasser,
@@ -862,17 +903,13 @@ LEVELS.push({
         titel: 'Zweites Rohr',
         kommando: '2. Rohr Wasser marsch!',
         wer: 'Wassertruppführer → Verteiler',
-        text: 'Auch hier: erst Schlauchreserve legen, Strahlrohr ankuppeln – dann Wasser anfordern. Der Schlauchtrupp öffnet den zweiten Abgang.',
+        text: 'Der Wassertrupp hat seine Leitung verlegt, die Reserve liegt kurz vorm Strahlrohr, das Rohr ist angekuppelt. Erst jetzt fordert er Wasser an – und der Schlauchtrupp öffnet den zweiten Abgang.',
         dauer: 4.0,
         blick: [UO.verteiler, UO.rohr2, [9.5, 0, 5.5]],
         anteil: .82,
         tun: () => {
           Audio3.wasser();
           verteiler.userData.oeffnen(2);   // rechter C-Abgang: zweites Rohr
-          const res2 = baueSchlauchreserve(2, 'C');
-          res2.position.set(UO.rohr2[0] - .8, 0, UO.rohr2[2] + 1.3);
-          res2.rotation.y = Math.atan2(-(UO.rohr2[2] - UO.verteiler[2]), UO.rohr2[0] - UO.verteiler[0]);
-          Stage.welt.add(res2);
           strahl2.visible = true; strahl2.userData.an = true;
           strahl2.userData.setzen(new THREE.Vector3(UO.rohr2[0] + .2, .9, UO.rohr2[2] + .2),
                                   new THREE.Vector3(UO.rohr2[0] + 1.5, .5, UO.rohr2[2] - 1.6));

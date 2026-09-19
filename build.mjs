@@ -26,6 +26,7 @@ spielBauen({
     'src/three/vehicles.js',
     'src/three/fx.js',
     'src/three/scenery.js',
+    'src/bausteine.js',
     // Level alphabetisch = L1 bis L8
     ...ordnerDateien('src/levels'),
     'src/beamer.js',

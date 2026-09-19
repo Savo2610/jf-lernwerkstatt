@@ -25,15 +25,38 @@ LEVELS.push({
     Stage.welt.add(new THREE.AmbientLight(0x9fb4d8, .55));
     Stage.welt.add(bei(new THREE.DirectionalLight(0x8fb4f0, 1.2), -6, 6, -8));
 
-    let fzg = null;
+    let fzg = null, blicke = null;
     const figuren = [];
     Stage.anmelden((dt, t) => { belebeFiguren(figuren, dt, t); if (fzg) blaulichtUpdate(fzg, dt, t); });
 
+    const blickeWeg = () => { if (blicke) { Stage.welt.remove(blicke); blicke = null; } };
+
     const aufraeumen = () => {
       HotSpots.beenden();
+      blickeWeg();
       figuren.forEach(f => Stage.welt.remove(f));
       figuren.length = 0;
       if (fzg) { Stage.welt.remove(fzg); fzg = null; }
+    };
+
+    /* --- Blicklinien vom Einheitsführer zu den Truppführern ---------------
+       Der Grund für die halbe Sitzordnung: Alle Truppführer sitzen links, der
+       Führer vorne rechts – er dreht sich um und hat sie alle im Blick. Als
+       Satz überliest man das; als drei Striche in der Draufsicht nicht.    */
+    const blickeZeigen = (opt) => {
+      blickeWeg();
+      if (!fzg || !opt.imFahrzeug) return;
+      const ef = opt.plaetze.find(p => p.soll === 'EF');
+      const fuehrer = opt.plaetze.filter(p => /TF$/.test(p.soll));
+      if (!ef || !fuehrer.length) return;
+      const von = sitzWeltPos(fzg, ef);
+      blicke = new THREE.Group();
+      const mat = new THREE.LineBasicMaterial({ color: 0xffd23f, transparent: true, opacity: .6 });
+      fuehrer.forEach(p => {
+        const geo = new THREE.BufferGeometry().setFromPoints([von, sitzWeltPos(fzg, p)]);
+        blicke.add(new THREE.Line(geo, mat));
+      });
+      Stage.welt.add(blicke);
     };
 
     /* ===== Baustein: Plätze besetzen ===================================== */
@@ -133,6 +156,9 @@ LEVELS.push({
         const panel = seitenLayout(s, [
           el('div', { class: 'klein', text: opt.schrittText }),
           el('h3', { text: opt.titel }),
+          // „LF" und „KLF" sagen einem Neuling gar nichts. Die Abkuerzung
+          // steht im Titel, ausgeschrieben steht sie direkt darunter.
+          opt.langName ? el('div', { class: 'chip', text: opt.langName }) : null,
           el('p', { class: 'klein', style: { margin: 0 }, text: opt.hinweis }),
           el('div', { class: 'klein', text: 'Zieh die Karten auf die Plätze' }),
           vorrat,
@@ -231,9 +257,11 @@ LEVELS.push({
     /* ===== Auflösung mit Merksatz ======================================== */
     const aufloesung = (opt, eigeneFehler) => {
       if (opt.imFahrzeug) fahrzeugOeffnen(fzg, true);
+      blickeZeigen(opt);
 
       UI.zeige('l4-loesung-' + opt.id, (s) => {
         const schicht = HotSpots.schicht;
+        const warum = opt.merk && opt.merk.warum;
         const panel = seitenLayout(s, [
           el('div', { style: { fontSize: '2.2em' }, text: eigeneFehler === 0 ? '🎯' : '👍' }),
           el('h3', { text: opt.titel + ' sitzt' }),
@@ -243,6 +271,12 @@ LEVELS.push({
             el('div', { class: 'klein', text: opt.merk.titel || 'Merksatz' }),
             el('b', { style: { fontSize: '1.06em', lineHeight: 1.25, display: 'block', margin: '.2em 0' }, text: opt.merk.spruch }),
             el('span', { class: 'klein', text: opt.merk.erklaert })) : null,
+          // Der Spruch sagt, WO jemand sitzt. Erst der Grund macht daraus
+          // etwas, das man sich behalten kann – und die gelben Linien im Bild
+          // zeigen den ersten davon.
+          warum ? el('div', { class: 'feedback', style: { width: '100%' } },
+            el('b', { text: 'Warum ausgerechnet so?' }),
+            warum.map((t, i) => el('span', { style: { display: 'block', marginTop: i ? '.55em' : 0 }, text: t }))) : null,
           opt.zusatz ? el('p', { class: 'klein', style: { margin: 0 }, text: opt.zusatz }) : null,
           opt.zitat ? UI.zitat(opt.zitat) : null,
           el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); opt.danach(); } }, 'Weiter →'),
@@ -270,6 +304,7 @@ LEVELS.push({
     const aufgabeLF = () => platzAufgabe({
       id: 'lf', schrittText: 'Aufgabe 1 von 3',
       titel: 'Sitzordnung LF',
+      langName: 'LF = Löschgruppenfahrzeug',
       hinweis: 'Gruppenbesatzung 1/8/9. Vorne Fahrerhaus, dahinter die 3er-Bank, gegenüber die 4er-Bank.',
       fahrzeugTyp: 'lf', imFahrzeug: true,
       plaetze: FAHRZEUGE.lf.sitze,
@@ -282,6 +317,7 @@ LEVELS.push({
     const aufgabeKLF = () => platzAufgabe({
       id: 'klf', schrittText: 'Aufgabe 2 von 3',
       titel: 'Sitzordnung KLF',
+      langName: 'KLF = Kleinlöschfahrzeug',
       hinweis: 'Staffelbesatzung 1/5/6. Kein Melder, kein Schlauchtrupp – nur eine 4er-Bank hinten.',
       fahrzeugTyp: 'klf', imFahrzeug: true,
       plaetze: FAHRZEUGE.klf.sitze,
@@ -368,7 +404,7 @@ LEVELS.push({
         el('p', { class: 'hinweis', style: { margin: 0 },
           text: 'Jeder Platz im Fahrzeug gehört einer Funktion – damit auf der Alarmfahrt niemand überlegen muss. Und nach dem Absitzen steht jeder an seinem Platz.' }),
         el('p', { class: 'klein', style: { margin: 0 },
-          text: 'Wir nehmen unser LF mit Gruppenbesatzung und unser KLF mit Staffelbesatzung.' }),
+          text: 'Wir nehmen unsere beiden Fahrzeuge: das LF – das Löschgruppenfahrzeug mit Gruppenbesatzung – und das KLF, das Kleinlöschfahrzeug mit Staffelbesatzung.' }),
         el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); aufgabeLF(); } }, 'Einsteigen →'),
       ], { obenBreit: .04, obenSchmal: .3, rechtsBreit: .18 });
     });

@@ -35,6 +35,7 @@ const EINHEITEN = {
     ],
     zitat:'Der Selbstständige Trupp ist eine taktische Einheit, deren Mannschaft aus einem Truppführer und zwei weiteren Einsatzkräften besteht (1/2/3).',
     merke:'Achtung Verwechslungsgefahr: Ein Angriffs-, Wasser- oder Schlauchtrupp ist NUR ein Teil einer Gruppe. Der Selbstständige Trupp dagegen ist eine eigene taktische Einheit – er kann alleine losfahren.',
+    einsatz:'Für kleine Einsätze, bei denen drei Leute reichen: eine Ölspur abstreuen, eine Tür öffnen, bei einer Tragehilfe unterstützen, eine Einsatzstelle absichern.',
     grenze:'Zu dritt geht kein Innenangriff unter Atemschutz. Dafür braucht es mindestens eine Staffel.',
   },
   staffel: {
@@ -49,6 +50,7 @@ const EINHEITEN = {
     ],
     zitat:'Die Staffel ist eine taktische Einheit, deren Mannschaft aus einem Staffelführer und fünf weiteren Einsatzkräften besteht (1/5/6).',
     merke:'Der Staffel fehlen gegenüber der Gruppe genau zwei Dinge: der Melder und der Schlauchtrupp. Das sind exakt die ersten beiden, auf die man laut Vorschrift verzichtet.',
+    einsatz:'Die Staffel macht dasselbe wie die Gruppe – nur mit drei Händen weniger. Weil kein Schlauchtrupp da ist, verlegt der Angriffstrupp seine Schlauchleitung selbst, und den Verteiler bedient, wen der Staffelführer dazu bestimmt. Alles andere läuft wie gewohnt.',
     grenze:'Innenangriff unter Atemschutz? Ja, geht.',
   },
   gruppe: {
@@ -65,6 +67,7 @@ const EINHEITEN = {
     ],
     zitat:'Die Gruppe ist eine taktische Einheit, deren Mannschaft aus einem Gruppenführer und acht weiteren Einsatzkräften besteht (1/8/9).',
     merke:'Die Gruppe ist die taktische GRUNDeinheit der Feuerwehr. Alles andere misst sich an ihr.',
+    einsatz:'Der Regelfall im Löscheinsatz: retten, Wasserversorgung aufbauen, zwei Rohre vornehmen – dafür reicht sie allein. Genau diesen Einsatz spielst du in Aufgabe 7 und 8 durch.',
     grenze:'Die Gruppe kann alle Ersteinsatzmaßnahmen alleine abarbeiten.',
     grund:true,
   },
@@ -80,6 +83,7 @@ const EINHEITEN = {
     ],
     zitat:'Der Zug ist eine taktische Einheit. Sie besteht aus dem Zugführer, dem Zugtrupp als Führungseinheit und aus Gruppen, Staffeln und/oder Selbstständigen Trupps. Der Zug hat in der Regel eine Mannschaftsstärke von 22.',
     merke:'22 = Zugführer (1) + Zugtrupp (3) + Gruppe (9) + Gruppe (9). Der Führungsassistent ist der Vertreter des Zugführers.',
+    einsatz:'Der Zug kommt, wenn ein Einsatz für eine einzelne Gruppe zu groß ist. Der Zugführer führt dann keine einzelnen Leute mehr, sondern ganze Einheiten: Die eine Gruppe bekommt einen Auftrag, die andere einen zweiten – und er behält das Ganze im Blick.',
     grenze:'Für besondere Aufgaben kann der Zug um einen Trupp, eine Staffel oder eine Gruppe erweitert werden.',
   },
 };
@@ -162,6 +166,44 @@ const AUFGABEN = {
   },
 };
 
+/* --- Fachwörter -----------------------------------------------------------
+   Die Vorschrift redet von „erstem Rohr" und „B-Leitung", als wüsste das
+   jeder. Ein Kind, das zum zweiten Mal im Gerätehaus steht, weiß es nicht –
+   und rät dann bei Aufgaben, die es eigentlich kann. Deshalb stehen die
+   Wörter hier einmal in einer Sprache, die ohne Vorwissen auskommt.
+   Benutzt in Aufgabe 5 (als Wörterbuch vor dem Zuordnen) und in Aufgabe 7,
+   jeweils an der Stelle, an der das Wort zum ersten Mal fällt.           */
+const BEGRIFFE = {
+  rohr: {
+    name: '1. Rohr', icon: '💦',
+    text: '„Rohr" ist die Kurzform für Strahlrohr – das Stück am Ende der Leitung, aus dem das Wasser kommt. Gezählt wird nach der Reihenfolge des Einsatzes: Das erste Rohr nimmt in der Regel der Angriffstrupp vor, das zweite ein anderer Trupp.',
+  },
+  verteiler: {
+    name: 'Verteiler', icon: '🔱',
+    text: 'Das Gerät, an dem sich das Wasser aufteilt: Hinten kommt eine dicke B-Leitung an, vorn gehen drei Leitungen ab – links und rechts je eine C-Leitung zu einem Rohr, in der Mitte noch einmal B.',
+  },
+  bleitung: {
+    name: 'B-Leitung', icon: '🧵',
+    text: 'Die dicke Schlauchleitung (B-Schlauch, 75 Millimeter). Sie bringt viel Wasser über weite Strecken: vom Fahrzeug zum Verteiler und von der Wasserentnahmestelle zum Fahrzeug. Zum Vorgehen ist sie zu schwer.',
+  },
+  cleitung: {
+    name: 'C-Leitung', icon: '🪢',
+    text: 'Der dünnere Schlauch ab dem Verteiler bis zum Strahlrohr (C-Schlauch, 42 oder 52 Millimeter). Leichter und beweglicher – damit geht ein Trupp vor.',
+  },
+  reserve: {
+    name: 'Schlauchreserve', icon: '➰',
+    text: 'Die letzte Schlauchlänge vor dem Strahlrohr wird nicht stramm gezogen, sondern bleibt in losen Buchten liegen. So kann der Trupp noch ein Stück weiter vorgehen, ohne dass die Leitung zieht und ohne neu zu kuppeln.',
+  },
+  wasserentnahme: {
+    name: 'Wasserentnahmestelle', icon: '🚰',
+    text: 'Woher das Wasser kommt: ein Hydrant, ein Löschwasserbehälter, ein Teich oder ein Bach. Im Befehl steht sie an erster Stelle.',
+  },
+  hydrant: {
+    name: 'Unterflurhydrant & Standrohr', icon: '🕳️',
+    text: 'Ein Unterflurhydrant liegt unter einer Straßenkappe im Boden – man sieht nur einen Deckel. Anschließen kann man daran erst, wenn der Wassertrupp den Deckel öffnet und ein Standrohr hineinschraubt: Das ist das Rohrstück mit den zwei B-Anschlüssen, das danach aus der Straße ragt.',
+  },
+};
+
 /* --- Aufgabenkarten für das Sortier-Level (Level 5) ------------------------ */
 /* jede Karte gehoert genau einer Funktion; "zitat" = Beleg aus der Vorschrift */
 const AUFGABEN_KARTEN = [
@@ -224,6 +266,7 @@ const BEREITSTELLUNG = {
     wiederholt:'Der Angriffstruppführer wiederholt das Kommando „Zum Einsatz fertig".',
     wann:'Der Einheitsführer weiß erst, WOHER das Wasser kommt und WO der Verteiler steht – aber noch nicht, wer was wohin tun soll.',
     zitat:'Der Einsatz m i t Bereitstellung wird durchgeführt, wenn der Einheitsführer nach dem Eintreffen an der Einsatzstelle die Lage zunächst nur soweit feststellen kann, dass er zwar die Wasserentnahmestelle und die Lage des Verteilers, aber noch nicht den Einsatzauftrag, die Einsatzmittel, das Einsatzziel oder den Einsatzweg bestimmen kann.',
+    passiert:'Die Mannschaft baut die Wasserversorgung auf und wartet dann am Verteiler. Der Gruppenführer erkundet währenddessen weiter und schiebt den Rest des Befehls nach.',
     eselsbruecke:'Bereitstellung = "Macht schon mal fertig, ich schau mir das noch an."',
   },
   ohne: {
@@ -232,6 +275,7 @@ const BEREITSTELLUNG = {
     wiederholt:'Der beauftragte Truppführer wiederholt seinen Befehl ab „Einheit".',
     wann:'Der Einheitsführer hat alles gesehen, was er braucht, und gibt gleich den kompletten Befehl.',
     zitat:'Nur wenn ausreichende Informationen zur Bestimmung des Einsatzauftrages vorliegen, befiehlt der Einheitsführer einen Einsatz o h n e Bereitstellung.',
+    passiert:'Aufgebaut und vorgegangen wird gleichzeitig: Der beauftragte Trupp weiß schon, mit welchem Rohr er wohin und über welchen Weg soll – er geht los, sobald er Wasser hat.',
     eselsbruecke:'Ohne Bereitstellung = "Ich weiß Bescheid – los geht’s, sofort!"',
   },
 };

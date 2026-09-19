@@ -212,29 +212,89 @@ function baueVerteiler() {
   g.userData = {
     hebel, muendung,
     abgang(i) { return muendung[i] ? muendung[i].clone() : new THREE.Vector3(); },
+    /* Wo die B-Leitung ankuppelt: mittig hinten, in Kupplungshoehe. Wer den
+       Schlauch stattdessen irgendwo an die Seite legt, hat einen Verteiler,
+       der an nichts haengt – und genau das ist im Bild sofort zu sehen.  */
+    eingang() { return new THREE.Vector3(0, hoehe, -.27); },
     oeffnen(i) { if (hebel[i]) hebel[i].rotation.x = .9; },
     schliessen(i) { if (hebel[i]) hebel[i].rotation.x = -.55; },
   };
   return g;
 }
 
-/* ===== Unterflurhydrant mit Standrohr ====================================== */
+/* ===== Unterflurhydrant ====================================================
+   „Unterflur" heisst: Der Hydrant liegt im Boden, zu sehen ist nur die
+   Strassenkappe. Anschliessen kann man daran gar nichts – erst wenn der
+   Wassertrupp den Deckel aufklappt und ein Standrohr einschraubt, ragen zwei
+   B-Anschluesse aus der Strasse.
+
+   Genau das war vorher falsch zu sehen: Das Standrohr stand von Anfang an da,
+   und der Unterflurhydrant sah aus wie ein Ueberflurhydrant. Deshalb baut
+   diese Funktion beides getrennt, und das Level schaltet es in dem Moment
+   frei, in dem der Wassertrupp dort ankommt:
+
+     h.userData.deckelOeffnen(true)      Kappe auf
+     h.userData.standrohrSetzen(true)    Standrohr waechst aus dem Schacht
+     h.userData.anschluss()              Punkt, an dem die B-Leitung ankuppelt
+   -------------------------------------------------------------------------*/
 function baueHydrant() {
   const g = new THREE.Group();
-  const deckel = new THREE.Mesh(new THREE.CylinderGeometry(.28, .28, .04, 16), Mat.glanz(0x5b6472, .55, .7));
-  deckel.position.y = .02; deckel.receiveShadow = true;
-  g.add(deckel);
-  const rohr = new THREE.Mesh(new THREE.CylinderGeometry(.07, .085, 1.0, 12), Mat.glanz(0xb0b8c6, .35, .8));
+  const stahl = Mat.glanz(0xb0b8c6, .35, .8);
+
+  // Strassenkappe: Rahmen im Pflaster, darin der dunkle Schacht
+  const rahmen = new THREE.Mesh(new THREE.BoxGeometry(.66, .05, .54), Mat.matt(0x4b525e, .9));
+  rahmen.position.y = .025; rahmen.receiveShadow = true;
+  g.add(rahmen);
+  const schacht = new THREE.Mesh(new THREE.BoxGeometry(.46, .04, .34), Mat.matt(0x0e1219, .95));
+  schacht.position.y = .048;
+  g.add(schacht);
+
+  // Der Deckel klappt zur Seite auf. Scharnier an der linken Kante, deshalb
+  // sitzt die Platte im Drehpunkt um ihre halbe Breite versetzt.
+  const deckelDreh = new THREE.Group();
+  deckelDreh.position.set(-.23, .055, 0);
+  const deckel = new THREE.Mesh(new THREE.BoxGeometry(.46, .035, .38), Mat.glanz(0x5b6472, .55, .7));
+  deckel.position.x = .23; deckel.castShadow = true;
+  deckelDreh.add(deckel);
+  g.add(deckelDreh);
+
+  // Das Standrohr bringt der Wassertrupp mit – bis dahin ist es nicht da.
+  const standrohr = new THREE.Group();
+  const rohr = new THREE.Mesh(new THREE.CylinderGeometry(.07, .085, 1.0, 12), stahl);
   rohr.position.y = .5; rohr.castShadow = true;
-  g.add(rohr);
-  const kopf = new THREE.Mesh(new THREE.BoxGeometry(.34, .12, .13), Mat.glanz(0xa9b2c0, .38, .8));
-  kopf.position.y = 1.0;
-  g.add(kopf);
-  for (const x of [-.16, .16]) {
-    const h = new THREE.Mesh(new THREE.BoxGeometry(.035, .15, .035), Mat.matt(0xd6392c, .5));
-    h.position.set(x, 1.13, 0);
-    g.add(h);
+  standrohr.add(rohr);
+  const kopf = new THREE.Mesh(new THREE.CylinderGeometry(.13, .13, .14, 12), Mat.glanz(0xa9b2c0, .38, .8));
+  kopf.position.y = 1.02;
+  standrohr.add(kopf);
+  // zwei B-Abgaenge mit Niederschraubventil – daran haengt spaeter der Schlauch
+  for (const x of [-1, 1]) {
+    const abgang = new THREE.Mesh(new THREE.CylinderGeometry(.052, .052, .22, 10), stahl);
+    abgang.rotation.z = Math.PI / 2;
+    abgang.position.set(x * .17, 1.0, 0);
+    standrohr.add(abgang);
+    const rad = new THREE.Mesh(new THREE.TorusGeometry(.055, .014, 6, 12), Mat.matt(0xd6392c, .5));
+    rad.rotation.x = Math.PI / 2;
+    rad.position.set(x * .12, 1.2, 0);
+    standrohr.add(rad);
   }
+  standrohr.visible = false;
+  g.add(standrohr);
+
+  g.userData = {
+    standrohr,
+    deckelOeffnen(an) { deckelDreh.rotation.z = an ? 2.4 : 0; },
+    /* Das Standrohr wird eingeschraubt, also waechst es aus dem Schacht
+       heraus statt zu erscheinen. */
+    standrohrSetzen(an) {
+      if (!an) { standrohr.visible = false; return; }
+      if (standrohr.visible) return;
+      standrohr.visible = true;
+      standrohr.scale.set(1, .02, 1);
+      Bewegung.neu(.7, (p) => standrohr.scale.set(1, Math.max(.02, p), 1), null, true);
+    },
+    /* Ankuppelpunkt der B-Leitung – am Abgang, nicht am Boden. */
+    anschluss() { return new THREE.Vector3(0, .95, 0); },
+  };
   return g;
 }
 
@@ -308,13 +368,11 @@ function ringeUpdate(ringe, dt, t) {
   });
 }
 
-/* ===== Schlauchreserve: ein paar Buchten am Boden ==========================
-   Genau das, was der Angriffstrupp am letzten C-Schlauch legt, damit er
-   vorgehen kann, ohne neu kuppeln zu muessen.                              */
-/* Schlauchreserve: der ganze letzte Schlauch bleibt in Buchten liegen.
-   Nicht als Knäuel, sondern in Serpentinen – zweimal nach links, zweimal
-   nach rechts. So sieht es auf der Wiese wirklich aus, und man erkennt,
-   dass da noch eine ganze Schlauchlänge zum Vorgehen bereitliegt.       */
+/* ===== Schlauchreserve: der letzte Schlauch in Buchten =====================
+   Genau das, was ein Trupp am letzten C-Schlauch legt, damit er vorgehen
+   kann, ohne neu kuppeln zu muessen. Der ganze Schlauch bleibt liegen, in
+   losen Buchten hin und her – nicht als Knaeuel. So sieht man, dass da noch
+   eine ganze Schlauchlaenge zum Vorgehen bereitliegt.                      */
 /* Wie weit eine Reserve in Buchten laengs reicht. Die Leitung laesst genau
    dieses Stueck frei, damit die Buchten nicht auf dem geraden Schlauch
    liegen, sondern seine letzte Laenge sind.                                */

@@ -44,6 +44,65 @@ LEVELS.push({
                new THREE.Vector3(HECK[0] + 1.2, 2.6, HECK[2] + 3.7)]);
     const blickWache = (panel) => motivWache(MOTIV, panel, { hoch: .38, weit: .92, anteil: .96, rand: .7 });
 
+    /* --- Phase 0: Was heißt überhaupt „Bereitstellung"? --------------------
+       Vorher fing das Level mit der Überschrift „Einsatz OHNE Bereitstellung"
+       an – und niemand hatte je gehört, was eine Bereitstellung ist. Hier
+       kann man beide Befehle nebeneinander umschalten und hört, wie sie
+       enden. Die sieben Elemente stehen bewusst noch nicht drin: Die
+       Reihenfolge herauszufinden bleibt die Aufgabe danach.               */
+    const tutorial = () => {
+      let art = 'mit';
+
+      UI.zeige('l6-tutorial', (s) => {
+        const kasten = el('div', { class: 'panel', style: { width: '100%', textAlign: 'left' } });
+        const schalter = el('div', { style: { display: 'flex', gap: '8px', width: '100%' } });
+
+        const zeichnen = () => {
+          const B = BEREITSTELLUNG[art];
+          kasten.innerHTML = '';
+          kasten.style.borderColor = art === 'mit' ? 'var(--gelb)' : 'var(--rot)';
+          kasten.appendChild(el('b', { style: { display: 'block', marginBottom: '.25em' }, text: B.name }));
+          kasten.appendChild(el('div', { class: 'klein', text: 'Wann?' }));
+          kasten.appendChild(el('span', { text: B.wann }));
+          kasten.appendChild(el('div', { class: 'klein', style: { marginTop: '.7em' }, text: 'Was der Befehl enthält' }));
+          kasten.appendChild(el('span', { text: art === 'mit'
+            ? 'Nur zwei Angaben: woher das Wasser kommt und wo der Verteiler steht.'
+            : 'Alle sieben Angaben – bis hin zu Ziel und Weg des Trupps.' }));
+          kasten.appendChild(el('div', { class: 'klein', style: { marginTop: '.7em' }, text: 'Was dann passiert' }));
+          kasten.appendChild(el('span', { text: B.passiert }));
+          kasten.appendChild(el('div', {
+            class: 'kennzahl',
+            style: { fontSize: 'clamp(1.05rem,2.6vw,1.5rem)', textAlign: 'center', marginTop: '.7em',
+                     color: art === 'mit' ? 'var(--gelb)' : 'var(--rot)' },
+            text: '„' + B.kommando + '"',
+          }));
+          kasten.appendChild(el('div', { class: 'klein', style: { textAlign: 'center' }, text: 'so endet er' }));
+          $$('button', schalter).forEach(b => b.className = 'btn ' + (b.dataset.art === art ? 'gelb' : 'geist'));
+        };
+
+        ['mit', 'ohne'].forEach(a => schalter.appendChild(el('button', {
+          class: 'btn geist', 'data-art': a, style: { flex: '1', padding: '.55em .6em', fontSize: '.92em' },
+          onclick: () => {
+            art = a; Audio3.klick(); zeichnen();
+            Audio3.kommando(BEREITSTELLUNG[a].kommando);
+          },
+        }, a === 'mit' ? 'MIT Bereitstellung' : 'OHNE Bereitstellung')));
+
+        const panel = seitenLayout(s, [
+          el('div', { class: 'dienstvorschrift', text: 'Bevor du befiehlst' }),
+          el('h3', { text: 'Was ist eine Bereitstellung?' }),
+          el('p', { class: 'hinweis', style: { margin: 0 },
+            text: 'Bereitstellen heißt: fertig machen und warten. Die Mannschaft baut die Wasserversorgung auf – aber niemand geht vor, weil noch niemand weiß, wohin. Genau danach richtet sich, welchen der beiden Befehle der Gruppenführer gibt.' }),
+          schalter,
+          kasten,
+          el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); reihenfolgePhase(); } },
+            'Verstanden – jetzt du →'),
+        ], { obenBreit: .04, obenSchmal: .5, rechtsBreit: .18 });
+        zeichnen();
+        return blickWache(panel);
+      });
+    };
+
     /* --- Phase 1: Reihenfolge bauen (ohne Bereitstellung) ------------------ */
     const reihenfolgePhase = () => {
       const soll = BEFEHL_ELEMENTE.map(e => e.id);
@@ -463,7 +522,7 @@ LEVELS.push({
         el('h3', { text: 'Der Befehl' }),
         el('p', { class: 'hinweis', style: { margin: 0 },
           text: 'Ein Befehl der Feuerwehr ist kein Zuruf, sondern ein festes Schema. Immer gleich aufgebaut – damit jeder sofort weiß, was gemeint ist.' }),
-        el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); reihenfolgePhase(); } }, 'Anfangen →'),
+        el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); tutorial(); } }, 'Anfangen →'),
       ], { obenBreit: .04, obenSchmal: .3, rechtsBreit: .18 });
     });
   },

@@ -100,7 +100,14 @@ const App = {
   },
 
   profil() {
-    const farben = ['#ffd23f', '#ff4d3d', '#35c8ff', '#3ddc84', '#c98bff', '#ffffff'];
+    const helmfarben = [
+      { farbe: '#ffd23f', name: 'Gelb' },
+      { farbe: '#ff4d3d', name: 'Rot' },
+      { farbe: '#35c8ff', name: 'Hellblau' },
+      { farbe: '#3ddc84', name: 'Grün' },
+      { farbe: '#c98bff', name: 'Lila' },
+      { farbe: '#ffffff', name: 'Weiß' },
+    ];
     UI.hudVerstecken();
 
     /* 3D-Vorschau: Figur steht links im Bild, Formular liegt rechts daneben */
@@ -113,10 +120,13 @@ const App = {
     gegen.position.set(-4, 3, -4);
     Stage.welt.add(gegen);
 
+    /* Die Vorschau wird bei jeder Farbwahl neu gebaut. Das ist billiger, als
+       sich durch die Figur zu hangeln und einzelne Materialien zu tauschen –
+       und die Materialien liegen in `Mat` im Cache, gehoeren also allen. */
     let fig = null;
-    const helmVorschau = (farbe) => {
+    const vorschau = (helm, jacke) => {
       if (fig) Stage.welt.remove(fig);
-      fig = baueFigur({ helm: parseInt(farbe.slice(1), 16), pa: false });
+      fig = baueFigur({ helm: parseInt(helm.slice(1), 16), jacke, pa: false });
       Stage.welt.add(fig);
     };
 
@@ -133,8 +143,9 @@ const App = {
     });
 
     UI.zeige('profil', (s) => {
-      let gewaehlt = State.helmfarbe || farben[0];
-      helmVorschau(gewaehlt);
+      let gewaehlterHelm = State.helmfarbe || helmfarben[0].farbe;
+      let gewaehlteJacke = State.jackenfarbe || JACKENFARBEN[0].farbe;
+      vorschau(gewaehlterHelm, gewaehlteJacke);
 
       const eingabe = el('input', {
         type: 'text', maxlength: '14', placeholder: 'Dein Name', value: State.name || '',
@@ -154,25 +165,41 @@ const App = {
       }
       const weiter = () => {
         if (!State.nameGesperrt()) State.name = (eingabe.value || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
-        State.helmfarbe = gewaehlt;
+        State.helmfarbe = gewaehlterHelm;
+        State.jackenfarbe = gewaehlteJacke;
         State.sichern();
         Audio3.klick();
         App.levelMenue();
       };
       eingabe.addEventListener('keydown', e => { if (e.key === 'Enter') weiter(); });
 
-      const farbreihe = el('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' } },
-        farben.map(f => el('button', {
-          style: { width: '42px', height: '42px', borderRadius: '50%', background: f, flex: '0 0 auto',
-                   boxShadow: f === gewaehlt ? '0 0 0 4px var(--txt)' : '0 0 0 2px var(--linie2)',
-                   transition: 'box-shadow .15s, transform .15s' },
-          onclick: (e) => {
-            gewaehlt = f; Audio3.klick();
-            $$('button', farbreihe).forEach(x => x.style.boxShadow = '0 0 0 2px var(--linie2)');
-            e.currentTarget.style.boxShadow = '0 0 0 4px var(--txt)';
-            helmVorschau(f);
-          },
-        })));
+      /* Eine Reihe runder Farbknoepfe. Zweimal dasselbe – einmal fuer den Helm,
+         einmal fuer die Jacke –, deshalb hier nur einmal gebaut. Der Name der
+         Farbe steht im `title` und im `aria-label`: Ein runder Fleck ohne
+         Beschriftung ist fuer eine Vorlesehilfe gar nichts.               */
+      const farbreiheBauen = (liste, istGewaehlt, beiWahl) => {
+        const reihe = el('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' } },
+          liste.map(f => el('button', {
+            title: f.name, 'aria-label': f.name,
+            style: { width: '42px', height: '42px', borderRadius: '50%', background: f.farbe, flex: '0 0 auto',
+                     boxShadow: f.farbe === istGewaehlt ? '0 0 0 4px var(--txt)' : '0 0 0 2px var(--linie2)',
+                     transition: 'box-shadow .15s, transform .15s' },
+            onclick: (e) => {
+              Audio3.klick();
+              $$('button', reihe).forEach(x => x.style.boxShadow = '0 0 0 2px var(--linie2)');
+              e.currentTarget.style.boxShadow = '0 0 0 4px var(--txt)';
+              beiWahl(f.farbe);
+            },
+          })));
+        return reihe;
+      };
+
+      const helmreihe = farbreiheBauen(helmfarben, gewaehlterHelm, (f) => {
+        gewaehlterHelm = f; vorschau(gewaehlterHelm, gewaehlteJacke);
+      });
+      const jackenreihe = farbreiheBauen(JACKENFARBEN, gewaehlteJacke, (f) => {
+        gewaehlteJacke = f; vorschau(gewaehlterHelm, gewaehlteJacke);
+      });
 
       /* --- Fortschritt loeschen: zwei Klicks, damit es kein Versehen wird - */
       const loeschKnopf = el('button', { class: 'btn geist', style: { fontSize: '.88em' } },
@@ -214,11 +241,13 @@ const App = {
         el('div', { class: 'dienstvorschrift', style: { alignSelf: 'center' }, text: 'Feuerwehr-Dienstvorschrift 3' }),
         el('h2', { text: State.name ? 'Dein Profil' : 'Wer bist du?' }),
         el('p', { class: 'klein', style: { margin: 0 }, text: State.nameGesperrt()
-          ? 'Die Helmfarbe kannst du ändern – dein Name gehört jetzt zu deinen Abzeichen.'
-          : 'Name und Helmfarbe kannst du jederzeit ändern – den Namen bis zum ersten Abzeichen.' }),
+          ? 'Helm und Jacke kannst du ändern – dein Name gehört jetzt zu deinen Abzeichen.'
+          : 'Name, Helm und Jacke kannst du jederzeit ändern – den Namen bis zum ersten Abzeichen.' }),
         eingabe,
         el('div', { class: 'klein', style: { marginTop: '4px' }, text: 'Helmfarbe' }),
-        farbreihe,
+        helmreihe,
+        el('div', { class: 'klein', style: { marginTop: '4px' }, text: 'Einsatzjacke' }),
+        jackenreihe,
         el('button', { class: 'btn gross', onclick: weiter },
           State.name ? 'Weiter üben \u2192' : 'Los geht\u2019s \u2192'),
         el('div', { style: { height: '1px', background: 'var(--linie)', margin: '2px 0' } }),
@@ -226,7 +255,9 @@ const App = {
           class: 'btn geist', style: { fontSize: '.92em' },
           onclick: () => {
             if (!State.nameGesperrt()) State.name = (eingabe.value || State.name || 'Kamerad').trim().slice(0, 14) || 'Kamerad';
-            State.helmfarbe = gewaehlt; State.sichern();
+            State.helmfarbe = gewaehlterHelm;
+            State.jackenfarbe = gewaehlteJacke;
+            State.sichern();
             Audio3.klick(); App.beamerStart();
           },
         }, '📽️ Gruppenabend am Beamer starten'),

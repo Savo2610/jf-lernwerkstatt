@@ -351,14 +351,33 @@ LEVELS.push({
     };
 
     /* --- Auflösung nach jeder Einheit -------------------------------------- */
+    /* Welches unserer Fahrzeuge diese Einheit faehrt. Steht nicht doppelt in
+       den Einheitendaten, sondern haengt an FAHRZEUGE[].einheit – so kann
+       hier gar nicht etwas anderes stehen als in Aufgabe 4.               */
+    const fahrzeugFuer = (einheitId) =>
+      Object.values(FAHRZEUGE).find(f => f.einheit === einheitId) || null;
+
     const aufloesung = (auf, E, fehler, gebaut) => {
       if (auf.einheit === 'zug') return zugAufloesung(E, gebaut);
+      const fz = fahrzeugFuer(auf.einheit);
 
       UI.zeige('l2-loesung-' + auf.einheit, (s) => {
         const panel = seitenLayout(s, [
           el('div', { class: 'kennzahl', style: { fontSize: 'clamp(2.4rem,6vw,3.6rem)', color: 'var(--gelb)' }, text: E.staerke }),
           el('h3', { text: E.name }),
           el('p', { class: 'hinweis', style: { margin: 0 }, text: E.merke }),
+          // Was die Einheit im Einsatz tut, ist die Frage, die nach der
+          // Staerke als Naechstes kommt – und die Zahl allein beantwortet sie
+          // nicht. Deshalb steht sie hier und nicht erst in Aufgabe 7.
+          el('div', { class: 'feedback gut', style: { width: '100%' } },
+            el('b', { text: 'Wofür ist sie da?' }),
+            el('span', { text: E.einsatz }),
+            el('div', { class: 'klein', style: { marginTop: '.5em' }, text: E.grenze })),
+          // Mannschaft + Einsatzmittel: In der Werkstatt stehen nur Menschen
+          // auf der Buehne. Ohne diesen Satz bleibt die halbe Formel aus
+          // Aufgabe 1 unsichtbar.
+          fz ? el('p', { class: 'klein', style: { margin: 0 },
+            text: `Dazu gehören die Einsatzmittel: Bei uns fährt die ${E.name} auf dem ${fz.name} – dem ${fz.lang}.` }) : null,
           UI.zitat(E.zitat),
           el('button', {
             class: 'btn gross',
@@ -414,7 +433,8 @@ LEVELS.push({
           el('div', { class: 'klein', text: 'Personen gesamt' }),
           el('div', { class: 'feedback gut', style: { width: '100%' } },
             el('b', { text: 'Der Zug ist der einzige Sonderfall' }),
-            el('span', { text: 'Trupp, Staffel und Gruppe bestehen aus Personen. Der Zug besteht aus ganzen taktischen Einheiten – dazu kommen der Zugführer und sein Zugtrupp als Führungseinheit.' })),
+            el('span', { text: 'Trupp, Staffel und Gruppe bestehen aus Personen. Der Zug besteht aus ganzen taktischen Einheiten – dazu kommen der Zugführer und sein Zugtrupp als Führungseinheit.' }),
+            el('div', { class: 'klein', style: { marginTop: '.5em' }, text: EINHEITEN.zug.einsatz })),
           el('div', { class: 'klein', text: 'Probier aus, wie sich der Zug ändert:' }),
           knoepfe,
           notiz,
@@ -460,7 +480,13 @@ LEVELS.push({
         el('h2', { text: 'Die Einheiten-Werkstatt' }),
         el('p', { class: 'hinweis', style: { fontSize: '1.06em' },
           text: 'Vier taktische Einheiten, vom kleinsten Trupp bis zum ganzen Zug. Zieh die richtigen Bausteine in die Felder – und schau zu, wie die Einheit vor dir antritt.' }),
-        el('p', { class: 'klein', text: 'Die Aufstellung entspricht der Gliederungsgrafik aus der FwDV 3.' }),
+        // Der Begriff steht in Aufgabe 1, wird hier aber gebraucht. Wer mit
+        // Aufgabe 2 anfaengt oder eine Woche Pause hatte, faengt sonst an,
+        // Bausteine zu schieben, ohne zu wissen, was da eigentlich entsteht.
+        el('div', { class: 'feedback', style: { maxWidth: '640px' } },
+          el('b', { text: 'Kurz vorweg: Was ist eine taktische Einheit?' }),
+          el('span', { text: 'Eine feste Mannschaft mit ihren Einsatzmitteln – also Leute plus Fahrzeug und Gerät. Jeder darin hat eine Funktion und weiß, wofür er zuständig ist. Vier Größen gibt es davon, und sie unterscheiden sich nur darin, wie viele Leute dazugehören.' })),
+        el('p', { class: 'klein', text: 'Die Aufstellung entspricht der Gliederungsgrafik aus der FwDV 3. Auf der Bühne steht nur die Mannschaft – die Einsatzmittel kommen bei jeder Auflösung dazu.' }),
         el('button', { class: 'btn gross', onclick: () => { Audio3.klick(); aufgabeZeigen(); } }, 'Werkstatt öffnen →')));
     });
   },

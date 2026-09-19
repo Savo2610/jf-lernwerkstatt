@@ -5,6 +5,24 @@
 const HAUT = [0xf0c9a4, 0xdcae86, 0xb9825c, 0x8d5a3b, 0xf5d7b8];
 const JACKE = 0x1d2740, HOSE = 0x18203a, REFLEX = 0xf2f5a0, STIEFEL = 0x0d1018;
 
+/* Einsatzkleidung zur Auswahl. Vier Farben, die es bei Feuerwehren wirklich
+   gibt – die erste ist die, die alle Figuren im Spiel tragen. Die Hose kommt
+   nicht dazu: Sie ist immer ein Stueck dunkler als die Jacke, sonst sieht die
+   Figur aus wie ein Overall.                                               */
+const JACKENFARBEN = [
+  { farbe: '#1d2740', name: 'Nachtblau' },
+  { farbe: '#8a6a2f', name: 'Sandgold' },
+  { farbe: '#2b2f36', name: 'Anthrazit' },
+  { farbe: '#27412f', name: 'Tannengrün' },
+];
+
+/* Farbe abdunkeln – fuer die Hose unter einer frei gewaehlten Jacke. */
+function farbeDunkler(farbe, anteil) {
+  const c = new THREE.Color(farbe);
+  c.multiplyScalar(1 - (anteil == null ? .3 : anteil));
+  return c.getHex();
+}
+
 function baueFigur(opt) {
   const o = opt || {};
   const g = new THREE.Group();
@@ -13,8 +31,13 @@ function baueFigur(opt) {
   const kennung = o.kennung || null;      // Truppfarbe als Weste
   const s = 1;
 
-  const matJacke  = Mat.matt(JACKE, .82);
-  const matHose   = Mat.matt(HOSE, .86);
+  // Wer keine Jacke waehlt, bekommt die des Bestands – so bleiben alle
+  // Figuren im Spiel gleich, und nur die eigene im Profil aendert sich.
+  const jackeFarbe = o.jacke != null ? o.jacke : JACKE;
+  const hoseFarbe  = o.jacke != null ? farbeDunkler(o.jacke, .28) : HOSE;
+
+  const matJacke  = Mat.matt(jackeFarbe, .82);
+  const matHose   = Mat.matt(hoseFarbe, .86);
   const matReflex = Mat.leucht(REFLEX, .35);
   const matHaut   = Mat.matt(haut, .78);
   const matStiefel= Mat.matt(STIEFEL, .55);
