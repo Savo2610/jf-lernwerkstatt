@@ -49,7 +49,7 @@ LEVELS.push({
     stellen(baueLF({ name: '19/43' }), plan.mx(12), spurOben, -9, plan.symbolSkala);
 
     // Der Trupp steht vor dem Fahrzeug – dort, wo Aufgabe 1 aufgehört hat.
-    const trupp = stellen(baueFigur({ kennung: 'WTr' }), plan.mx(4), bankettOben, 0);
+    const trupp = stellen(baueFigur({ trupp: 'wasser', kennung: 'WTr' }), plan.mx(4), bankettOben, 0);
     planZeigen(plan, 1.02);
 
     const kopf = (i) => UI.schritte(SCHRITTE, i);
@@ -240,7 +240,7 @@ LEVELS.push({
       const nahSpur = nah.spurMitte(0);
       stellen(bauePKW('#2f6fd0', true), nah.mx(-6), nahSpur, 5, nah.symbolSkala);
       stellen(baueLF({ name: '19/43' }), nah.mx(5), nahSpur, -9, nah.symbolSkala);
-      const laeufer = stellen(baueFigur({ kennung: 'WTr' }), nah.mx(12), nah.bankettMitte(), 0);
+      const laeufer = stellen(baueFigur({ trupp: 'wasser', kennung: 'WTr' }), nah.mx(12), nah.bankettMitte(), 0);
       planZeigen(nah, 1.02);
 
       // Von der Mittellinie am Fahrzeug bis an den Fahrbahnrand draußen:

@@ -53,9 +53,11 @@ const App = {
     window.__as = {
       Stage, State, UI, LEVELS, Marken, Fehlerliste, App, Bewegung, Audio3,
       STRASSEN, GERAETE, AUSRUESTUNG, BELADUNG, REGELN, LEITPFOSTEN_ABSTAND,
+      TRUPPFARBEN, RAENGE, ABZEICHEN, NACHWEIS,
       bausteine: { baueStrecke, planZeigen, stellen, setzen, baueLF, bauePKW,
                    baueLeitkegel, baueWarndreieck, baueWarnleuchte, baueBlitzleuchte,
-                   baueFaltsignal, baueFigur, baueSichthindernis, verjuengungPunkte,
+                   baueFaltsignal, baueFigur, baueWaldstueck, verjuengungPunkte,
+                   aufPlan, setzenAuf,
                    unterbau, auftrag, abstandsregler, geraeteLeiste, planMarke, bedienfeld },
     };
     if (q.get('level') && levelHolen(q.get('level'))) {
@@ -91,8 +93,8 @@ const App = {
     // man noch auseinanderhalten kann.
     verjuengungPunkte(plan, 26, 70, spurOben + 24, spurOben - 26, 4)
       .forEach(pt => stellen(baueLeitkegel(), plan.mx(pt.m), pt.y, 0));
-    stellen(baueFigur({}), plan.mx(6), bankettOben, 0);
-    stellen(baueFigur({}), plan.mx(3), bankettOben, 0);
+    stellen(baueFigur({ trupp: 'wasser' }), plan.mx(6), bankettOben, 0);
+    stellen(baueFigur({ trupp: 'wasser' }), plan.mx(3), bankettOben, 0);
     planZeigen(plan, 1.04);
   },
 

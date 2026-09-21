@@ -172,6 +172,30 @@ const REGELN = [
     text: 'Leitkegel stellt man quer über die Fahrbahn, damit niemand durchkommt.' },
 ];
 
+/* --- Truppfarben -----------------------------------------------------------
+   Dieselbe Zuordnung wie in „Einsatzbereit" und in Löschlos: rot der
+   Angriffstrupp, blau der Wassertrupp, grün der Schlauchtrupp, Gold der
+   Einheitsführer, Stahl der Maschinist. Wer drei Seiten der Lernwerkstatt
+   kennt, soll den Wassertrupp überall an derselben Farbe erkennen.
+
+   Die Töne sind dunkler als drüben, und das ist kein Versehen: Dort liegen
+   sie auf einer Nachtszene, hier auf hellem Asphalt. Das Hellblau von
+   „Einsatzbereit" (#35c8ff) verschwindet auf Hellgrau, und ein Name in dieser
+   Farbe ist nicht mehr zu lesen.
+
+   Die Warnweste bleibt trotzdem gelb — sie ist das Thema dieser Seite und
+   nicht die Funktion. Die Truppfarbe liegt deshalb als Ring um die Figur und
+   im Namensschild, nicht auf der Weste.
+   -------------------------------------------------------------------------*/
+const TRUPPFARBEN = {
+  ef:       { name: 'Einheitsführer', farbe: '#b8860b' },
+  ma:       { name: 'Maschinist',     farbe: '#5e6c7d' },
+  me:       { name: 'Melder',         farbe: '#7a4fd0' },
+  angriff:  { name: 'Angriffstrupp',  farbe: '#d92d20' },
+  wasser:   { name: 'Wassertrupp',    farbe: '#1467b3' },
+  schlauch: { name: 'Schlauchtrupp',  farbe: '#1f8f52' },
+};
+
 /* --- Ränge ---------------------------------------------------------------- */
 const RAENGE = [
   { xp: 0,    name: 'Fußgänger',      icon: '🚶' },

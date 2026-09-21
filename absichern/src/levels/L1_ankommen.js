@@ -215,8 +215,22 @@ LEVELS.push({
           fahrbahn: planMarke(mLF, h.y + 46, 'diese Seite', { titel: 'Zur Fahrbahn hin', onKlick: () => seite('fahrbahn') }),
         };
 
-        const figurSetzen = (x, y, kennung) => {
-          const f = stellen(baueFigur({ kennung }), x, y, 0);
+        /* Wer hier steht, steht in der Farbe seiner Funktion: blau der
+           Wassertrupp, Stahl der Maschinist – dieselbe Zuordnung wie in
+           „Einsatzbereit" und in Löschlos (TRUPPFARBEN). */
+        const MANNSCHAFT = [
+          { kennung: 'Ma', trupp: 'ma' },
+          { kennung: 'WTrF', trupp: 'wasser' },
+          { kennung: 'WTrM', trupp: 'wasser' },
+        ];
+        /* Abstand der drei: Ein Namensschild ist gut vierzig Einheiten breit,
+           und zwei davon dürfen sich nicht überlappen – sonst liest man
+           „WTrFWTrM". */
+        const ABSTAND_FIGUR = 56;
+        const ABSITZ_Y = h.y - 78;
+
+        const figurSetzen = (x, y, mann) => {
+          const f = stellen(baueFigur(mann), x, y, 0);
           figuren.push(f);
           return f;
         };
@@ -229,8 +243,10 @@ LEVELS.push({
           const gut = welche === 'bankett';
           seiten[welche].node.classList.add(gut ? 'gesetzt' : 'falsch');
           if (!gut) { seiten.bankett.node.classList.add('gesetzt'); fehler++; sauber = false; }
-          const y = h.y - 40;
-          [-30, 0, 30].forEach((dx, i) => figurSetzen(mLF + dx, y, ['Ma', 'WTrF', 'WTrM'][i]));
+          /* Weit genug vom Fahrzeug weg, dass die Namensschilder nicht auf
+             dem Aufbau liegen: Ein Schild hängt 25 Einheiten unter seiner
+             Figur, und bei -40 landet es mitten auf dem Löschfahrzeug. */
+          MANNSCHAFT.forEach((mann, i) => figurSetzen(mLF + (i - 1) * ABSTAND_FIGUR, ABSITZ_Y, mann));
           gut ? Audio3.richtig() : Audio3.falsch();
           unten.hinweis(gut
             ? 'Richtig — der Fahrbahn abgewandt.'
@@ -241,9 +257,20 @@ LEVELS.push({
         const antretenFragen = () => {
           s.querySelector('.auftrag b').textContent = 'Antreten';
           s.querySelector('.auftrag span').textContent = 'Und wo tritt der Trupp an? Tipp die Stelle an.';
+          /* Die beiden Seitenmarken verschwinden: Vier Marken auf zwei
+             Fahrzeuglängen liegen am Handy übereinander, und die Antwort
+             steht ohnehin schon unten in der Rückmeldung. */
+          for (const k in seiten) seiten[k].node.style.display = 'none';
+          /* Kurze Beschriftung, und unterhalb der Fahrbahn: „vor dem Fahrzeug"
+             und „hinter dem Fahrzeug" nebeneinander sind breiter als der
+             Abstand, den sie bezeichnen — sie überlappten sich gegenseitig.
+             Der lange Text steht als `titel` im Tooltip. */
+          const markeY = plan.fbUnten + plan.bankett / 2;
           const ziele = {
-            vorn: planMarke(mLF - 105, h.y - 40, 'vor dem Fahrzeug', { onKlick: () => antreten('vorn') }),
-            hinten: planMarke(mLF + 105, h.y - 40, 'hinter dem Fahrzeug', { onKlick: () => antreten('hinten') }),
+            vorn: planMarke(mLF - 105, markeY, 'vorn',
+              { titel: 'Vor dem Fahrzeug', onKlick: () => antreten('vorn') }),
+            hinten: planMarke(mLF + 105, markeY, 'hinten',
+              { titel: 'Hinter dem Fahrzeug', onKlick: () => antreten('hinten') }),
           };
 
           const antreten = (wo) => {
@@ -257,7 +284,7 @@ LEVELS.push({
             const zielX = mLF - 105;
             figuren.forEach((f, i) => {
               const vonX = f.userData.x, vonY = f.userData.y;
-              const nachX = zielX + (i - 1) * 26, nachY = h.y - 40;
+              const nachX = zielX + (i - 1) * ABSTAND_FIGUR, nachY = ABSITZ_Y;
               if (RUHIG) return setzen(f, nachX, nachY, 0);
               Bewegung.neu(1.0 + i * .12, (p) => setzen(f, lerp(vonX, nachX, p), lerp(vonY, nachY, p), 0));
             });

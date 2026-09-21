@@ -36,8 +36,9 @@ LEVELS.push({
     const spur = plan.spurMitte(0);
     stellen(bauePKW('#2f6fd0', true), plan.mx(-11), spur, 6, plan.symbolSkala);
     stellen(baueLF({ name: '19/43' }), plan.mx(9), spur, -9, plan.symbolSkala);
-    const wtrf = stellen(baueFigur({ kennung: 'WTrF' }), plan.mx(2.6), spur - 40, 0);
-    const wtrm = stellen(baueFigur({ kennung: 'WTrM' }), plan.mx(1.0), spur - 40, 0);
+    // Vier Meter auseinander: Näher beieinander überlappen die Namensschilder.
+    const wtrf = stellen(baueFigur({ trupp: 'wasser', kennung: 'WTrF' }), plan.mx(3.2), spur - 42, 0);
+    const wtrm = stellen(baueFigur({ trupp: 'wasser', kennung: 'WTrM' }), plan.mx(-0.8), spur - 42, 0);
     planZeigen(plan, 1.02);
 
     const kopf = (i) => UI.schritte(SCHRITTE, i);

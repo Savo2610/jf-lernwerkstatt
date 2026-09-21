@@ -133,7 +133,7 @@ nicht aus der Froschperspektive — deshalb hier SVG statt Three.js.
 | 1 | Wir kommen an | Wo hält das Fahrzeug? Was bleibt eingeschaltet? Auf welcher Seite steigt man aus, wo tritt man an? Und: absichern kommt **vor** der Versorgung oder parallel dazu |
 | 2 | Was nehmen wir mit? | Der Befehl „… zum Sichern gegen den fließenden Straßenverkehr … vor!", der Wassertrupp und sein Gerät — Warndreieck und Warnleuchte immer, der Rest auf Befehl |
 | 3 | Innerorts | 100 Meter, nach beiden Seiten. Der Weg dorthin führt über das Bankett, nicht über die Fahrbahn. Die Verjüngung wird von innen nach außen aufgebaut |
-| 4 | Landstraße | 200 Meter — und was eine Kurve oder eine Kuppe daraus macht. Dazu der Sicherungsposten |
+| 4 | Landstraße | 200 Meter — und was eine echte Kurve daraus macht: Die Straße biegt ab, der Wald in der Innenseite nimmt die Sicht, das Warngerät auf 200 Metern liegt dahinter. Dazu die Kuppe und der Sicherungsposten |
 | 5 | Autobahn (Boss) | 800 Meter entgegen der Fahrtrichtung, alle 200 Meter wiederholt, Fahrspur sperren — und ein zweites Fahrzeug, weil das Material eines Löschfahrzeugs nicht reicht |
 
 **Die Seite ist kürzer als die beiden anderen, und das ist Absicht.** Sie ist
@@ -170,6 +170,29 @@ mitgestaucht, sondern bekommen `plan.symbolSkala` — im Nahplan ist die 1, auf
 dem Übersichtsplan deutlich kleiner. Einzelheiten stehen oben in
 `absichern/src/welt/plan.js`.
 
+### Die Kurve ist eine Kurve
+
+Die Straße besteht nicht aus Rechtecken, sondern folgt einer **Mittellinie**.
+Jede Kante — Fahrbahnrand, Mittelstreifen, Bankett, Leitplanke — ist ein
+abgetasteter Linienzug mit konstantem Querabstand dazu. Ohne Kurve liegt diese
+Mitte überall auf null und es kommt dasselbe heraus wie aus Rechtecken; mit
+`kurve: { vonM, bisM, versatz }` biegt sich alles gemeinsam, samt Pfeilen,
+Leitpfosten und allem, was auf der Straße steht.
+
+In Aufgabe 4 biegt die Landstraße deshalb wirklich ab, und das Waldstück steht
+in der **Innenseite** des Bogens — dort, wo die Sichtlinie von draußen zur
+Einsatzstelle die Fahrbahn verlässt. Eine eingezeichnete Sichtlinie gibt es
+trotzdem nicht: Bei diesem Maßstab verlässt sie die Fahrbahn nur um
+Zentimeter und liefe scheinbar parallel zur Straße — sie würde das Gegenteil
+von dem zeigen, was gemeint ist. Stattdessen ist der verdeckte Abschnitt
+aufgehellt und endet an einer roten Linie quer über die Fahrbahn.
+
+Eine **Kuppe** wird gar nicht gezeichnet. Eine Kuppe ist eine Steigung, und
+die sieht man in der Draufsicht grundsätzlich nicht; sie bleibt eine Frage.
+
+Wer einem Plan eine Kurve gibt, muss alles darauf mit `aufPlan()` setzen statt
+mit `stellen()` — sonst steht es dort, wo die Straße ohne Bogen gewesen wäre.
+
 ## Löschlos (`loeschlos/`)
 
 Kein Lernspiel, sondern ein Werkzeug für den Gruppenabend: eintragen, wer da
@@ -190,9 +213,8 @@ welche Position und welchen Trupppartner hatte. Alles Weitere steht in
   Die Oberfläche und die Kommentare sind deutsch, der Code streckenweise nicht.
 - **Es steht unter MIT**, nicht unter CC BY 4.0 — siehe [LIZENZ.md](LIZENZ.md).
 
-Auf der Startseite steht es als Glücksrad an vierter Station, zwischen
-„Brennen & Löschen" und „Erst sichern!"
-(`kulisseLosrad` in `hub/src/szene.js`). Die neun Felder sind die neun Plätze
+Auf der Startseite steht es als Glücksrad an fünfter Station, zwischen
+„Erst sichern!" und der Baustelle (`kulisseLosrad` in `hub/src/szene.js`). Die neun Felder sind die neun Plätze
 der Gruppe, in den Farben der App: rot Angriffstrupp, blau Wassertrupp, grün
 Schlauchtrupp, Gold für den Einheitsführer, Orange für den Melder, Stahl für
 den Maschinisten. Das Rad ist anklickbar und löst dieselbe Ausfahrt aus wie
@@ -703,8 +725,17 @@ In **Erst sichern!**:
   Zone um die Einsatzstelle im großen Maßstab, `nahProM`/`fernProM` die
   Einheiten je Meter davor und dahinter. Zurück kommt unter anderem `mx(m)`
   (Meter → Einheiten), `spurMitte(i)`, `bankettMitte()` und `symbolSkala`.
+- **Etwas auf die Straße stellen:** `aufPlan(plan, markup, m, quer, dreh, skala)`
+  in `absichern/src/welt/geraete.js` — in Meter und Querabstand statt in
+  Weltkoordinaten, und damit kurventauglich. `setzenAuf(...)` setzt eine
+  schon gestellte Gruppe um (Anfahrten, Laufwege). Auf einem geraden Plan ist
+  das dasselbe wie `stellen()`, auf einem Plan mit Kurve ist es Pflicht.
+- **Truppfarben:** `TRUPPFARBEN` in `absichern/src/data/absicherung.js` —
+  dieselbe Zuordnung wie in „Einsatzbereit" und Löschlos, nur dunkler für den
+  hellen Grund. `baueFigur({ trupp: 'wasser', kennung: 'WTrF' })` malt Ring
+  und Namensschild damit; die Warnweste bleibt gelb.
 - **Der Maßstab für Fahrzeuge:** `plan.symbolSkala`, als fünftes Argument an
-  `stellen()`. Ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig
+  `stellen()` bzw. `aufPlan()`. Ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig
   Meter lang. Menschen und Geräte bekommen sie **nicht** — die wären dann
   nicht mehr zu sehen.
 - **Knöpfe auf der Karte:** `planMarke(x, y, text, opt)` in

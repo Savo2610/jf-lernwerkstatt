@@ -52,7 +52,7 @@ LEVELS.push({
 
     stellen(bauePKW('#2f6fd0', true), plan.mx(-4), spurRechts, 6, plan.symbolSkala);
     stellen(baueLF({ name: '19/43' }), plan.mx(12), spurRechts, -7, plan.symbolSkala);
-    const trupp = stellen(baueFigur({ kennung: 'WTr' }), plan.mx(4), stand, 0);
+    const trupp = stellen(baueFigur({ trupp: 'wasser', kennung: 'WTr' }), plan.mx(4), stand, 0);
     planZeigen(plan, 1.02);
 
     const warngeraet = `<g>${baueWarndreieck()}<g transform="translate(24,2)">${baueWarnleuchte()}</g></g>`;

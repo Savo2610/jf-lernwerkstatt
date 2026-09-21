@@ -13,10 +13,15 @@
    *hinter* einer Kurve nützt nichts, auch wenn der Abstand genau stimmt. Die
    200 Meter sind ein Mindestmaß, keine Vorschrift zum Abzählen.
 
-   Kurve und Kuppe werden nicht als verbogene Straße gezeichnet. Ein
-   gestauchter Maßstab und eine Kurve zusammen ergeben ein Bild, das niemand
-   mehr liest — stattdessen nimmt ein Waldstück bzw. ein Hügelrücken die
-   Sicht, und der Bereich dahinter wird grau.
+   Die Kurve ist eine echte Kurve: Die Straße biegt ab 150 Metern weg, und in
+   ihrer Innenseite steht ein Waldstück. Genau das ist der Grund, warum man
+   nicht hindurchsieht — die Sichtlinie von draußen zur Einsatzstelle verlässt
+   die Fahrbahn und läuft durch den Wald. Der graue Streifen auf der Fahrbahn
+   sagt, wie weit das reicht.
+
+   Die Kuppe bekommt keine eigene Zeichnung. Eine Kuppe ist eine Steigung, und
+   die sieht man in der Draufsicht grundsätzlich nicht — sie bleibt deshalb
+   eine Frage.
    ========================================================================== */
 LEVELS.push({
   id: 'landstrasse',
@@ -32,7 +37,8 @@ LEVELS.push({
        Warngerät auf 200 Metern längst vor dem Hindernis und die Aufgabe hätte
        keine. So dagegen sitzt es dahinter, und man sieht es erst, wenn man
        schon aus der Kurve heraus ist. */
-    const KURVE_M = 230;          // hier nimmt das Waldstück die Sicht
+    const KURVE_M = 230;          // hier ist die Sicht endgültig weg
+    const KURVE_VON = 150;        // hier fängt die Straße an, wegzubiegen
     let fehler = 0;
     const SCHRITTE = 4;
     const abzeichen = { zweihundert: false, sichthindernis: true };
@@ -43,15 +49,21 @@ LEVELS.push({
       art: 'gegenverkehr', von: -240, bis: 370,
       nah: 25, nahProM: 4, fernProM: .92,
       marken: [-200, 200], leitpfosten: true,
+      // Nach oben weg: Dann liegt die Innenseite der Kurve über der Straße,
+      // und der Wald steht dort, wo ohnehin Platz ist. Nach unten läge er auf
+      // dem Maßband.
+      kurve: { vonM: KURVE_VON, bisM: KURVE_M + 90, versatz: -62 },
     });
     const spurOben = plan.spurMitte(0);
     const bankettOben = plan.bankettMitte();
     const bankettUnten = plan.fbUnten + plan.bankett / 2;
 
-    stellen(bauePKW('#2f6fd0', true), plan.mx(-3), spurOben, 7, plan.symbolSkala);
-    stellen(baueLF({ name: '19/43' }), plan.mx(11), spurOben, -8, plan.symbolSkala);
-    stellen(`<g>${baueWarndreieck()}<g transform="translate(24,2)">${baueWarnleuchte()}</g></g>`,
-      plan.mx(-STR.abstand), bankettUnten, 0);
+    // Auf einem Plan mit Kurve wird mit `aufPlan` gestellt, nicht mit
+    // `stellen` – siehe welt/plan.js.
+    aufPlan(plan, bauePKW('#2f6fd0', true), -3, spurOben, 7, plan.symbolSkala);
+    aufPlan(plan, baueLF({ name: '19/43' }), 11, spurOben, -8, plan.symbolSkala);
+    aufPlan(plan, `<g>${baueWarndreieck()}<g transform="translate(24,2)">${baueWarnleuchte()}</g></g>`,
+      -STR.abstand, bankettUnten, 0);
     planZeigen(plan, 1.02);
 
     const warngeraet = `<g>${baueWarndreieck()}<g transform="translate(24,2)">${baueWarnleuchte()}</g></g>`;
@@ -64,11 +76,17 @@ LEVELS.push({
           'Dieselbe Lage, andere Straße: außerhalb der Ortschaft. Wie weit vor der Einsatzstelle?'));
         const unten = unterbau();
         const feld = bedienfeld(s, [kopf(0)], { oben: .26 });
-        const geraet = stellen(warngeraet, plan.mx(0), bankettOben, 0);
+        const geraet = aufPlan(plan, warngeraet, 0, bankettOben, 0);
 
+        /* Der Regler endet bei 200 – also genau dort, wo die richtige Antwort
+           liegt, und man zieht bis zum Anschlag. Ein größerer Höchstwert wäre
+           eine willkürliche Zahl, die nichts bedeutet; 200 ist die Zahl aus
+           der Vorschrift. Dass die Autobahn später trotzdem bis 1000 geht,
+           ist Absicht: Dort sind es 800, und wer „immer bis zum Anschlag"
+           gelernt hätte, läge falsch. */
         const regler = abstandsregler({
-          max: 300, schritt: 10, wert: 0,
-          onWert: (m) => setzen(geraet, plan.mx(m), bankettOben, 0),
+          max: STR.abstand, schritt: 10, wert: 0,
+          onWert: (m) => setzenAuf(plan, geraet, m, bankettOben, 0),
         });
         feld.appendChild(regler);
         const knopf = el('button', { class: 'btn gross' }, 'Hier aufstellen');
@@ -80,7 +98,7 @@ LEVELS.push({
           const gut = m === STR.abstand;
           knopf.remove();
           regler.sperren(true);
-          setzen(geraet, plan.mx(STR.abstand), bankettOben, 0);
+          setzenAuf(plan, geraet, STR.abstand, bankettOben, 0);
           if (gut) {
             Audio3.richtig();
             abzeichen.zweihundert = true;
@@ -108,25 +126,46 @@ LEVELS.push({
 
     /* --- Runde 2: die Kurve ------------------------------------------------- */
     const phaseKurve = () => {
-      baueSichthindernis(plan, KURVE_M, 'kurve');
-      // Was hinter dem Hindernis liegt, sieht ein Ankommender nicht. Der
-      // graue Streifen sagt das, bevor jemand falsch tippt – die Aufgabe ist
-      // nicht, das Hindernis zu entdecken, sondern daraus zu folgern.
+      baueWaldstueck(plan, KURVE_VON + 20, KURVE_M + 40);
+      /* Was hinter der Kurve liegt, sieht ein Ankommender nicht. Der graue
+         Streifen sagt das, bevor jemand falsch tippt – die Aufgabe ist nicht,
+         die Kurve zu entdecken, sondern daraus zu folgern. Er liegt als
+         Fläche auf der Fahrbahn und biegt sich deshalb mit ihr (`flaeche`
+         statt `rect`). */
+      /* Was hinter der Kurve liegt, sieht ein Ankommender nicht. Der Streifen
+         sagt das, bevor jemand falsch tippt — die Aufgabe ist nicht, die
+         Kurve zu entdecken, sondern daraus zu folgern.
+
+         Aufgehellt statt abgedunkelt: Auf dunklem Asphalt verschwindet eine
+         dunkle Schicht, und genau dort muss man sie sehen. Die Fläche biegt
+         sich mit der Straße (`flaeche` statt `rect`), und an ihrem Ende steht
+         eine Linie quer über die Fahrbahn — das ist die Stelle, ab der die
+         Sicht weg ist, und die soll man benennen können.
+
+         Eine eingezeichnete Sichtlinie wäre hier eine Lüge: Bei diesem
+         Maßstab verlässt sie die Fahrbahn nur um Zentimeter und liefe
+         scheinbar parallel zur Straße. Dass die Sicht trotzdem weg ist, liegt
+         am Wald unmittelbar am Fahrbahnrand — nicht an der Krümmung allein. */
+      const grenzeOben = plan.yAuf(KURVE_M, plan.randOben + 22);
+      const grenzeUnten = plan.yAuf(KURVE_M, plan.randUnten);
       const schatten = Stage.hinzu(`<g>
-        <rect x="${plan.mx(0)}" y="${plan.randOben}" width="${plan.mx(KURVE_M) - plan.mx(0)}"
-          height="${plan.randUnten - plan.randOben}" fill="var(--txt)" opacity=".16"/>
+        <polygon points="${plan.flaeche(0, KURVE_M, plan.randOben + 22, plan.randUnten)}"
+          fill="var(--weiss)" opacity=".42"/>
+        <line x1="${zahl2(plan.mx(KURVE_M))}" y1="${zahl2(grenzeOben)}"
+              x2="${zahl2(plan.mx(KURVE_M))}" y2="${zahl2(grenzeUnten)}"
+          stroke="var(--rot)" stroke-width="3" stroke-dasharray="10 8"/>
         <text class="t-plan" x="${(plan.mx(0) + plan.mx(KURVE_M)) / 2}" y="${plan.randUnten + 26}"
           text-anchor="middle" font-size="24" fill="var(--txt2)">hinter der Kurve – von weitem nicht zu sehen</text></g>`);
 
       const WAHL = [
-        { m: 300, gut: true, text: 'Bei 300 Metern — vor dem Waldstück' },
-        { m: 200, gut: false, text: 'Bei 200 Metern, wie die Vorschrift sagt' },
-        { m: 120, gut: false, text: 'Bei 120 Metern, also näher an die Einsatzstelle heran' },
+        { m: 300, gut: true, text: 'Bei 300 m — vor dem Waldstück' },
+        { m: 200, gut: false, text: 'Bei 200 m, wie die Vorschrift sagt' },
+        { m: 120, gut: false, text: 'Bei 120 m, näher an die Einsatzstelle' },
       ];
 
       UI.zeige('l4-kurve', (s) => {
         s.appendChild(auftrag('Ein Waldstück nimmt die Sicht',
-          'Bei 230 Metern geht die Straße in eine Kurve — hinter dem Warngerät, das ihr eben gestellt habt.'));
+          'Ab 150 Metern biegt die Straße ab. Euer Warngerät auf 200 Metern liegt dahinter.'));
         const unten = unterbau();
         const feld = bedienfeld(s, [kopf(1)], { oben: .26 });
         const liste = el('div', { class: 'liste', style: { width: '100%' } });
@@ -140,7 +179,7 @@ LEVELS.push({
             $$('.regelkarte', liste).forEach(x => x.classList.add('aus'));
             k.classList.remove('aus');
             k.classList.add(w.gut ? 'gut' : 'schlecht');
-            const g = stellen(warngeraet, plan.mx(w.m), bankettOben, 0);
+            const g = aufPlan(plan, warngeraet, w.m, bankettOben, 0);
             if (w.gut) {
               Audio3.richtig();
               unten.hinweis('Von weitem zu sehen.', 'gut', 0);
@@ -219,10 +258,11 @@ LEVELS.push({
             + 'Hindernisse im Verkehrsbereich sonst nicht ausreichend kenntlich gemacht werden können.',
           danach: (gut) => {
             if (!gut) fehler++;
-            stellen(`<g>${baueFigur({ kennung: 'Posten' })}<g transform="translate(16,-14)">
-              <rect x="-2" y="-16" width="3" height="22" fill="var(--metall)"/>
-              <rect x="0" y="-18" width="16" height="12" rx="2" fill="var(--rot)"/></g></g>`,
-              plan.mx(330), bankettOben, 0);
+            aufPlan(plan, `<g>${baueFigur({ trupp: 'wasser', kennung: 'Posten' })}
+              <g transform="translate(18,-16)">
+                <rect x="-2" y="-16" width="3" height="22" fill="var(--metall)"/>
+                <rect x="0" y="-18" width="16" height="12" rx="2" fill="var(--rot)"/></g></g>`,
+              330, bankettOben, 0);
             auswerten();
           },
         }));

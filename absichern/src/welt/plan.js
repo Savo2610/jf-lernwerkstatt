@@ -62,9 +62,27 @@ const zahl2 = (n) => Math.round(n * 10) / 10;
      nahProM, fernProM   Einheiten je Meter
      marken: [Meter]     bekommen eine Raute am Maßband
      leitpfosten: true   weiße Pfosten alle 50 m
+     kurve: { vonM, bisM, versatz }   die Straße macht dort einen Bogen
    }
    Zurück kommt ein Objekt mit `gruppe` (im Stage.welt), `mx(m)` und den
    Querkoordinaten.
+
+   **Die Straße folgt einer Mittellinie, nicht einem Rechteck.** Gezeichnet
+   wird sie aus abgetasteten Linienzügen: Jede Kante – Fahrbahnrand,
+   Mittelstreifen, Bankett, Leitplanke – ist ein `polyline` mit konstantem
+   Querabstand zur Mitte. Ohne `kurve` ist diese Mitte überall null und es
+   kommt genau dasselbe heraus wie aus geraden Rechtecken; mit `kurve` biegt
+   sich alles gemeinsam.
+
+   Der Bogen ist eine Verschiebung in y, keine echte Drehung: Die Fahrbahn
+   wird dadurch im Bogen ein paar Prozent breiter, als sie sein müsste. Bei
+   den flachen Bögen hier sieht das niemand, und dafür bleibt die
+   Längsrichtung dieselbe Achse wie überall sonst – Meterzahlen, Maßband und
+   Leitpfosten rechnen unverändert weiter.
+
+   **Wer einem Plan eine Kurve gibt, muss alles darauf mit `aufPlan()` setzen**
+   (welt/geraete.js) statt mit `stellen()`. Sonst steht das Fahrzeug an der
+   Stelle, an der die Straße ohne Kurve gewesen wäre – also neben ihr.
    -------------------------------------------------------------------------*/
 function baueStrecke(opt) {
   const o = Object.assign({
@@ -81,6 +99,32 @@ function baueStrecke(opt) {
   };
   const gebrochen = fernProM !== nahProM;
 
+  /* Einheiten -> Meter, die Umkehrung von mx. Gebraucht wird sie beim
+     Abtasten: Abgetastet wird in Einheiten (sonst lägen die Stützstellen im
+     gestauchten Teil viel zu dicht), die Kurve denkt aber in Metern. */
+  const xm = (x) => {
+    const s2 = x < 0 ? -1 : 1, a = Math.abs(x), knick = o.nah * nahProM;
+    return s2 * (a <= knick ? a / nahProM : o.nah + (a - knick) / fernProM);
+  };
+
+  /* Die Fahrbahnmitte. Vor `vonM` läuft die Straße gerade; ab dort zieht sie
+     quadratisch weg und erreicht bei `bisM` den vollen Versatz. Dahinter geht
+     es **tangential** geradeaus weiter.
+
+     Quadratisch und nicht als weiche S-Flanke: Ein Smoothstep hat in der
+     Mitte einen Wendepunkt, und dann sind es zwei Kurven hintereinander
+     statt einer. Gemeint ist hier eine Kurve – eine, die eine Innenseite hat,
+     hinter der etwas stehen und die Sicht nehmen kann.                     */
+  const bogenM = (m) => {
+    if (!o.kurve) return 0;
+    const t = (m - o.kurve.vonM) / (o.kurve.bisM - o.kurve.vonM);
+    if (t <= 0) return 0;
+    return o.kurve.versatz * (t <= 1 ? t * t : 1 + 2 * (t - 1));
+  };
+  const bogenX = (x) => bogenM(xm(x));
+  /* Steigung der Mittellinie in Grad – Fahrzeuge und Pfeile drehen sich mit. */
+  const neigungX = (x) => Math.atan2(bogenX(x + 3) - bogenX(x - 3), 6) * 180 / Math.PI;
+
   const x0 = mx(o.von), x1 = mx(o.bis), breite = x1 - x0;
   /* Der Asphalt reicht über den betrachteten Abschnitt hinaus: Ein Fahrzeug,
      das ins Bild fährt, soll auf der Straße ankommen und nicht auf der
@@ -90,28 +134,49 @@ function baueStrecke(opt) {
   const randOben = fbOben - (q.standstreifen ? 0 : q.bankett) - (q.leitplanke ? 30 : 0);
   const randUnten = (q.standstreifen ? q.standstreifen.bis : fbUnten + q.bankett) + (q.leitplanke ? 30 : 0);
 
+  /* --- Abtastung ----------------------------------------------------------
+     Alles Längslaufende entsteht aus denselben Stützstellen. Acht Einheiten
+     sind fein genug, dass man die Ecken nicht sieht, und grob genug, dass
+     das Markup nicht explodiert. */
+  const proben = [];
+  for (let x = xa; x < xb; x += 8) proben.push(x);
+  proben.push(xb);
+
+  /* Ein Linienzug im Querabstand `quer` zur Fahrbahnmitte. */
+  const bahn = (quer, rueckwaerts) => {
+    const p = proben.map(x => `${zahl2(x)},${zahl2(quer + bogenX(x))}`);
+    return (rueckwaerts ? p.reverse() : p).join(' ');
+  };
+  /* Eine Fläche zwischen zwei Querabständen – Fahrbahn, Bankett,
+     Standstreifen. Heißt bewusst nicht „band": Das ist weiter unten das
+     Maßband unter der Straße. */
+  const flaeche = (quer1, quer2, fill) =>
+    `<polygon points="${bahn(quer1)} ${bahn(quer2, true)}" fill="${fill}"/>`;
+
   /* --- Untergrund --------------------------------------------------------- */
+  // Das Gelände ist das Einzige, was ein Rechteck bleiben darf: Es reicht in
+  // alle Richtungen weit über den Plan hinaus, ein Bogen wäre daran nicht zu
+  // sehen.
   let s = `<rect x="${xa - 200}" y="${randOben - 900}" width="${breiteA + 400}" height="${randUnten - randOben + 1800}" fill="var(--gelaende)"/>`;
 
   // Bankett bzw. Standstreifen
   if (q.bankett) {
-    s += `<rect x="${xa}" y="${fbOben - q.bankett}" width="${breiteA}" height="${q.bankett}" fill="var(--bankett)"/>`
-       + `<rect x="${xa}" y="${fbUnten}" width="${breiteA}" height="${q.bankett}" fill="var(--bankett)"/>`;
+    s += flaeche(fbOben - q.bankett, fbOben, 'var(--bankett)')
+       + flaeche(fbUnten, fbUnten + q.bankett, 'var(--bankett)');
   }
   // Fahrbahn
-  s += `<rect x="${xa}" y="${fbOben}" width="${breiteA}" height="${fbUnten - fbOben}" fill="var(--asphalt)"/>`;
+  s += flaeche(fbOben, fbUnten, 'var(--asphalt)');
   if (q.standstreifen) {
-    s += `<rect x="${xa}" y="${q.standstreifen.von}" width="${breiteA}" height="${q.standstreifen.bis - q.standstreifen.von}" fill="var(--asphalt2)"/>`;
+    s += flaeche(q.standstreifen.von, q.standstreifen.bis, 'var(--asphalt2)');
   }
 
   /* --- Markierungen -------------------------------------------------------
      Durchgezogen am Rand, gestrichelt zwischen den Spuren. Die Striche sind
      in Einheiten gleichmäßig und nicht in Metern: Im gestauchten Teil wären
      sie sonst ein grauer Brei.                                              */
-  const strich = (y, art) => art === 'voll'
-    ? `<rect x="${xa}" y="${y - 2}" width="${breiteA}" height="4" fill="var(--markierung)"/>`
-    : `<line x1="${xa}" y1="${y}" x2="${xb}" y2="${y}" stroke="var(--markierung)" stroke-width="4"
-         stroke-dasharray="26 22" opacity=".9"/>`;
+  const strich = (quer, art) =>
+    `<polyline points="${bahn(quer)}" fill="none" stroke="var(--markierung)"
+       stroke-width="4"${art === 'voll' ? '' : ' stroke-dasharray="26 22" opacity=".9"'}/>`;
 
   s += strich(fbOben, 'voll') + strich(fbUnten, 'voll');
   if (q.mittellinie != null) s += strich(q.mittellinie, 'strich');
@@ -122,9 +187,11 @@ function baueStrecke(opt) {
 
   /* --- Leitplanken --------------------------------------------------------- */
   if (q.leitplanke) {
-    for (const y of [q.leitplanke.oben, q.leitplanke.unten]) {
-      s += `<rect x="${xa}" y="${y - 4}" width="${breiteA}" height="8" rx="4" fill="var(--leitplanke)"/>`
-         + `<rect x="${xa}" y="${y - 1.5}" width="${breiteA}" height="3" fill="var(--leitplanke2)" opacity=".7"/>`;
+    for (const quer of [q.leitplanke.oben, q.leitplanke.unten]) {
+      s += `<polyline points="${bahn(quer)}" fill="none" stroke="var(--leitplanke)"
+              stroke-width="8" stroke-linecap="round"/>`
+         + `<polyline points="${bahn(quer)}" fill="none" stroke="var(--leitplanke2)"
+              stroke-width="3" opacity=".7"/>`;
     }
   }
 
@@ -132,36 +199,34 @@ function baueStrecke(opt) {
      Alle 50 Meter – das Maßband der Einsatzstelle. Wo sie im gestauchten
      Teil aufeinanderkleben, bleiben sie weg: Vier Pfosten zu zählen ist der
      Sinn, ein gepunkteter Streifen wäre keiner.                             */
-  let pfosten = '';
   if (o.leitpfosten) {
-    const yO = fbOben - (q.bankett ? q.bankett * .55 : 16);
-    const yU = (q.standstreifen ? q.standstreifen.bis + 16 : fbUnten + q.bankett * .55);
+    const querO = fbOben - (q.bankett ? q.bankett * .55 : 16);
+    const querU = (q.standstreifen ? q.standstreifen.bis + 16 : fbUnten + q.bankett * .55);
     const start = Math.ceil(o.von / LEITPFOSTEN_ABSTAND) * LEITPFOSTEN_ABSTAND;
     for (let m = start; m <= o.bis; m += LEITPFOSTEN_ABSTAND) {
-      const abstandEinheiten = mx(m + LEITPFOSTEN_ABSTAND) - mx(m);
-      if (abstandEinheiten < 16) continue;
-      const x = mx(m);
-      for (const y of [yO, yU]) {
-        pfosten += `<g transform="translate(${zahl2(x)},${zahl2(y)})">
+      if (mx(m + LEITPFOSTEN_ABSTAND) - mx(m) < 16) continue;
+      const x = mx(m), hoch = bogenX(x);
+      for (const quer of [querO, querU]) {
+        s += `<g transform="translate(${zahl2(x)},${zahl2(quer + hoch)})">
           <rect x="-3" y="-11" width="6" height="22" rx="2" fill="var(--pfosten)"/>
           <rect x="-3" y="-4" width="6" height="5" fill="var(--pfosten-band)"/></g>`;
       }
     }
   }
-  s += pfosten;
 
-  /* --- Fahrtrichtungspfeile auf dem Asphalt -------------------------------- */
-  let pfeile = '';
+  /* --- Fahrtrichtungspfeile auf dem Asphalt --------------------------------
+     Sie liegen auf der Fahrbahn und drehen sich deshalb mit ihr. */
   q.spuren.forEach((sp) => {
-    const y = (sp.von + sp.bis) / 2;
+    const quer = (sp.von + sp.bis) / 2;
     for (let i = 0; i < 4; i++) {
       const x = x0 + breite * (.12 + i * .25);
-      const d = sp.richtung;
-      pfeile += `<path d="M${x - 26 * d} ${y - 9} h 30 v -7 l 17 16 l -17 16 v -7 h -30 Z"
-        transform="${d < 0 ? `rotate(180,${x},${y})` : ''}" fill="var(--richtungspfeil)" opacity=".5"/>`;
+      const y = quer + bogenX(x);
+      const dreh = neigungX(x) + (sp.richtung < 0 ? 180 : 0);
+      s += `<g transform="translate(${zahl2(x)},${zahl2(y)}) rotate(${zahl2(dreh)})">
+        <path d="M-26 -9 h 30 v -7 l 17 16 l -17 16 v -7 h -30 Z"
+          fill="var(--richtungspfeil)" opacity=".5"/></g>`;
     }
   });
-  s += pfeile;
 
   const gruppe = Stage.hinzu(s);
 
@@ -192,7 +257,19 @@ function baueStrecke(opt) {
     }
   }
   const bandGruppe = o.band === false ? null : Stage.hinzu(band);
-  const unterkante = o.band === false ? randUnten + 26 : bandY + 60;
+  /* Der Bogen zieht die Straße nach oben oder unten aus ihrem geraden
+     Streifen heraus. Was er dort an Höhe braucht, muss der Bildausschnitt
+     mitbekommen – sonst liegt die halbe Kurve außerhalb. Das Maßband bleibt
+     unten, wo es ist: Es misst längs, nicht quer. */
+  let bogenAuf = 0, bogenAb = 0;
+  for (const x of proben) {
+    const h = bogenX(x);
+    if (h < bogenAuf) bogenAuf = h;
+    if (h > bogenAb) bogenAb = h;
+  }
+  const oberkante = randOben - 40 + bogenAuf;
+  const unterkante = Math.max(randUnten + 26 + bogenAb,
+                              o.band === false ? -Infinity : bandY + 60);
 
   return {
     gruppe, bandGruppe, mx, art: o.art, von: o.von, bis: o.bis,
@@ -211,10 +288,30 @@ function baueStrecke(opt) {
        Löschfahrzeug fünfzig Meter Straße ab. Nach unten gedeckelt, weil ein
        Fahrzeug auch auf 800 Metern noch als Fahrzeug erkennbar bleiben muss. */
     symbolSkala: clamp(nahProM / 13, .42, 1),
+    /* --- Die Kurve ------------------------------------------------------
+       `bogen(m)` ist die Höhe der Fahrbahnmitte an dieser Stelle, `neigung(m)`
+       ihre Steigung in Grad, `yAuf(m, quer)` die fertige y-Koordinate für
+       einen Querabstand. Auf einem geraden Plan sind das 0, 0 und `quer`. */
+    bogen: (m) => bogenM(m),
+    neigung: (m) => neigungX(mx(m)),
+    yAuf: (m, quer) => quer + bogenM(m),
+    /* Eine Fläche entlang der Straße, von Meter zu Meter und zwischen zwei
+       Querabständen – für Sichtschatten und alles andere, was sich mitbiegen
+       muss. Zurück kommt der `points`-Text für ein <polygon>. */
+    flaeche: (vonM, bisM, quer1, quer2) => {
+      const p1 = [], p2 = [];
+      const schritte = 24;
+      for (let i = 0; i <= schritte; i++) {
+        const m = lerp(vonM, bisM, i / schritte), x = mx(m), h = bogenM(m);
+        p1.push(`${zahl2(x)},${zahl2(quer1 + h)}`);
+        p2.unshift(`${zahl2(x)},${zahl2(quer2 + h)}`);
+      }
+      return p1.concat(p2).join(' ');
+    },
     /* das ganze Bild, für Stage.blick */
     breite: () => breite + 60,
-    hoehe: () => unterkante - (randOben - 40),
-    mitteY: () => (unterkante + (randOben - 40)) / 2,
+    hoehe: () => unterkante - oberkante,
+    mitteY: () => (unterkante + oberkante) / 2,
     mitteX: () => (x0 + x1) / 2,
   };
 }

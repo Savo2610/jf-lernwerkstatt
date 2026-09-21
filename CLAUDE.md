@@ -234,6 +234,15 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 
 ### Nur in „Erst sichern!" (`absichern/`)
 
+- **Die Straße folgt einer Mittellinie, nicht einem Rechteck.** Jede Kante —
+  Fahrbahnrand, Mittelstreifen, Bankett, Leitplanke — ist ein abgetasteter
+  Linienzug mit konstantem Querabstand zu dieser Mitte. Ohne `kurve` ist die
+  Mitte überall null und es kommt dasselbe heraus wie aus Rechtecken; mit
+  `kurve` biegt sich alles gemeinsam. **Wer einem Plan eine Kurve gibt, muss
+  alles darauf mit `aufPlan()` / `setzenAuf()` setzen** statt mit `stellen()` /
+  `setzen()` — sonst steht das Fahrzeug dort, wo die Straße ohne Bogen gewesen
+  wäre, also neben ihr. Flächen auf der Fahrbahn (Sichtschatten) brauchen
+  `plan.flaeche(...)` statt eines `rect`.
 - **Der Längsmaßstab ist gebrochen, der Querschnitt nicht.** Quer ist ein
   Meter immer `QUER` Einheiten, längs entscheidet der Plan (`nahProM`,
   `fernProM` in `welt/plan.js`). Das ist Absicht — eine Einsatzstelle von
@@ -260,9 +269,27 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   SVG-Präsentationsattribut aus: Aus dem zarten Schein um das Blaulicht würde
   sonst ein knallblauer Klecks.
 - **Das Sichthindernis muss weiter draußen liegen als der Regelabstand.**
-  In Aufgabe 4 steht die Kurve bei 230 Metern, nicht bei 170 — läge sie näher
-  an der Einsatzstelle, stünde das Warngerät auf 200 Metern längst davor und
-  die ganze Runde hätte keine Aufgabe mehr.
+  In Aufgabe 4 ist die Sicht ab 230 Metern weg, nicht ab 170 — läge die Kurve
+  näher an der Einsatzstelle, stünde das Warngerät auf 200 Metern längst davor
+  und die ganze Runde hätte keine Aufgabe mehr.
+- **Der Wald gehört in die Innenseite der Kurve.** Dort verlässt die
+  Sichtlinie die Fahrbahn; auf der Außenseite stünde er herum, ohne etwas zu
+  erklären. Eine eingezeichnete Sichtlinie gibt es bewusst nicht: Bei diesem
+  Maßstab verlässt sie die Fahrbahn nur um Zentimeter und liefe scheinbar
+  parallel zur Straße — sie würde das Gegenteil von dem zeigen, was gemeint
+  ist. Und eine **Kuppe** wird gar nicht gezeichnet: Eine Steigung sieht man
+  in der Draufsicht grundsätzlich nicht, sie bleibt eine Frage.
+- **Die Truppfarben sind dieselben wie überall** (`TRUPPFARBEN` in
+  `data/absicherung.js`): blau Wassertrupp, rot Angriffstrupp, grün
+  Schlauchtrupp, Gold Einheitsführer, Stahl Maschinist. Nur dunkler als in
+  „Einsatzbereit" — dort liegen sie auf einer Nachtszene, hier auf hellem
+  Asphalt. **Die Warnweste bleibt gelb:** Sie ist das Thema dieser Seite,
+  nicht die Funktion. Die Truppfarbe liegt als Ring um die Figur und im
+  Namensschild.
+- **Namensschilder brauchen Abstand.** Ein Schild ist gut vierzig Einheiten
+  breit; zwei Figuren, die enger stehen, ergeben „WTrFWTrM". `schildBreite()`
+  sagt, wie breit es wird. Und es hängt 25 Einheiten unter der Figur — wer
+  eine Figur dicht neben ein Fahrzeug stellt, legt ihr Schild auf den Aufbau.
 - **`BELADUNG` ist bewusst knapp** (zwei Warndreiecke, zwei Warnleuchten).
   Aufgabe 5 braucht vier von jedem, und genau daran merkt man, dass auf der
   Autobahn ein zweites Fahrzeug dazugehört. Wer die Zahlen großzügiger macht,

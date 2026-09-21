@@ -134,9 +134,14 @@ __as.GERAETE                    // Warndreieck, Warnleuchte, Leitkegel …
 __as.AUSRUESTUNG                // wer was trägt (FwDV 1, 3.3.2)
 __as.BELADUNG                   // was ein LF dabeihat – bewusst knapp
 __as.REGELN                     // die Sicherheitssätze, richtige und falsche
+__as.TRUPPFARBEN                // blau Wassertrupp, rot Angriffstrupp, …
+__as.ABZEICHEN, __as.RAENGE     // Abzeichen und Ränge
+__as.NACHWEIS                   // der Prüfcode für „alle Abzeichen"
 __as.bausteine.baueStrecke      // eine Straße von oben bauen
 __as.bausteine.planZeigen       // Bildausschnitt auf einen Plan setzen
-__as.bausteine.stellen          // etwas an einen Punkt der Welt stellen
+__as.bausteine.aufPlan          // etwas in Meter + Querabstand hinstellen
+__as.bausteine.setzenAuf        // dasselbe zum Umsetzen (Laufwege)
+__as.bausteine.stellen          // in Weltkoordinaten – nur auf geraden Plänen
 __as.bausteine.planMarke        // Knopf an einer Weltposition
 __as.bausteine.abstandsregler   // Regler, der in Metern und Leitpfosten denkt
 ```
@@ -156,6 +161,23 @@ __as.bausteine.stellen(__as.bausteine.baueLF({}), p.mx(12), p.spurMitte(1), -7, 
 für ein Bild, das falsch aussieht. `p.symbolSkala` gehört an jedes Fahrzeug;
 ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig Meter lang.
 Warum das so ist, steht oben in `absichern/src/welt/plan.js`.
+
+Der zweite häufige Grund: **eine Kurve im Plan.** `baueStrecke({ kurve: … })`
+biegt die ganze Straße; alles, was darauf steht, muss dann mit `aufPlan()`
+gesetzt werden statt mit `stellen()`. Sonst steht es dort, wo die Straße ohne
+Bogen gewesen wäre — also neben ihr.
+
+### Wenn die Vorschau versteckt ist
+
+Dasselbe wie bei den 3D-Seiten: In einer versteckten oder gedrosselten
+Vorschau läuft `requestAnimationFrame` kaum, und dann steht jede Bewegung
+still — das Fahrzeug fährt nicht an, der Trupp läuft nicht los, und die
+Rückmeldung danach kommt nie. `document.visibilityState` sagt, ob das der
+Grund ist. Von Hand weiterdrehen:
+
+```js
+for (let t = 0; t < 3; t += .05) __as.Stage.updates.slice().forEach(f => f(.05, t));
+```
 
 ## Auf der Startseite
 

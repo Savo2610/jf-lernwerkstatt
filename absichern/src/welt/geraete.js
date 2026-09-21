@@ -39,6 +39,26 @@ function setzen(g, x, y, dreh) {
   if (g.userData) { g.userData.x = x; g.userData.y = y; g.userData.dreh = d; }
 }
 
+/* --- Etwas auf die Straße stellen ------------------------------------------
+   Wie `stellen()`, aber in Meter und Querabstand statt in Weltkoordinaten —
+   und damit kurventauglich: Der Bogen der Fahrbahn kommt auf die Höhe, die
+   Steigung auf die Drehung.
+
+   **Auf einem Plan mit Kurve ist das Pflicht.** `stellen()` würde das Objekt
+   dorthin setzen, wo die Straße ohne Bogen gewesen wäre — also neben sie.
+   Auf einem geraden Plan ist beides dasselbe.
+   -------------------------------------------------------------------------*/
+function aufPlan(plan, markup, m, quer, dreh, skala) {
+  return stellen(markup, plan.mx(m), plan.yAuf(m, quer),
+                 (dreh || 0) + plan.neigung(m), skala);
+}
+
+/* Dasselbe zum Umsetzen – für Laufwege und Anfahrten. */
+function setzenAuf(plan, g, m, quer, dreh) {
+  setzen(g, plan.mx(m), plan.yAuf(m, quer),
+         (dreh == null ? (g.userData ? g.userData.dreh : 0) : dreh) + plan.neigung(m));
+}
+
 /* --- Löschfahrzeug ---------------------------------------------------------
    `blaulicht` und `warnblinker` sind keine Verzierung: Ein Fahrzeug an einer
    Einsatzstelle im fließenden Verkehr steht mit beidem und mit Fahrlicht da.
@@ -130,18 +150,49 @@ function baueFaltsignal() {
 
 /* --- Einsatzkraft ----------------------------------------------------------
    Von oben sieht man Helm und Schultern. Die Warnweste ist der ganze Punkt
-   dieser Seite und deshalb die größte Fläche.                              */
+   dieser Seite und deshalb die größte Fläche — sie bleibt gelb, egal wer
+   darin steckt.
+
+   Die **Funktion** steckt trotzdem in der Farbe, nur eine Schicht weiter
+   außen: als Ring um die Figur und im Namensschild. Es sind dieselben Farben
+   wie in „Einsatzbereit" und in Löschlos (blau Wassertrupp, rot Angriffstrupp,
+   grün Schlauchtrupp, Gold Einheitsführer, Stahl Maschinist), nur dunkler —
+   siehe TRUPPFARBEN in data/absicherung.js.
+
+   Das Namensschild ist ein Schild und kein nackter Text: Auf Asphalt, Gras
+   und Bankett liegt sonst jede Beschriftung irgendwann auf einem Untergrund,
+   der sie schluckt. Seine Breite richtet sich nach der Länge der Kennung,
+   damit zwei Figuren nebeneinander nicht ineinanderlaufen.
+   -------------------------------------------------------------------------*/
 function baueFigur(opt) {
   const o = opt || {};
+  const t = o.trupp ? TRUPPFARBEN[o.trupp] : null;
+  const ring = t ? t.farbe : 'var(--txt3)';
+  const schild = o.kennung ? schildchen(o.kennung, ring) : '';
   return `<g class="figur">
-    <ellipse rx="11" ry="10" fill="rgba(0,0,0,.2)" transform="translate(1.5,2.5)"/>
-    <ellipse rx="10.5" ry="9" fill="${o.weste === false ? 'var(--jacke)' : 'var(--weste)'}"/>
-    <circle r="5.5" fill="${o.helm || 'var(--helm)'}"/>
-    <circle r="5.5" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
-    ${o.kennung ? `<text class="t-plan" x="0" y="20" text-anchor="middle" font-size="15"
-      fill="var(--txt)">${o.kennung}</text>` : ''}
+    <ellipse rx="12" ry="11" fill="rgba(0,0,0,.2)" transform="translate(1.5,2.5)"/>
+    <ellipse rx="11.5" ry="10" fill="${ring}"/>
+    <ellipse rx="8.5" ry="7.5" fill="${o.weste === false ? 'var(--jacke)' : 'var(--weste)'}"/>
+    <circle r="5" fill="${o.helm || 'var(--helm)'}"/>
+    <circle r="5" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
+    ${schild}
   </g>`;
 }
+
+/* Namensschild unter einer Figur. Breite nach Zeichenzahl – „WTrF" braucht
+   mehr als „Ma", und zwei Schilder dürfen sich nicht überlappen.          */
+function schildchen(text, farbe) {
+  const b = 13 + String(text).length * 8.5;
+  return `<g transform="translate(0,25)">
+    <rect x="${-b / 2}" y="-10" width="${b}" height="20" rx="10"
+      fill="var(--panel)" stroke="${farbe}" stroke-width="1.6" opacity=".96"/>
+    <text class="t-plan" x="0" y="6" text-anchor="middle" font-size="13"
+      fill="${farbe}">${text}</text></g>`;
+}
+
+/* Wie breit ein Namensschild wird – die Level brauchen das, um Figuren weit
+   genug auseinanderzustellen. */
+function schildBreite(text) { return 13 + String(text).length * 8.5; }
 
 /* --- Verjüngung aus Leitkegeln ---------------------------------------------
    Kegel stehen nie quer über der Fahrbahn, sondern schräg: Sie ziehen den
@@ -158,32 +209,28 @@ function verjuengungPunkte(plan, vonM, bisM, vonY, bisY, anzahl) {
   return p;
 }
 
-/* --- Sichthindernisse für die Landstraße -----------------------------------
-   Kurve und Kuppe werden nicht als verbogene Straße gezeichnet – ein
-   gestauchter Maßstab und eine Kurve zusammen ergeben ein Bild, das niemand
-   mehr liest. Stattdessen steht ein Waldstück bzw. ein Hügelrücken an der
-   Stelle, an der die Sicht endet.
+/* --- Waldstück in der Innenseite einer Kurve -------------------------------
+   Der Grund, warum man nicht um die Kurve sieht. Es steht in der
+   **Innenseite** des Bogens — dort, wo die Sichtlinie von draußen zur
+   Einsatzstelle die Fahrbahn verlässt. Auf der Außenseite stünde es im Bild
+   herum, ohne irgendetwas zu erklären.
 
-   Beides liegt **über** der Fahrbahn, nicht auf dem Bankett: Dort steht das
-   Warngerät, und ein Baum, der es zudeckt, verwechselt „nimmt die Sicht" mit
-   „nimmt das Gerät weg". Beschriftet wird nicht hier, sondern im Level —
-   unter der Straße ist Platz, darüber nicht.
+   Die Bäume folgen dem Bogen (`plan.yAuf`), sonst lägen sie dort, wo die
+   Straße ohne Kurve gewesen wäre — also mitten auf der Fahrbahn.
+
+   Eine Kuppe gibt es hier bewusst nicht: Eine Kuppe ist eine Steigung, und
+   die sieht man in der Draufsicht grundsätzlich nicht. Sie bleibt eine Frage.
    -------------------------------------------------------------------------*/
-function baueSichthindernis(plan, m, art) {
-  const x = plan.mx(m);
-  const oben = plan.randOben, unten = plan.randUnten + 10;
-  if (art === 'kuppe') {
-    return Stage.hinzu(`<g>
-      <rect x="${x - 40}" y="${oben - 30}" width="80" height="${unten - oben + 30}"
-        fill="var(--kuppe)" opacity=".55"/>
-      <rect x="${x - 3}" y="${oben - 30}" width="6" height="${unten - oben + 30}"
-        fill="var(--kuppe2)" opacity=".8"/></g>`);
-  }
+function baueWaldstueck(plan, vonM, bisM) {
   let baeume = '';
-  for (let i = 0; i < 9; i++) {
-    const bx = x - 44 + (i % 3) * 32 + (i % 2) * 8;
-    const by = oben - 44 + Math.floor(i / 3) * 16;
-    baeume += `<circle cx="${bx}" cy="${by}" r="${10 + (i % 3) * 3}" fill="var(--laub)"/>`;
+  const reihen = 3, jeReihe = 5;
+  for (let r = 0; r < reihen; r++) {
+    for (let i = 0; i < jeReihe; i++) {
+      const m = lerp(vonM, bisM, (i + (r % 2) * .5) / jeReihe);
+      const quer = plan.randOben - 16 - r * 26;
+      const x = plan.mx(m), y = plan.yAuf(m, quer);
+      baeume += `<circle cx="${zahl2(x)}" cy="${zahl2(y)}" r="${13 + (i % 3) * 3}" fill="var(--laub)"/>`;
+    }
   }
   return Stage.hinzu(`<g>${baeume}</g>`);
 }
