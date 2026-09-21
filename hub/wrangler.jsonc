@@ -3,6 +3,9 @@
   //   jf.veerka.mp/         Startseite (hub/dist/index.html)
   //   jf.veerka.mp/fwdv3/   Einsatzbereit (hub/dist/fwdv3/index.html)
   //   jf.veerka.mp/brennen-loeschen/  Brennen & Loeschen
+  //   jf.veerka.mp/absichern/         Erst sichern!
+  //   jf.veerka.mp/loeschlos/         Loeschlos (mehrere Dateien, PWA)
+  //   jf.veerka.mp/nachweis/          Pruefseite fuer den Jugendwart
   //   fwdv3.veerka.mp/*     alte Adresse, leitet dauerhaft um
   //
   // Alle Seiten liegen damit auf derselben Domain – nur so teilen sie sich
