@@ -21,6 +21,13 @@
       "runtimeArgs": ["brennen/server.mjs"],
       "autoPort": true,
       "port": 8414
+    },
+    {
+      "name": "absichern",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["absichern/server.mjs"],
+      "autoPort": true,
+      "port": 8415
     }
   ]
 }

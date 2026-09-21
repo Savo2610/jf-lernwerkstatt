@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-/* ---------- Der Bauweg, den sich beide Spiele teilen -----------------------
-   Ergebnis ist immer genau eine HTML-Datei: Stil, Three.js und alle Quellen
-   darin eingebettet. Zur Laufzeit wird nichts nachgeladen ausser der Schrift.
-   So laeuft dieselbe Datei im Netz, offline und als Artifact.
+/* ---------- Der Bauweg, den sich alle Lernseiten teilen --------------------
+   Ergebnis ist immer genau eine HTML-Datei: Stil, alle Quellen und – wo eine
+   3D-Buehne dranhaengt – Three.js darin eingebettet. Zur Laufzeit wird nichts
+   nachgeladen ausser der Schrift. So laeuft dieselbe Datei im Netz, offline
+   und als Artifact.
    -------------------------------------------------------------------------*/
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -12,8 +13,8 @@ const HIER = dirname(fileURLToPath(import.meta.url));
 const WURZEL = join(HIER, '..');
 
 /* --- three.js: ES-Modul in klassisches Skript umwandeln --------------------
-   Beide Spiele benutzen dieselbe Datei aus vendor/. Sie einmal umzuwandeln
-   reicht – das dauert bei jedem Aufruf spuerbar.                            */
+   Die beiden 3D-Spiele benutzen dieselbe Datei aus vendor/. Sie einmal
+   umzuwandeln reicht – das dauert bei jedem Aufruf spuerbar.                */
 let _three = null;
 export function threeAlsSkript() {
   if (_three) return _three;
@@ -42,8 +43,12 @@ export function ordnerDateien(pfad) {
 }
 
 /* --- Ein Spiel bauen -------------------------------------------------------
-   opt: { titel, beschreibung, stile[], quellen[], ziel, alsArtifact }
+   opt: { titel, beschreibung, stile[], quellen[], ziel, alsArtifact, three }
    Pfade sind immer relativ zur Wurzel des Projekts.
+
+   `three: false` laesst die Bibliothek weg. Das braucht „Erst sichern!":
+   Die Seite zeichnet eine Draufsicht in SVG und hat gar keine 3D-Buehne –
+   Three.js waere dort knapp ein Megabyte totes Gewicht in jeder Auslieferung.
 
    alsArtifact laesst doctype und Kopfangaben weg: dort liefert die Umgebung
    beides, und doppelte Angaben wuerden sich in die Quere kommen. Ohne
@@ -74,7 +79,7 @@ ${lies(opt.body)}
 <script>
 (function(){
 "use strict";
-${threeAlsSkript()}
+${opt.three === false ? '' : threeAlsSkript()}
 ${app}
 })();
 </script>

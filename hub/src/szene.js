@@ -300,7 +300,7 @@ function kulisseBaustelle(x) {
     <g transform="translate(62,-62)">
       <rect x="0" y="0" width="88" height="50" rx="4" fill="var(--schild)"/>
       <text class="t-text" x="44" y="16" text-anchor="middle" font-size="9.5"
-        letter-spacing="1.3" fill="var(--schild-txt)">THEMA 3</text>
+        letter-spacing="1.3" fill="var(--schild-txt)">THEMA 4</text>
       <text class="t-display" x="44" y="44" text-anchor="middle" font-size="27" fill="var(--gelb)">?</text>
     </g>
   </g>`;
@@ -382,6 +382,51 @@ function kulisseLosrad(x) {
 }
 
 /* ---------- Strassenende: hier geht es spaeter weiter ---------------------- */
+/* ---------- Kulisse 6: die Absicherung -------------------------------------
+   Eine abgesicherte Einsatzstelle am Strassenrand: Warndreieck mit
+   Warnleuchte, eine Verjuengung aus Leitkegeln und ein Schild mit der Zahl,
+   um die sich die ganze Lernseite dreht.
+
+   Auf dem Schild stehen 200 m und nicht 100: Die Landstrasse ist der Fall,
+   den man draussen vor Harheim wirklich hat, und 200 ist die Zahl, die man
+   sich merken soll. Wer sie aendert, muss auch in absichern/ nachsehen.
+
+   Die Kegel stehen schraeg gestaffelt statt in einer Linie – eine Verjuengung
+   zieht den Verkehr herueber, sie sperrt ihn nicht. Genau das lehrt die
+   Seite, und die Kulisse darf nichts anderes zeigen.
+
+   Alles liegt links vom Haltepunkt: Dort steht gleich das Fahrzeug, und das
+   ist zweihundert Pixel breit. Was rechts davon stuende, waere hinter ihm.  */
+function kulisseAbsicherung(x) {
+  let kegel = '';
+  for (let i = 0; i < 3; i++) {
+    const kx = -175 + i * 30, ky = BODEN.bord + 4 + i * 7, gr = 1 - i * .06;
+    kegel += '<g transform="translate(' + kx + ',' + ky + ') scale(' + zahl(gr) + ')">'
+      + '<ellipse cx="0" cy="0" rx="15" ry="4" fill="rgba(0,0,0,.16)"/>'
+      + '<path d="M-13 0 h26 l-3 -5 h-20 Z" fill="#c74a10"/>'
+      + '<path d="M-9 -5 L-3 -34 h6 L9 -5 Z" fill="#ef5b12"/>'
+      + '<path d="M-6.6 -21 L6.6 -21 L5.4 -28 L-5.4 -28 Z" fill="#f7f4ef"/></g>';
+  }
+  return '<g transform="translate(' + zahl(x) + ',0)">'
+    + '<g transform="translate(-215,' + (BODEN.gehweg - 2) + ')">'
+    + '<ellipse cx="0" cy="2" rx="20" ry="5" fill="rgba(0,0,0,.2)"/>'
+    + '<path d="M-14 0 h28 l-4 -7 h-20 Z" fill="var(--metall)"/>'
+    + '<path d="M0 -62 L20 -8 L-20 -8 Z" fill="#f2f0e6"/>'
+    + '<path d="M0 -54 L15 -12 L-15 -12 Z" fill="var(--rot)"/>'
+    + '<path d="M0 -44 L9 -17 L-9 -17 Z" fill="#f2f0e6"/>'
+    + '<circle cx="24" cy="-16" r="9" fill="#f59e0b" opacity=".35"/>'
+    + '<circle cx="24" cy="-16" r="5.5" fill="#f59e0b"/></g>'
+    + kegel
+    + '<g transform="translate(-150,' + (BODEN.gehweg - 4) + ')">'
+    + '<rect x="-3" y="-96" width="6" height="96" rx="3" fill="var(--metall)"/>'
+    + '<rect x="-46" y="-150" width="92" height="56" rx="6" fill="var(--schild)"/>'
+    + '<text class="t-text" x="0" y="-126" text-anchor="middle" font-size="11"'
+    + ' letter-spacing="1.2" fill="var(--schild-txt)">ABSTAND</text>'
+    + '<text class="t-display" x="0" y="-104" text-anchor="middle" font-size="25"'
+    + ' fill="var(--gelb)">200 m</text></g>'
+    + '</g>';
+}
+
 function kulisseEnde(x) {
   let streifen = '';
   for (let i = 0; i < 5; i++) streifen += `<rect x="${i * 24}" y="-42" width="12" height="26" fill="var(--rot)"/>`;
@@ -404,6 +449,7 @@ const KULISSEN = {
   uebungshof: kulisseUebungshof,
   brandhaus: kulisseBrandhaus,
   losrad: kulisseLosrad,
+  absicherung: kulisseAbsicherung,
   baustelle: kulisseBaustelle,
 };
 

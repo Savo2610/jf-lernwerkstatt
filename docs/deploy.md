@@ -57,7 +57,7 @@ ist damit weg. Also hinterher committen.
 ## Wenn die Startseite das Spiel zeigt
 
 Störungsbild: `jf.veerka.mp/` liefert **Einsatzbereit** statt der Startseite,
-und `/fwdv3/` wie `/brennen-loeschen/` geben 404. Der Zurück-Knopf im Spiel
+und `/fwdv3/`, `/brennen-loeschen/` wie `/absichern/` geben 404. Der Zurück-Knopf im Spiel
 führt dann im Kreis, weil er auf `jf.veerka.mp/?einfahrt=1` zeigt.
 
 Dann liefert der Worker einen falschen Ordner aus. Zum Prüfen:
@@ -85,9 +85,10 @@ falsche Seite zu veröffentlichen. Diese Trennung bitte so lassen.
 | `jf.veerka.mp/` | Startseite (`hub/dist/index.html`) |
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit (`hub/dist/fwdv3/index.html`) |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen (`hub/dist/brennen-loeschen/index.html`) |
+| `jf.veerka.mp/absichern/` | Erst sichern! (`hub/dist/absichern/index.html`) |
 | `jf.veerka.mp/loeschlos/` | Löschlos (`hub/dist/loeschlos/`, mehrere Dateien) |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart (`hub/dist/nachweis/index.html`) |
-| `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` |
+| `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` — genauso für die anderen Unterseiten |
 | `jf.veerka.mp/löschlos` | 301 auf `/loeschlos/` — der Umlaut kommt als `%C3%B6` an |
 | `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query und Fragment bleiben |
 
@@ -110,8 +111,8 @@ Steht in `hub/wrangler.jsonc`, hier nochmal im Klartext:
 
 ## Warum eine Domain und nicht zwei
 
-Startseite und Spiel liegen als Pfade auf **derselben** Domain, nicht auf zwei
-Subdomains. Nur dann teilen sie sich den Browserspeicher. Ein gemeinsamer
+Startseite und Lernseiten liegen als Pfade auf **derselben** Domain, nicht auf
+mehreren Subdomains. Nur dann teilen sie sich den Browserspeicher. Ein gemeinsamer
 Fortschritt über mehrere Themen hinweg — Medaillen, Gesamt-XP — ist damit
 später ohne Umzug möglich. Wer daran etwas ändert, wirft allen Kindern ihren
 Spielstand weg.

@@ -6,7 +6,8 @@
 
 const ABSTAND = 1000;                 // Weltmeter zwischen zwei Haltepunkten
 const VORLAUF = 900;                  // Strasse vor der ersten und nach der letzten Station
-const KULISSE_VERSATZ = { wache: -70, uebungshof: -86, brandhaus: -66, losrad: 34, baustelle: -104 };
+const KULISSE_VERSATZ = { wache: -70, uebungshof: -86, brandhaus: -66, losrad: 34,
+                          absicherung: 0, baustelle: -104 };
 
 /* Immer dieselbe „Zufalls"-Landschaft – sonst springt sie bei jedem Neuladen */
 function wuerfel(saat) {

@@ -1,0 +1,192 @@
+/* ============================================================================
+   Was es nur auf dieser Seite gibt.
+
+   Der Grundriss ist überall derselbe: **Plan oben, Bedienfeld unten.** Eine
+   Draufsicht ist breit und flach; ein Bedienfeld daneben würde sie auf ein
+   Drittel zusammenquetschen, und dann sieht man die Abstände nicht mehr, um
+   die es hier geht. Deshalb steht das Bedienfeld auch am Beamer unten und
+   nicht rechts — anders als bei den beiden 3D-Seiten.
+   ========================================================================== */
+
+/* Schrift im Plan: Display-Schrift, damit Zahlen auf dem Asphalt aussehen
+   wie Zahlen auf Schildern. */
+.t-plan{font-family:var(--display); font-weight:400; letter-spacing:.01em}
+
+/* ---------- Auftragskarte über dem Plan ----------------------------------- */
+.auftrag{
+  width:min(680px,100%); margin:0 auto; text-align:center;
+  background:var(--glas); backdrop-filter:blur(10px);
+  border:1px solid var(--glas-rand); border-radius:var(--r-l);
+  padding:clamp(8px,1.3vw,13px) clamp(14px,2vw,20px);
+  box-shadow:var(--schatten); display:flex; flex-direction:column; gap:2px;
+}
+.auftrag b{font-size:1.04em}
+.auftrag span{color:var(--txt2); font-size:.92em; line-height:1.4}
+
+/* ---------- Bedienfeld unten ---------------------------------------------- */
+.feldhuelle{flex:1; display:flex; align-items:flex-end; justify-content:center; min-height:0}
+.bedienfeld{
+  width:min(760px,100%); max-height:56vh; overflow-y:auto;
+  display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center;
+}
+
+/* ---------- Rückmeldung, die nichts verdeckt ------------------------------ */
+.unterbau{
+  width:min(760px,100%); margin:auto auto 0;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.unterbau > *{width:100%}
+.hinweisleiste{min-height:2.9em; display:flex; align-items:center; justify-content:center}
+.hinweistext{
+  padding:.55em 1.15em; border-radius:999px; font-weight:800; font-size:.94em;
+  text-align:center; background:var(--toast); border:1px solid var(--linie2);
+  box-shadow:var(--schatten); animation:rein .28s var(--ease) both;
+}
+.hinweistext.gut{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 14%,#fff)}
+.hinweistext.schlecht{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 12%,#fff)}
+.hinweistext.weg{animation:hinweisRaus .3s ease-in both}
+@keyframes hinweisRaus{to{opacity:0; transform:translateY(-6px)}}
+@media (max-width:620px){
+  .hinweisleiste{min-height:2.4em}
+  .hinweistext{font-size:.86em; padding:.45em .9em}
+}
+
+/* ---------- Regler --------------------------------------------------------
+   Der Daumen ist groß: Das hier wird mit dem Finger bedient. */
+.regler{width:min(600px,100%); margin-inline:auto; display:flex; flex-direction:column; gap:6px}
+.reglerkopf{display:flex; justify-content:space-between; align-items:baseline; gap:1em;
+  font-weight:800; font-size:.95em}
+.reglerzahl{font-size:1.6em; color:var(--kegel); white-space:nowrap}
+.reglerbahn{position:relative; height:38px; display:flex; align-items:center}
+.reglerschiene{position:absolute; inset:auto 0; height:14px; border-radius:999px;
+  background:var(--panel2); border:1px solid var(--linie)}
+.reglereingabe{position:relative; width:100%; margin:0; background:transparent;
+  -webkit-appearance:none; appearance:none; height:38px; cursor:grab}
+.reglereingabe:active{cursor:grabbing}
+.reglereingabe::-webkit-slider-runnable-track{background:transparent; height:38px}
+.reglereingabe::-moz-range-track{background:transparent; height:38px}
+.reglereingabe::-webkit-slider-thumb{-webkit-appearance:none; appearance:none;
+  width:32px; height:32px; border-radius:50%; margin-top:3px;
+  background:var(--panel); border:3px solid var(--kegel); box-shadow:var(--schatten)}
+.reglereingabe::-moz-range-thumb{width:32px; height:32px; border-radius:50%;
+  border:3px solid var(--kegel); background:var(--panel); box-shadow:var(--schatten)}
+.reglereingabe:focus-visible{outline:none}
+.reglereingabe:focus-visible::-webkit-slider-thumb{border-color:var(--blau); box-shadow:0 0 0 4px var(--glas-rand2)}
+.reglereingabe:focus-visible::-moz-range-thumb{border-color:var(--blau); box-shadow:0 0 0 4px var(--glas-rand2)}
+.regler.zu{opacity:.6}
+.regler.zu .reglereingabe{cursor:default}
+
+.knopfreihe{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+.knopfreihe .btn{flex:1 1 auto; min-width:170px}
+
+/* ---------- Geräteleiste --------------------------------------------------- */
+.geraeteleiste{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; width:100%}
+.geraetchip{
+  display:flex; align-items:center; gap:.5em;
+  padding:.5em .9em; border-radius:999px; font-weight:700; font-size:.94em;
+  background:var(--panel); border:2px solid var(--linie); cursor:pointer;
+  transition:transform .14s var(--ease), border-color .14s, background .14s;
+}
+.geraetchip:hover{transform:translateY(-2px); border-color:var(--kegel)}
+.geraetchip .ic{font-size:1.25em; line-height:1}
+.geraetchip .rest{
+  min-width:1.7em; padding:.05em .35em; border-radius:999px; font-size:.82em;
+  background:var(--tint2); font-variant-numeric:tabular-nums;
+}
+.geraetchip.gewaehlt{border-color:var(--kegel); background:color-mix(in srgb,var(--kegel) 13%,#fff);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--kegel) 22%,transparent)}
+.geraetchip.leer{opacity:.45}
+.geraetchip.leer .rest{background:color-mix(in srgb,var(--rot) 20%,transparent)}
+
+/* ---------- Marken auf der Karte -------------------------------------------
+   Größe in Pixeln, nicht in Welteinheiten – sonst sind sie auf dem Handy
+   nicht zu treffen. Und: **kein transform.** Das schreibt die Bühne jedes
+   Bild neu (siehe Marken in buehne.js); ein :hover mit transform würde die
+   Marke schlagartig in die Bildecke reißen. Animiert werden deshalb Rahmen
+   und Schatten. */
+.planmarke{
+  min-width:46px; min-height:46px; padding:.25em .5em; border-radius:999px;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-weight:800; font-size:.88em; line-height:1.1; cursor:pointer;
+  background:var(--glas); backdrop-filter:blur(6px);
+  border:2.5px dashed var(--txt3); color:var(--txt);
+  box-shadow:var(--schatten);
+}
+.planmarke:hover{border-color:var(--kegel); box-shadow:0 0 0 5px color-mix(in srgb,var(--kegel) 26%,transparent), var(--schatten)}
+.planmarke.gesetzt{border-style:solid; border-color:var(--gruen);
+  background:color-mix(in srgb,var(--gruen) 16%,#fff)}
+.planmarke.falsch{border-style:solid; border-color:var(--rot);
+  background:color-mix(in srgb,var(--rot) 14%,#fff)}
+.planmarke.gefahr{border-color:var(--rot); border-style:dotted}
+.planmarke.still{cursor:default; border-style:solid; border-color:var(--linie2)}
+.planmarke.still:hover{border-color:var(--linie2); box-shadow:var(--schatten)}
+.planmarke .nr{font-family:var(--display); font-size:1.15em}
+
+/* ---------- Ablagen für die Ausrüstung (Aufgabe 2) ------------------------- */
+.truppfeld{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));
+  gap:12px; width:100%}
+.truppablage{
+  padding:.8em; border-radius:var(--r); text-align:center;
+  background:var(--panel2); border:2.5px dashed var(--linie2);
+  display:flex; flex-direction:column; gap:6px; min-height:120px;
+}
+.truppablage b{font-size:1em}
+.truppablage .traegt{display:flex; flex-wrap:wrap; gap:6px; justify-content:center}
+.truppablage .traegt span{padding:.2em .6em; border-radius:999px; background:var(--tint2); font-size:.84em; font-weight:700}
+
+/* ---------- Blinkendes -----------------------------------------------------
+   Rein in CSS, damit „Bewegung reduzieren" es von selbst stilllegt: Die
+   globale Regel in gemeinsam/stil.css dreht jede Animation auf null. Die
+   Leuchten bleiben dann sichtbar stehen – gezeichnet sind sie eingeschaltet,
+   der Plan stimmt also weiter. */
+.blaulicht .bl-a{animation:blau1 .9s steps(1,end) infinite}
+.blaulicht .bl-b{animation:blau2 .9s steps(1,end) infinite}
+@keyframes blau1{0%,24%{opacity:1}25%,100%{opacity:.25}}
+@keyframes blau2{0%,49%{opacity:.25}50%,74%{opacity:1}75%,100%{opacity:.25}}
+.warnblinker{animation:warnblink 1s steps(1,end) infinite}
+@keyframes warnblink{0%,49%{opacity:1}50%,100%{opacity:.2}}
+.warnleuchte{animation:warnpuls 1.6s ease-in-out infinite}
+@keyframes warnpuls{50%{opacity:.55}}
+.blitzleuchte{animation:blitz 1.3s steps(1,end) infinite}
+@keyframes blitz{0%,8%{opacity:1}9%,100%{opacity:.42}}
+
+/* ---------- Menükopf ------------------------------------------------------- */
+.menuekopf{
+  width:min(640px,100%); margin-inline:auto; text-align:center; margin-bottom:4px;
+  background:var(--glas); backdrop-filter:blur(10px);
+  border:1px solid var(--glas-rand); border-radius:var(--r-l);
+  padding:clamp(8px,1.4vw,14px) clamp(14px,2vw,22px);
+  box-shadow:var(--schatten);
+}
+.menuekopf p{margin:0}
+
+/* ---------- Regelkarten (Aufgabe 5) ---------------------------------------- */
+.regelkarte{
+  display:flex; align-items:center; gap:.8em; width:100%;
+  padding:.75em 1em; border-radius:var(--r); text-align:left; font-weight:600;
+  background:var(--panel); border:2px solid var(--linie); cursor:pointer;
+  transition:border-color .16s, background .16s, transform .16s var(--ease);
+}
+.regelkarte:hover{transform:translateX(4px); border-color:var(--blau)}
+.regelkarte .ja{flex:0 0 auto; font-size:1.3em}
+.regelkarte.gut{border-color:var(--gruen); background:color-mix(in srgb,var(--gruen) 12%,#fff)}
+.regelkarte.schlecht{border-color:var(--rot); background:color-mix(in srgb,var(--rot) 11%,#fff)}
+.regelkarte.aus{opacity:.45; pointer-events:none}
+
+/* ---------- Quellenzeile im Levelmenü -------------------------------------- */
+.quelle-fuss{max-width:52ch; margin:10px auto 0; color:var(--txt3); font-size:.82em; line-height:1.5}
+
+/* ---------- Schmale Schirme ------------------------------------------------
+   Geprüft bei 360 × 740 mit `--skala: 1.3` (Chromes Textskalierung auf 130 %).
+   Dort stehen Kopfzeile, Auftragskarte und Bedienfeld übereinander, und wenn
+   jedes davon seine bequeme Größe behält, bleibt für den Plan ein Streifen
+   von zwanzig Pixeln — also nichts. Auftrag und Bedienfeld geben deshalb
+   nach: Der Plan ist hier der Inhalt, die Karten sind die Beschriftung. */
+@media (max-width:620px){
+  .auftrag{padding:8px 12px; gap:0}
+  .auftrag b{font-size:.98em}
+  .auftrag span{font-size:.86em; line-height:1.32}
+  .bedienfeld{max-height:46vh; gap:10px; padding:12px}
+  .reglerkopf{font-size:.88em}
+  .reglerzahl{font-size:1.35em}
+}

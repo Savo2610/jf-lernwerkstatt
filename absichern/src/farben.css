@@ -1,0 +1,99 @@
+/* ============================================================================
+   „Erst sichern!" – Farbwelt: heller Tag an der Straße.
+
+   Die dritte Welt neben der Einsatznacht von „Einsatzbereit" und dem warmen
+   Übungsplatz von „Brennen & Löschen": kühler, grauer, nüchterner. Das Thema
+   ist eine Verkehrsfläche, und eine Verkehrsfläche ist grau.
+
+   Die Leitfarbe ist deshalb nicht Rot, sondern **Warnorange** — die Farbe von
+   Leitkegel, Warnleuchte und Warnweste. Rot bleibt dem Fahrzeug und den
+   Fehlermeldungen; wer beides gleich einfärbt, macht den Plan unlesbar.
+
+   Setzt die Variablen, die gemeinsam/stil.css benutzt – wird VOR dieser Datei
+   eingebunden.
+   ========================================================================== */
+
+:root{
+  color-scheme:light;
+
+  /* Grund: heller Beton mit einem Stich ins Kühle. Weiß blendet am Beamer. */
+  --bg:#eef0f2; --bg2:#e3e6e9;
+  /* Farbe, auf die die Heimfahrt zufährt – der Nachtton, in dem die
+     Startseite ihre Einfahrt beginnt. Bewusst nicht --bg: siehe .heimfahrt
+     in gemeinsam/stil.css. */
+  --heimfarbe:#080b14;
+  --panel:#ffffff; --panel2:#f2f4f6;
+  --linie:#d3d8de; --linie2:#b3bcc6;
+  --txt:#1d2329; --txt2:#5b666f; --txt3:#8a949d;
+
+  /* Leitfarbe Warnorange – und ein Gelb, das daneben noch als eigene Farbe
+     durchgeht. */
+  --rot:#d92d20; --rot-d:#a31f14; --glut:#f07818;
+  --gelb:#c98a06;
+  --blau:#1467b3;
+  --gruen:#1f8f52; --lila:#6f52c4;
+
+  --auf-blau:#ffffff; --auf-gruen:#ffffff; --auf-gelb:#ffffff;
+
+  --tint:rgba(29,35,41,.05); --tint2:rgba(29,35,41,.11);
+
+  --glas:rgba(255,255,255,.88); --glas-rand:rgba(29,35,41,.10); --glas-rand2:rgba(29,35,41,.17);
+  --hud:rgba(244,246,248,.90);
+  --ergebnis:rgba(255,255,255,.96);
+  --zitat-bg:rgba(29,35,41,.05);
+  --boss:linear-gradient(180deg,#fff4e6,#ffe8cf);
+
+  --toast:rgba(255,255,255,.97); --toast-gut:rgba(226,245,232,.97);
+  --toast-schlecht:rgba(253,231,225,.97); --toast-gold:rgba(255,242,216,.97);
+
+  --vignette:rgba(60,74,88,.16);
+  --dunkler:linear-gradient(180deg,rgba(238,240,242,.9),rgba(238,240,242,.76) 45%,rgba(238,240,242,.93));
+
+  --schatten:0 12px 34px rgba(36,48,60,.14);
+  --schatten-hoch:0 16px 40px rgba(36,48,60,.18);
+  --schatten-zug:0 22px 46px rgba(36,48,60,.26);
+  --schatten-knopf:0 12px 22px rgba(36,48,60,.18);
+  --schatten-knopf-tief:0 6px 12px rgba(36,48,60,.16);
+
+  --marke-verlauf:linear-gradient(172deg,#f5a524 4%,#ef6c14 48%,#d92d20 92%);
+  --marke-schein:rgba(239,108,20,.28);
+  --note-verlauf:linear-gradient(180deg,#f5a524,#ef6c14 55%,#d92d20);
+
+  /* Zitiert wird fast nur die Vorschrift selbst. Was aus der Lernunterlage
+     der Landesfeuerwehrschule stammt, steht im Fließtext und nicht im
+     Zitatkasten – zwei Herkunftsmarken in einem Spiel verwirren mehr, als
+     sie klären. */
+  --quelle:'FwDV 1 · ';
+
+  /* ---------- Die Straße ---------------------------------------------------
+     Eigene Variablen, weil der Plan sie braucht. Der Asphalt ist deutlich
+     dunkler als der Seitenraum: Auf einem Plan muss man auf einen Blick
+     sehen, wo die Fahrbahn aufhört – daran hängt hier die halbe Lehre. */
+  --asphalt:#6d7680; --asphalt2:#7e8791;
+  --markierung:#f4f6f7;
+  --bankett:#b9ae94;
+  --gelaende:#cfd9c4;
+  --leitplanke:#9aa3ad; --leitplanke2:#e7ebee;
+  --pfosten:#f4f6f7; --pfosten-band:#2b3138;
+  --richtungspfeil:#eef1f3;
+  --band:#5b666f; --band-txt:#3b454e;
+
+  /* Warngerät */
+  --warn:#f59e0b;
+  --kegel:#ef5b12; --kegel-band:#f7f4ef;
+  --weiss:#ffffff;
+  --metall:#b9c1c9;
+  --fenster:#2a3b4d;
+  --blaulicht:#2f9bff;
+
+  /* Menschen */
+  --weste:#f2e527; --jacke:#39424c; --helm:#d9d3c4;
+
+  /* Kulisse */
+  --laub:#7da05e;
+  --kuppe:#c3b898; --kuppe2:#9c8e6c;
+}
+
+/* Panele brauchen vor hellem Grund eine Kante, sonst schwimmen sie. */
+.panel{ border-color:var(--linie) }
+.antwort{ box-shadow:0 1px 0 rgba(36,48,60,.06) }

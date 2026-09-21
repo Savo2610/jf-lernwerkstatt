@@ -1,9 +1,9 @@
 /* Ein Worker fuer beide Adressen.
 
-   jf.veerka.mp    liefert die Startseite und darunter die Spiele
-                   /fwdv3/ und /brennen-loeschen/, die Truppauslosung
-                   /loeschlos/ sowie /nachweis/ – die Pruefseite fuer den
-                   Jugendwart, nirgends verlinkt.
+   jf.veerka.mp    liefert die Startseite und darunter die Lernseiten
+                   /fwdv3/, /brennen-loeschen/ und /absichern/, die
+                   Truppauslosung /loeschlos/ sowie /nachweis/ – die
+                   Pruefseite fuer den Jugendwart, nirgends verlinkt.
    fwdv3.veerka.mp ist die alte Adresse des Spiels und leitet dauerhaft um.
 
    Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`), sonst
@@ -11,7 +11,7 @@
    werden.                                                                    */
 const ALT = 'fwdv3.veerka.mp';
 const NEU = 'https://jf.veerka.mp/fwdv3/';
-const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/nachweis', '/loeschlos'];
+const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/absichern', '/nachweis', '/loeschlos'];
 
 /* Loeschlos heisst mit Umlaut, die Adresse nicht. Ein oe im Pfad kommt als
    %C3%B6 an und ueberlebt weder QR-Code noch Zettel an der Pinnwand zuverlaessig.

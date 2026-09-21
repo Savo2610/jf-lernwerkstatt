@@ -105,8 +105,8 @@ const THEMEN = [
     status: 'offen',
     kurz: 'Löschlos',
     // Kein „Thema": Loeschlos lehrt nichts, es nimmt dem Gruppenabend eine
-    // Entscheidung ab. Deshalb steht hier Werkzeug, und die Baustelle bleibt
-    // Thema 3.
+    // Entscheidung ab. Deshalb steht hier Werkzeug – und deshalb ist „Erst
+    // sichern!" dahinter Thema 3 und nicht Thema 4.
     ober: 'Werkzeug',
     chip: 'Für den Gruppenabend',
     titel: 'Löschlos',
@@ -130,11 +130,39 @@ const THEMEN = [
     },
   },
   {
+    id: 'absichern',
+    kulisse: 'absicherung',
+    status: 'offen',
+    kurz: 'Erst sichern!',
+    ober: 'Thema 3',
+    chip: '2D · 5 Aufgaben',
+    titel: 'Erst sichern!',
+    zeile: 'Die Einsatzstelle gegen den fließenden Verkehr sichern — von oben, mit Fahrzeug, Kegeln und den Abständen, die wirklich gelten.',
+    punkte: [
+      'Innerorts 100 m, Landstraße 200 m, Autobahn 800 m',
+      'Anfahren, hinstellen, absitzen, antreten — in der Draufsicht',
+      'Warndreieck, Warnleuchte, Leitkegel, Blitzleuchten: was wohin gehört',
+      'Wenn das Material eines Fahrzeugs nicht reicht: das zweite',
+      'Vorbereitung auf die Jugendflamme Stufe 2',
+    ],
+    ziel: 'https://jf.veerka.mp/absichern/',
+    knopf: 'Losfahren',
+    // Heller Tag an der Straße, Asphaltgrau mit Warnorange. Die Schrift muss
+    // deshalb dunkel sein, nicht hell.
+    uebergang: {
+      grund: '#eef0f2', schrift: '#1d2329',
+      zeichen: '<svg viewBox="0 0 32 32" aria-hidden="true">' +
+        '<path d="M4 27 h24 l-4 -5 h-16 Z" fill="#c74a10"/>' +
+        '<path d="M11 22 L14.4 5 h3.2 L21 22 Z" fill="#ef5b12"/>' +
+        '<path d="M12.6 13.5 h6.8 l-.8 -4 h-5.2 Z" fill="#f7f4ef"/></svg>',
+    },
+  },
+  {
     id: 'baustelle',
     kulisse: 'baustelle',
     status: 'bald',
     kurz: 'Baustelle',
-    ober: 'Thema 3',
+    ober: 'Thema 4',
     chip: 'Baustelle',
     titel: 'Hier ist noch Platz',
     zeile: 'Was hinter dem Bauzaun entsteht, steht noch nicht fest. Gerätekunde? Knoten und Stiche? Erste Hilfe? Wer eine Idee hat, sagt sie am besten direkt im Gruppenabend — oder gleich im Repo.',

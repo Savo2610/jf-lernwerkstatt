@@ -1,23 +1,26 @@
 # Prüfen, ohne sich durchzuklicken
 
 Alle Seiten haben Haken für die Konsole. Wer sie nicht kennt, klickt sich
-für jede Kleinigkeit durch acht Level oder scrollt eine halbe Seite weit — und
-gibt dann irgendwann auf und prüft gar nicht mehr.
+für jede Kleinigkeit durch acht Aufgaben oder scrollt eine halbe Seite weit —
+und gibt dann irgendwann auf und prüft gar nicht mehr.
 
 ## Loslegen
 
 ```bash
-npm run dev         # alles wie im Netz, Port 8413
-npm run dev:spiel   # nur Einsatzbereit, Port 8412
-npm run dev:brennen # nur Brennen & Löschen, Port 8414
+npm run dev           # alles wie im Netz, Port 8413
+npm run dev:spiel     # nur Einsatzbereit, Port 8412
+npm run dev:brennen   # nur Brennen & Löschen, Port 8414
+npm run dev:absichern # nur Erst sichern!, Port 8415
 ```
 
-Nach jeder Änderung an `src/`, `brennen/src/`, `gemeinsam/` oder `hub/src/` muss
-**neu gebaut** werden (`npm run build`) — die Server liefern die gebaute Datei
-aus, nicht die Quellen. Kein Hot Reload.
+Nach jeder Änderung an `src/`, `brennen/src/`, `absichern/src/`, `gemeinsam/`
+oder `hub/src/` muss **neu gebaut** werden (`npm run build`) — die Server
+liefern die gebaute Datei aus, nicht die Quellen. Kein Hot Reload.
 
-Wer an `gemeinsam/` etwas ändert, muss **beide** Spiele ansehen. Der Bau merkt
-nicht, dass die eine Seite noch geht und die andere nicht mehr.
+Wer an `gemeinsam/` etwas ändert, muss **alle drei** Lernseiten ansehen. Der
+Bau merkt nicht, dass die eine noch geht und die andere nicht mehr. Und nicht
+jede Seite benutzt alles: „Erst sichern!" bringt keine 3D-Bühne mit, sondern
+eine eigene in SVG — `gemeinsam/stage.js` fehlt dort, `gemeinsam/ui.js` nicht.
 
 ## In Einsatzbereit
 
@@ -109,6 +112,51 @@ for (let t = 0; t < 3; t += .05) __bl.Stage.updates.forEach(f => f(.05, t));
 
 Dasselbe in Grün wie `szene.bild()` auf veerka.mp weiter unten.
 
+## In Erst sichern!
+
+Über die Adresszeile:
+
+- `?level=<id>` springt direkt in eine Aufgabe und umgeht auch die Sternsperre
+  des Boss-Levels. Die Kennungen: `ankommen`, `geraet`, `innerorts`,
+  `landstrasse`, `autobahn`.
+- Einen Beamer-Modus gibt es hier nicht — warum, steht oben in
+  `absichern/src/main.js`.
+
+In der Konsole liegt derselbe Satz Haken unter `__as`:
+
+```js
+__as.State                      // Spielstand, Ränge, XP, Abzeichen
+__as.Stage                      // die 2D-Bühne: blick(), bildVersatz(), sicht
+__as.Marken                     // die Knöpfe, die an der Karte kleben
+__as.Fehlerliste                // muss leer sein
+__as.STRASSEN                   // innerorts 100, Landstraße 200, Autobahn 800
+__as.GERAETE                    // Warndreieck, Warnleuchte, Leitkegel …
+__as.AUSRUESTUNG                // wer was trägt (FwDV 1, 3.3.2)
+__as.BELADUNG                   // was ein LF dabeihat – bewusst knapp
+__as.REGELN                     // die Sicherheitssätze, richtige und falsche
+__as.bausteine.baueStrecke      // eine Straße von oben bauen
+__as.bausteine.planZeigen       // Bildausschnitt auf einen Plan setzen
+__as.bausteine.stellen          // etwas an einen Punkt der Welt stellen
+__as.bausteine.planMarke        // Knopf an einer Weltposition
+__as.bausteine.abstandsregler   // Regler, der in Metern und Leitpfosten denkt
+```
+
+Eine Straße direkt in der Konsole ausprobieren, ohne neu zu bauen:
+
+```js
+__as.Stage.leeren();
+const p = __as.bausteine.baueStrecke({
+  art:'richtung', von:-90, bis:870, nah:30, nahProM:4, fernProM:.62,
+  marken:[800,600,400,200] });
+__as.bausteine.planZeigen(p);
+__as.bausteine.stellen(__as.bausteine.baueLF({}), p.mx(12), p.spurMitte(1), -7, p.symbolSkala);
+```
+
+**Der Längsmaßstab ist gebrochen**, quer nicht — das ist der häufigste Grund
+für ein Bild, das falsch aussieht. `p.symbolSkala` gehört an jedes Fahrzeug;
+ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig Meter lang.
+Warum das so ist, steht oben in `absichern/src/welt/plan.js`.
+
 ## Auf der Startseite
 
 ```js
@@ -147,10 +195,11 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
 
 ## Was vor dem Veröffentlichen dran ist
 
-1. `npm run build` läuft ohne Fehler — er baut Startseite und beide Spiele
-2. `__eb.Fehlerliste` und `__bl.Fehlerliste` sind leer, Browserkonsole ohne
-   Fehler
-3. Ein Level je Spiel und die Startseite einmal bei **360 × 740** — das ist ein
+1. `npm run build` läuft ohne Fehler — er baut Startseite und alle drei
+   Lernseiten
+2. `__eb.Fehlerliste`, `__bl.Fehlerliste` und `__as.Fehlerliste` sind leer,
+   Browserkonsole ohne Fehler
+3. Ein Level je Lernseite und die Startseite einmal bei **360 × 740** — das ist ein
    verbreitetes Android-Format und der Fall, in dem zuerst etwas nicht mehr
    passt. Dazu in der Konsole `document.body.style.setProperty('--skala',1.3)`:
    das entspricht Chromes Textskalierung auf 130 %, die viele eingeschaltet
@@ -161,7 +210,7 @@ Sieben-Sekunden-Runde eine Minute dauert und man glaubt, es sei kaputt.
    der Instagram-Link im Fuß, dazu „Hilf mit beim Bauen" an der Baustelle.
    Alle drei sind leicht zu übersehen und fallen deshalb auch nicht auf,
    wenn sie kaputt sind.
-5. Beide Übergänge einmal fahren: von der Startseite in jedes Spiel (die
+5. Jeden Übergang einmal fahren: von der Startseite in jede Lernseite (die
    Blende muss den Grundton des Ziels haben, nicht den des Nachbarn) und mit
    dem Knopf oben links wieder zurück.
 6. Bei Animationen: einmal mit „Bewegung reduzieren" — es muss einen

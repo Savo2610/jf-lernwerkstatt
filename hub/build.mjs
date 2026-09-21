@@ -24,7 +24,7 @@ const kopf = alsArtifact ? '' : `<!doctype html>
 <html lang="de">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Lernseiten der Jugendfeuerwehr: FwDV 3 als 3D-Lernspiel, bald auch Brennen und Löschen.">
+<meta name="description" content="Lernseiten der Jugendfeuerwehr: FwDV 3 und Brandlehre als 3D-Lernspiel, Verkehrsabsicherung in der Draufsicht.">
 <meta name="theme-color" content="#d92d20">
 `;
 
@@ -100,6 +100,7 @@ function loeschlosUebernehmen() {
 if (!alsArtifact) {
   await spielUebernehmen('../build.mjs', '../bau/fwdv3.html', 'fwdv3');
   await spielUebernehmen('../brennen/build.mjs', '../bau/brennen-loeschen.html', 'brennen-loeschen');
+  await spielUebernehmen('../absichern/build.mjs', '../bau/absichern.html', 'absichern');
   nachweisseiteBauen();
   loeschlosUebernehmen();
 }
@@ -127,6 +128,7 @@ function nachweisseiteBauen() {
   const spiele = [
     { id: 'fwdv3', name: 'Einsatzbereit', abzeichen: abzeichenSchluessel('../src/data/fwdv3.js') },
     { id: 'brennen', name: 'Brennen & Löschen', abzeichen: abzeichenSchluessel('../brennen/src/data/brandlehre.js') },
+    { id: 'absichern', name: 'Erst sichern!', abzeichen: abzeichenSchluessel('../absichern/src/data/absicherung.js') },
   ];
 
   const seite = `<!doctype html>

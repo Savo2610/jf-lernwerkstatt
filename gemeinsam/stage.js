@@ -399,36 +399,9 @@ function textSchild(text, opt) {
    darf also nicht per Object.assign gesetzt werden) */
 function bei(objekt, x, y, z) { objekt.position.set(x, y, z); return objekt; }
 
-/* ---------- kleine Animationshilfe ---------------------------------------- */
-/* Laufende Bewegungen; wird von Stage aus jedem Frame weitergedreht.         */
-const Bewegung = {
-  liste: [],
-  /* Stage.leeren() wirft alle Update-Funktionen weg – auch unsere. Deshalb
-     nicht "einmal anmelden und gut", sondern bei jeder neuen Bewegung
-     pruefen, ob der Taktgeber noch haengt. Sonst laufen Figuren auf der
-     Stelle, weil ihre Bewegung nie weitergedreht wird.                     */
-  init() {
-    if (!this._fn) {
-      this._fn = (dt) => {
-        for (let i = this.liste.length - 1; i >= 0; i--) {
-          const b = this.liste[i];
-          b.t += dt;
-          const p = clamp(b.t / b.dauer, 0, 1);
-          b.schritt(b.glatt ? easeInOutCubic(p) : p, p);
-          if (p >= 1) { this.liste.splice(i, 1); if (b.fertig) b.fertig(); }
-        }
-      };
-    }
-    if (Stage.updates.indexOf(this._fn) < 0) Stage.anmelden(this._fn);
-  },
-  neu(dauer, schritt, fertig, glatt) {
-    this.init();
-    const b = { t: 0, dauer: Math.max(.01, dauer), schritt, fertig, glatt: glatt !== false };
-    this.liste.push(b);
-    return b;
-  },
-  alleWeg() { this.liste.length = 0; },
-};
+/* Die Animationshilfe `Bewegung` stand frueher hier. Sie kennt kein 3D und
+   liegt jetzt in gemeinsam/util.js – die 2D-Seite „Erst sichern!" braucht sie
+   genauso und bringt keine Three-Buehne mit.                                */
 
 /* Figur zu einem Punkt laufen lassen (dreht sich in Laufrichtung) */
 function figurGehen(f, ziel, tempo, danach) {

@@ -1,13 +1,14 @@
 # Lernwerkstatt der Jugendfeuerwehr Harheim
 
-Startseite und 3D-Lernspiele für die Jugendfeuerwehr, 10 bis 17 Jahre. Alles
+Startseite und Lernspiele für die Jugendfeuerwehr, 10 bis 17 Jahre. Alles
 läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit.
 
 | Adresse | Was | Quelle |
 |---|---|---|
 | `jf.veerka.mp/` | Startseite, 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
-| `jf.veerka.mp/fwdv3/` | **Einsatzbereit** — FwDV 3, Ausgabe Februar 2008 | `src/` |
-| `jf.veerka.mp/brennen-loeschen/` | **Brennen & Löschen** — Brandlehre | `brennen/src/` |
+| `jf.veerka.mp/fwdv3/` | **Einsatzbereit** — FwDV 3, Ausgabe Februar 2008, 3D | `src/` |
+| `jf.veerka.mp/brennen-loeschen/` | **Brennen & Löschen** — Brandlehre, 3D | `brennen/src/` |
+| `jf.veerka.mp/absichern/` | **Erst sichern!** — Verkehrsabsicherung nach FwDV 1, Draufsicht in 2D | `absichern/src/` |
 | `jf.veerka.mp/loeschlos/` | **Löschlos** — Truppauslosung für den Gruppenabend | `loeschlos/` |
 
 Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um, `/löschlos` mit
@@ -15,7 +16,8 @@ Umlaut auf `/loeschlos/`.
 
 **Live:** Startseite https://jf.veerka.mp · Einsatzbereit
 https://jf.veerka.mp/fwdv3/ · Brennen & Löschen
-https://jf.veerka.mp/brennen-loeschen/ · Löschlos https://jf.veerka.mp/loeschlos/
+https://jf.veerka.mp/brennen-loeschen/ · Erst sichern!
+https://jf.veerka.mp/absichern/ · Löschlos https://jf.veerka.mp/loeschlos/
 
 ## Wo was steht
 
@@ -118,6 +120,56 @@ Aufgabe 2 eine eigene Runde.
 Beides steht so in den Unterlagen der Hessischen Landesfeuerwehrschule, siehe
 [Quellen](#quellen).
 
+## Erst sichern! (`absichern/`)
+
+Die Verkehrsabsicherung nach **FwDV 1, Kapitel 19**. Anders als die beiden
+anderen Lernseiten spielt sie nicht in 3D, sondern in der **Draufsicht**: Man
+schaut von oben auf die Straße, fährt das Löschfahrzeug an, stellt es hin und
+setzt Warndreieck, Warnleuchte und Leitkegel. Abstände liest man von oben ab,
+nicht aus der Froschperspektive — deshalb hier SVG statt Three.js.
+
+| # | Aufgabe | Inhalt |
+|---|---------|--------|
+| 1 | Wir kommen an | Wo hält das Fahrzeug? Was bleibt eingeschaltet? Auf welcher Seite steigt man aus, wo tritt man an? Und: absichern kommt **vor** der Versorgung oder parallel dazu |
+| 2 | Was nehmen wir mit? | Der Befehl „… zum Sichern gegen den fließenden Straßenverkehr … vor!", der Wassertrupp und sein Gerät — Warndreieck und Warnleuchte immer, der Rest auf Befehl |
+| 3 | Innerorts | 100 Meter, nach beiden Seiten. Der Weg dorthin führt über das Bankett, nicht über die Fahrbahn. Die Verjüngung wird von innen nach außen aufgebaut |
+| 4 | Landstraße | 200 Meter — und was eine Kurve oder eine Kuppe daraus macht. Dazu der Sicherungsposten |
+| 5 | Autobahn (Boss) | 800 Meter entgegen der Fahrtrichtung, alle 200 Meter wiederholt, Fahrspur sperren — und ein zweites Fahrzeug, weil das Material eines Löschfahrzeugs nicht reicht |
+
+**Die Seite ist kürzer als die beiden anderen, und das ist Absicht.** Sie ist
+die Vorbereitung auf die **Jugendflamme Stufe 2**: fünf Aufgaben, die man allein
+durchgeht, bevor man es auf dem Hof mit echten Kegeln macht. Einen Beamer-Modus
+gibt es deshalb nicht — ein Quiz-Duell über Abstände wäre ein anderes Spiel.
+
+### Die Zahlen
+
+| | Beginn der Absicherung |
+|---|---|
+| innerorts (geschlossene Ortschaft) | **100 m** |
+| außerorts (Landstraße) | **200 m** |
+| Autobahn ohne Geschwindigkeitsbegrenzung | **800 m**, Zeichen alle **200 m** wiederholen |
+
+Dazu die Regeln, an denen im Spiel mehr hängt als an den Zahlen: Bei
+Gegenverkehr wird **nach beiden Seiten** gesichert, auf Richtungsfahrbahnen nur
+**entgegen der Fahrtrichtung**. **Leitpfosten stehen 50 Meter auseinander** —
+sie sind das Maßband der Einsatzstelle, und der Regler im Spiel rechnet sie
+deshalb immer mit. Und eine Fahrspur sperrt man mit **fünf Leitkegeln und
+mindestens zwei Blitzleuchten**, nicht mit einer Reihe quer über die Straße.
+
+### Ein gebrochener Maßstab
+
+Eine Einsatzstelle ist dreißig Meter lang, die Absicherung davor achthundert.
+Beides gleichzeitig maßstäblich geht nicht — auf einem Handy wäre entweder das
+Fahrzeug ein Strich oder die 800 Meter außerhalb des Bildes. Die Zeichnung in
+der FwDV 1 löst das, indem sie den Maßstab bricht und ein `//` an die
+Bruchstelle setzt; der Plan hier macht es genauso.
+
+**Quer** ist ein Meter dagegen überall gleich: Eine Fahrspur ist 3,5 m breit
+und sieht auf jedem Plan gleich breit aus. Fahrzeuge werden längs nicht
+mitgestaucht, sondern bekommen `plan.symbolSkala` — im Nahplan ist die 1, auf
+dem Übersichtsplan deutlich kleiner. Einzelheiten stehen oben in
+`absichern/src/welt/plan.js`.
+
 ## Löschlos (`loeschlos/`)
 
 Kein Lernspiel, sondern ein Werkzeug für den Gruppenabend: eintragen, wer da
@@ -138,7 +190,8 @@ welche Position und welchen Trupppartner hatte. Alles Weitere steht in
   Die Oberfläche und die Kommentare sind deutsch, der Code streckenweise nicht.
 - **Es steht unter MIT**, nicht unter CC BY 4.0 — siehe [LIZENZ.md](LIZENZ.md).
 
-Auf der Startseite steht es als Glücksrad an vierter Station
+Auf der Startseite steht es als Glücksrad an vierter Station, zwischen
+„Brennen & Löschen" und „Erst sichern!"
 (`kulisseLosrad` in `hub/src/szene.js`). Die neun Felder sind die neun Plätze
 der Gruppe, in den Farben der App: rot Angriffstrupp, blau Wassertrupp, grün
 Schlauchtrupp, Gold für den Einheitsführer, Orange für den Melder, Stahl für
@@ -148,7 +201,7 @@ der Knopf auf der Karte.
 ## Startseite (`hub/`)
 
 Unter https://jf.veerka.mp liegt die Übersicht aller Lernseiten. Sie steckt im
-Ordner `hub/` und bringt beim Bauen das Spiel gleich mit — beides wird als
+Ordner `hub/` und bringt beim Bauen alle Lernseiten gleich mit — alles wird als
 **eine** Auslieferung veröffentlicht.
 
 Die Seite ist eine Straße durch Harheim, von der Seite gesehen. Scrollen fährt
@@ -163,7 +216,7 @@ Themen (`HALT_START` gegen `HALT_GEWICHT` in `hub/src/main.js`) — es gibt dort
 nichts zu lesen, also soll es schnell losgehen.
 
 Am anderen Ende steht die **Baustelle**: eine Station ohne Thema, mit Bauzaun,
-Kran und einer Tafel „Thema 3 — ?". Ihre Karte hat zwei Knöpfe, „Wird gerade
+Kran und einer Tafel „Thema 4 — ?". Ihre Karte hat zwei Knöpfe, „Wird gerade
 gebaut" und „Hilf mit beim Bauen"; der zweite führt ins GitHub-Repo. Sie ist
 absichtlich die letzte Station — die Absperrung am Straßenende setzt `welt.js`
 automatisch dahinter, sie wandert also mit, sobald ein Thema dazukommt. Wird
@@ -226,13 +279,15 @@ Nach draußen führen drei Wege, alle bewusst am Rand:
 
 In den Karten steht sonst nichts davon — die sind für Lerninhalte da.
 
-Ein Thema hinzufügen: Eintrag in `hub/src/themen.js` ergänzen und `kulisse` auf
-eine Kulisse aus `hub/src/szene.js` setzen. Scrolllänge, Streckenplan und die
+Ein Thema hinzufügen: Eintrag in `hub/src/themen.js` **vor der Baustelle**
+ergänzen und `kulisse` auf eine Kulisse aus `hub/src/szene.js` setzen.
+Die Baustelle rückt dann eine Station weiter — ihre Nummer steht an zwei
+Stellen, im `ober` des Eintrags und auf der Bautafel in `kulisseBaustelle()`. Scrolllänge, Streckenplan und die
 Liste im Fuß richten sich automatisch danach. Eine neue Kulisse ist eine
 Funktion, die SVG zurückgibt — Boden ist `y = 0`, nach oben ist negativ.
 
-Startseite und Spiel liegen bewusst auf **einer** Domain als Pfade und nicht
-auf zwei Subdomains: nur dann teilen sie sich den Browserspeicher. Ein
+Startseite und Lernseiten liegen bewusst auf **einer** Domain als Pfade und
+nicht auf mehreren Subdomains: nur dann teilen sie sich den Browserspeicher. Ein
 gemeinsamer Fortschritt über mehrere Themen hinweg — Medaillen, Gesamt-XP —
 ist damit später ohne Umzug möglich.
 
@@ -243,14 +298,17 @@ das Profil (Name, Helmfarbe), danach direkt die Levelauswahl. Den Beamer-Modus
 und das Zurücksetzen des Fortschritts findet man im Profil.
 
 Brennen & Löschen fragt nur nach dem Namen: dort steht keine Figur im Bild,
-sondern ein Feuer — eine Helmfarbe wäre nirgends zu sehen.
+sondern ein Feuer — eine Helmfarbe wäre nirgends zu sehen. „Erst sichern!"
+genauso: Von oben sieht man vor allem die Warnweste, und die ist bei allen
+gleich.
 
 ## Zwei Modi
 
-Beide Spiele haben beide Modi, und beide funktionieren gleich.
+Die beiden 3D-Spiele haben beide Modi, und beide funktionieren gleich.
+**„Erst sichern!" hat nur den ersten** — siehe unten.
 
 - **Alleine üben** — Fortschritt, XP, sieben Ränge, Abzeichen (elf bei
-  Einsatzbereit, sechzehn bei Brennen & Löschen). Speichert lokal im Browser
+  Einsatzbereit, sechzehn bei Brennen & Löschen, elf bei Erst sichern!). Speichert lokal im Browser
   (`localStorage`), nichts geht nach außen. Der Boss-Level bleibt verschlossen,
   bis in den Übungen sieben von 21 möglichen Sternen zusammen sind. Wer in
   allen acht Aufgaben drei Sterne hat (24 von 24), bekommt das Meisterabzeichen.
@@ -269,6 +327,12 @@ Die Spielarten unterscheiden sich:
 | Schnell | Blitzrunde, zehn Fragen | Blitzrunde, zehn Fragen |
 | Dazu | Memory (Begriff und Erklärung) | — |
 | Und | Hot Seat, Punkte von Hand | Hot Seat, Punkte von Hand |
+
+**„Erst sichern!" hat keinen Beamer-Modus.** Die Seite ist kurz und als
+Vorbereitung auf die Jugendflamme Stufe 2 gedacht, nicht als Programm für einen
+Gruppenabend: fünf Aufgaben, die man allein durchgeht, bevor man es auf dem Hof
+mit echten Kegeln macht. Die Begründung steht auch oben in
+`absichern/src/main.js`, damit sie niemand versehentlich „nachrüstet".
 
 Die Feuerwand ist jeden Abend dieselbe. Das ist Absicht: Wer die Fragen schon
 kennt, kann sie beantworten, und genau darum geht es. Ein Gruppenabend ist
@@ -323,7 +387,9 @@ Damit lohnt es sich nicht, Aufgabe 1 endlos zu wiederholen. Die Logik steht in
 
 ## Technik
 
-- Three.js (r169), vollständig in die HTML-Datei eingebettet
+- Three.js (r169), vollständig in die HTML-Datei eingebettet — aber nur dort,
+  wo es eine 3D-Bühne gibt. „Erst sichern!" zeichnet SVG und baut mit
+  `three: false`; seine Datei ist deshalb rund 210 KB statt 1,1 MB
 - Kein Build-Tooling nötig zum Ausführen, keine Abhängigkeiten zur Laufzeit
 - Einziger externer Verweis: Google Fonts (Archivo Black + Outfit)
 - Kommandos werden über die eingebaute Sprachausgabe des Browsers gesprochen
@@ -338,22 +404,24 @@ Damit lohnt es sich nicht, Aufgabe 1 endlos zu wiederholen. Die Logik steht in
 ## Entwickeln
 
 ```bash
-npm run build       # Startseite und beide Spiele, alles nach hub/dist/
-npm run dev         # alles wie im Netz, http://localhost:8413
-npm run dev:spiel   # nur Einsatzbereit, http://localhost:8412
-npm run dev:brennen # nur Brennen & Löschen, http://localhost:8414
+npm run build         # Startseite und alle Lernseiten, alles nach hub/dist/
+npm run dev           # alles wie im Netz, http://localhost:8413
+npm run dev:spiel     # nur Einsatzbereit, http://localhost:8412
+npm run dev:brennen   # nur Brennen & Löschen, http://localhost:8414
+npm run dev:absichern # nur Erst sichern!, http://localhost:8415
 ```
 
-`npm run build` ist `node hub/build.mjs`; das ruft `build.mjs` im Hauptordner
-und `brennen/build.mjs` auf und legt deren Ergebnisse als
-`hub/dist/fwdv3/index.html` und `hub/dist/brennen-loeschen/index.html` neben
-die Startseite. **Ein Befehl baut alles** — so kann man nicht versehentlich
-einen alten Stand eines Spiels veröffentlichen. Einzeln bauen geht mit
-`node build.mjs` bzw. `node brennen/build.mjs`; die Reihenfolge der Quelldateien
-steht jeweils dort.
+`npm run build` ist `node hub/build.mjs`; das ruft `build.mjs` im Hauptordner,
+`brennen/build.mjs` und `absichern/build.mjs` auf und legt deren Ergebnisse als
+`hub/dist/fwdv3/index.html`, `hub/dist/brennen-loeschen/index.html` und
+`hub/dist/absichern/index.html` neben die Startseite. **Ein Befehl baut alles** —
+so kann man nicht versehentlich einen alten Stand einer Seite veröffentlichen.
+Einzeln bauen geht mit `node build.mjs`, `node brennen/build.mjs` bzw.
+`node absichern/build.mjs`; die Reihenfolge der Quelldateien steht jeweils dort.
 
-Die Spiele landen dabei zuerst roh in `bau/` (`bau/fwdv3.html`,
-`bau/brennen-loeschen.html`) und werden von dort nach `hub/dist/` übernommen.
+Die Lernseiten landen dabei zuerst roh in `bau/` (`bau/fwdv3.html`,
+`bau/brennen-loeschen.html`, `bau/absichern.html`) und werden von dort nach
+`hub/dist/` übernommen.
 `hub/dist/` ist das **einzige** `dist/` im Repo, und das mit Absicht: solange es
 ein zweites gab, konnte ein falsch aufgerufener Deploy still das rohe Spiel
 statt der ganzen Auslieferung veröffentlichen. Näheres in
@@ -375,8 +443,8 @@ Von Hand geht es auch:
 npm run deploy
 ```
 
-Ein Befehl für alles: `hub/build.mjs` baut beide Spiele mit und legt sie neben
-die Startseite, veröffentlicht wird alles zusammen. Der Umweg ist Absicht — so
+Ein Befehl für alles: `hub/build.mjs` baut alle Lernseiten mit und legt sie
+neben die Startseite, veröffentlicht wird alles zusammen. Der Umweg ist Absicht — so
 kann man nicht versehentlich einen alten Stand eines Spiels mit hochladen. Was von
 Hand hochgeladen wurde, überschreibt der nächste Push aus `main` allerdings
 wieder — also hinterher committen.
@@ -389,10 +457,11 @@ Ein einziger Cloudflare Worker (`hub/wrangler.jsonc`, Code in
 | `jf.veerka.mp/` | Startseite |
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen |
+| `jf.veerka.mp/absichern/` | Erst sichern! |
 | `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query bleibt erhalten |
 
-Ein Spielpfad ohne abschließenden Schrägstrich wird auf die Fassung mit
-Schrägstrich umgeleitet (`SPIELE` in `hub/src/worker.js`) — sonst landet er in
+Ein Seitenpfad ohne abschließenden Schrägstrich wird auf die Fassung mit
+Schrägstrich umgeleitet (`UNTERSEITEN` in `hub/src/worker.js`) — sonst landet er in
 der Ersatzseite.
 
 `jf.veerka.mp` hängt an einer **Custom Domain** — den DNS-Eintrag hat
@@ -414,28 +483,29 @@ Autodeploy steht ausführlich in [docs/deploy.md](docs/deploy.md).
   den Gruppenabend. Bei Brennen & Löschen: `dreieck`, `brandklassen`,
   `sauerstoff`, `zuendung`, `loeschverfahren`, `loeschmittel`,
   `feuerloescher`, `ernstfall` – auch hier umgeht der Direktsprung die
-  Sternsperre des Boss-Levels
-- `?modus=beamer` startet den Beamer-Modus – gibt es in beiden Spielen
-- `window.__eb` bzw. `window.__bl` gibt im Browser Zugriff auf Stage, State, UI
-  und die Fehlerliste des jeweiligen Spiels
+  Sternsperre des Boss-Levels. Bei Erst sichern!: `ankommen`, `geraet`,
+  `innerorts`, `landstrasse`, `autobahn`
+- `?modus=beamer` startet den Beamer-Modus – gibt es in den beiden 3D-Spielen
+- `window.__eb`, `window.__bl` bzw. `window.__as` gibt im Browser Zugriff auf
+  Bühne, State, UI und die Fehlerliste der jeweiligen Seite
 
 ### Aufbau
 
 ```
 hub/                 Startseite + Auslieferung von allem (jf.veerka.mp)
-  build.mjs          baut Startseite und beide Spiele nach hub/dist/
+  build.mjs          baut Startseite und alle Lernseiten nach hub/dist/
   wrangler.jsonc     der eine Worker für alle Adressen
   src/themen.js      die Lernseiten – hier kommt ein neues Thema rein
   src/szene.js       Fahrzeuge, Gebäude, Bäume als SVG
   src/welt.js        setzt die Strecke aus den Themen zusammen
   src/main.js        Scrollposition -> Fahrt, Karten, Streckenplan
   src/worker.js      Umleitung der alten Adresse, sonst nur Dateien
-gemeinsam/           was beide Spiele teilen – siehe unten
-  bauen.mjs          der Bauvorgang: Three einbetten, alles zu einer Datei
-  util.js            Helfer + Levelregister
+gemeinsam/           was alle Lernseiten teilen – siehe unten
+  bauen.mjs          der Bauvorgang: alles zu einer Datei (Three nur bei Bedarf)
+  util.js            Helfer, Levelregister, die Animationshilfe `Bewegung`
   state.js           Spielstand, Ränge, Teams
   audio.js           WebAudio-Klänge + Sprachausgabe
-  stage.js           Renderer, Kamera, Bildeinpassung, Bewegungen, Laufwege
+  stage.js           3D-Bühne: Renderer, Kamera, Bildeinpassung, Laufwege
   ui.js              Bildschirme, Ziehen & Ablegen, Hotspots, Seitenlayout
   stil.css           Designsystem, ganz über Farbvariablen
 src/                 Einsatzbereit (jf.veerka.mp/fwdv3/)
@@ -467,34 +537,59 @@ brennen/             Brennen & Löschen (jf.veerka.mp/brennen-loeschen/)
   src/levels/        ein Level je Datei, trägt sich selbst in LEVELS ein
   src/beamer.js      Gruppenabend-Modus mit der Feuerwand
   src/main.js        Start, Menüs, Levelaufruf
+absichern/           Erst sichern! (jf.veerka.mp/absichern/)
+  build.mjs          eigener Bauvorgang, `three: false` – hier gibt es kein 3D
+  server.mjs         Vorschau auf Port 8415
+  src/spiel.js       Name und Speicherschlüssel (kein `licht`: keine 3D-Bühne)
+  src/farben.css     die graue Palette: Asphalt, Warnorange
+  src/stil-extra.css nur was es hier gibt: Auftragskarte, Bedienfeld, Marken
+  src/data/absicherung.js  alle Inhalte (Abstände, Geräte, Ausrüstung, Regeln)
+  src/buehne.js      die 2D-Bühne in SVG + `Marken` (Knöpfe an Weltpunkten)
+  src/welt/plan.js   die Straße von oben, mit gebrochenem Längsmaßstab
+  src/welt/geraete.js  Fahrzeuge, Kegel, Warndreieck, Figuren
+  src/bausteine.js   Unterbau, Auftragskarte, Abstandsregler, Geräteleiste
+  src/levels/        eine Aufgabe je Datei, trägt sich selbst in LEVELS ein
+  src/main.js        Start, Menüs, Levelaufruf
 ```
 
 ### Die gemeinsame Basis (`gemeinsam/`)
 
-Beide Spiele benutzen dieselbe Bühne, denselben Spielstand, dieselben
-Bildschirme. Was ein Spiel für sich behält, sind Inhalte, Welt, Level — und
-zwei kleine Dateien, über die es die Basis einstellt:
+Alle drei Lernseiten benutzen denselben Spielstand, dieselben Bildschirme,
+dieselben Klänge und dasselbe Designsystem. Was eine Seite für sich behält,
+sind Inhalte, Welt, Level — und zwei kleine Dateien, über die sie die Basis
+einstellt:
 
 - **`src/spiel.js`** definiert `SPIEL`: Kennung, Name, Speicherschlüssel,
   Name des Meister-Abzeichens und `licht` (Himmelsverlauf, Nebel, Haupt- und
   Himmelslicht, Belichtung). `gemeinsam/stage.js` baut daraus die Stimmung —
   deshalb ist die eine Seite Nacht und die andere heller Tag, ohne dass an der
-  Bühne etwas doppelt vorliegt.
+  Bühne etwas doppelt vorliegt. „Erst sichern!" hat kein `licht`: Eine
+  Draufsicht hat keinen Himmel.
 - **`src/farben.css`** setzt die Farbvariablen. `gemeinsam/stil.css` benutzt
   ausschließlich Variablen, keine festen Farben; eine neue Palette ist damit
   eine Datei und kein Umbau.
 
-Die Speicherschlüssel sind verschieden (`fwdv3-einsatzbereit-v1` gegen
-`jf-brennen-loeschen-v1`), obwohl beide auf einer Domain liegen und sich den
-Browserspeicher teilen — jedes Spiel hat seinen eigenen Fortschritt. Der
+Die Speicherschlüssel sind verschieden (`fwdv3-einsatzbereit-v1`,
+`jf-brennen-loeschen-v1`, `jf-absichern-v1`), obwohl alle auf einer Domain
+liegen und sich den Browserspeicher teilen — jede Seite hat ihren eigenen
+Fortschritt. Der
 gemeinsame Speicher ist der Grund, warum das später auch anders gehen kann.
 
+**Die Bühne teilen sich nur die beiden 3D-Spiele.** `gemeinsam/stage.js`
+braucht Three.js; „Erst sichern!" zeichnet stattdessen SVG und bringt seine
+eigene Bühne mit (`absichern/src/buehne.js`). Die erfüllt denselben kleinen
+Vertrag, den `gemeinsam/ui.js` an eine Bühne stellt — `bildVersatz`,
+`anmelden`, `abmelden`, `updates` —, und deshalb laufen Bildschirme,
+Ergebnisse und das Ziehen & Ablegen dort unverändert. Die Animationshilfe
+`Bewegung` steht aus demselben Grund in `gemeinsam/util.js` und nicht in
+`stage.js`: Sie weiß nichts von 3D.
+
 Dazu kommt `gemeinsam/nachweis.js`: der Prüfcode für „alle Abzeichen". Er
-gehört hierhin, weil beide Spiele ihn ausstellen und die Nachweisseite beide
+gehört hierhin, weil alle Seiten ihn ausstellen und die Nachweisseite alle
 prüfen können muss (siehe „Nachweis" weiter oben).
 
-Wer an `gemeinsam/` etwas ändert, ändert **beide** Spiele. Danach beide
-ansehen, nicht nur eines.
+Wer an `gemeinsam/` etwas ändert, ändert **alle drei** Lernseiten. Danach alle
+drei ansehen, nicht nur eine.
 
 ### Etwas ändern
 
@@ -595,6 +690,37 @@ In **Brennen & Löschen**:
 - **Beamer-Modus:** `brennen/src/beamer.js`, Einstieg über `?modus=beamer`
   oder den Knopf im Profil.
 
+In **Erst sichern!**:
+
+- **Abstände und Geräte:** `absichern/src/data/absicherung.js`. Dort stehen
+  `STRASSEN` (100 / 200 / 800 Meter), `LEITPFOSTEN_ABSTAND`, die `GERAETE`,
+  die `AUSRUESTUNG` des Wassertrupps, der `SICHERUNGSBEFEHL`, die `BELADUNG`
+  eines Löschfahrzeugs und die `REGELN`. Änderungen dort ändern, was Kinder
+  lernen — gegen `referenz/verkehrsabsicherung/` prüfen, nicht raten.
+- **Die Straße:** `baueStrecke(opt)` in `absichern/src/welt/plan.js`.
+  `art` ist `'gegenverkehr'` oder `'richtung'` (Autobahn mit Standstreifen und
+  Leitplanken), `von`/`bis` der gezeichnete Abschnitt in Metern, `nah` die
+  Zone um die Einsatzstelle im großen Maßstab, `nahProM`/`fernProM` die
+  Einheiten je Meter davor und dahinter. Zurück kommt unter anderem `mx(m)`
+  (Meter → Einheiten), `spurMitte(i)`, `bankettMitte()` und `symbolSkala`.
+- **Der Maßstab für Fahrzeuge:** `plan.symbolSkala`, als fünftes Argument an
+  `stellen()`. Ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig
+  Meter lang. Menschen und Geräte bekommen sie **nicht** — die wären dann
+  nicht mehr zu sehen.
+- **Knöpfe auf der Karte:** `planMarke(x, y, text, opt)` in
+  `absichern/src/bausteine.js`, darunter `Marken` aus `buehne.js`. Sie hängen
+  mit ihrem Anker an der Welt und haben ihre Größe in Bildschirmpixeln — sonst
+  sind sie am Handy nicht zu treffen. Ihr `transform` gehört der Bühne.
+- **Bildausschnitt:** `planZeigen(plan)` setzt ihn einmal, `bedienfeld()` führt
+  ihn nach: Es misst die freie Fläche zwischen Kopfzeile, Auftragskarte und
+  Bedienfeld aus und schiebt den Plan dorthin. Ein fester Wert geht hier nicht,
+  weil die Bedienfelder verschieden hoch sind.
+- **Rückmeldung:** `unterbau(...)` — dasselbe wie drüben, aus demselben Grund:
+  Ein `UI.toast` läge auf den Antwortknöpfen.
+- **Neue Aufgabe:** Datei in `absichern/src/levels/` anlegen, `LEVELS.push({…})`,
+  Dateiname bestimmt die Reihenfolge.
+- **Boss-Sperre:** `BOSS_STERNE` in `absichern/src/main.js` (sechs von zwölf).
+
 ### Bildausschnitt
 
 Kameras werden nicht mehr von Hand gesetzt, sondern eingepasst:
@@ -646,6 +772,24 @@ die Quelle dorthin.
   die Brandklassen folgen DIN EN 2.
 
 Zitate sind mit „Lernunterlage · " gekennzeichnet.
+
+**Erst sichern!:**
+
+- `referenz/verkehrsabsicherung/FwDV1-2006-Kap19-Sichern.txt` — Feuerwehr-
+  Dienstvorschrift 1 „Grundtätigkeiten – Lösch- und Hilfeleistungseinsatz",
+  Stand Januar 2006, Kapitel 19 „Sichern von Einsatzstellen gegen fließenden
+  Verkehr" und der Abschnitt „Trupp mit sichernden Aufgaben" aus 3.3.2
+- `referenz/verkehrsabsicherung/HLFS-Truppmann1-Verhalten-bei-Gefahr-2013.txt` —
+  Hessische Landesfeuerwehrschule, Leitfaden zur Truppausbildung,
+  Truppmannausbildung Teil 1, „Verhalten bei Gefahr", Abschnitt 2.4
+  „Fließender Straßenverkehr", Stand 24.06.2013
+- `referenz/verkehrsabsicherung/QUELLEN.md` — die Zahlen, an denen das Spiel
+  hängt, an einer Stelle zusammengeschrieben
+
+Zitate sind dort mit „FwDV 1 · " gekennzeichnet. Wo die Lernunterlage etwas
+sagt, was die Vorschrift nicht sagt, steht es im Fließtext und nicht im
+Zitatkasten — zwei Herkunftsmarken in einem Spiel verwirren mehr, als sie
+klären.
 
 ## Lizenz
 

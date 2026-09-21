@@ -13,21 +13,33 @@ Vier Seiten, ein Worker, eine Domain:
 | `jf.veerka.mp/` | Startseite („Lernwerkstatt"), 2D-SVG, Scrollen fährt ein Feuerwehrauto | `hub/src/` |
 | `jf.veerka.mp/fwdv3/` | das Spiel „Einsatzbereit" (FwDV 3), 3D mit Three.js | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | das Spiel „Brennen & Löschen" (Brandlehre), 3D | `brennen/src/` |
+| `jf.veerka.mp/absichern/` | „Erst sichern!", Verkehrsabsicherung nach FwDV 1, 2D-Draufsicht | `absichern/src/` |
 | `jf.veerka.mp/loeschlos/` | „Löschlos", Truppauslosung für den Gruppenabend, PWA | `loeschlos/` |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart, nirgends verlinkt | `hub/src/nachweis.*` |
 
-Beide Spiele stehen auf derselben Basis in `gemeinsam/`: Bühne, Spielstand,
-Bildschirme, Klänge, Designsystem. Beide haben acht Aufgaben und einen
-Beamer-Modus für den Gruppenabend (`?modus=beamer`) — drüben mit Quiz-Duell und
-Memory, hier mit der Feuerwand. Eigen ist jedem nur, was es zeigt — plus
-`src/spiel.js` (Name, Speicher, Lichtstimmung) und `src/farben.css` (Palette).
-**Wer `gemeinsam/` anfasst, ändert beide Spiele und muss beide ansehen.**
+Alle drei Lernseiten stehen auf derselben Basis in `gemeinsam/`: Spielstand,
+Bildschirme, Klänge, Designsystem. Eigen ist jeder nur, was sie zeigt — plus
+`spiel.js` (Name, Speicher) und `farben.css` (Palette).
+**Wer `gemeinsam/` anfasst, ändert alle drei und muss alle drei ansehen.**
+
+Die beiden 3D-Spiele teilen sich zusätzlich die Bühne (`gemeinsam/stage.js`,
+Three.js), haben acht Aufgaben und einen Beamer-Modus für den Gruppenabend
+(`?modus=beamer`) — „Einsatzbereit" mit Quiz-Duell und Memory, „Brennen &
+Löschen" mit der Feuerwand.
+
+**„Erst sichern!" fällt bewusst aus diesem Muster.** Es schaut von oben auf
+eine Straße, zeichnet SVG statt 3D und bringt deshalb seine eigene Bühne mit
+(`absichern/src/buehne.js`); Three.js ist dort gar nicht im Bundle
+(`three: false` in seinem `build.mjs`). Es hat fünf Aufgaben statt acht und
+keinen Beamer-Modus: Es ist die Vorbereitung auf die **Jugendflamme Stufe 2**,
+kein Programm für einen Gruppenabend.
 
 Zielgruppe ist die **Jugendfeuerwehr Harheim**, 10 bis 17 Jahre. Inhaltliche
 Grundlage für „Einsatzbereit" ist die FwDV 3 von 2008; Sitz- und
 Antreteordnung stammen aus den Unterlagen der Wehr und weichen bewusst an
 Stellen von der Vorschrift ab. „Brennen & Löschen" folgt den Unterlagen der
-Hessischen Landesfeuerwehrschule (`referenz/brennen-loeschen/`).
+Hessischen Landesfeuerwehrschule (`referenz/brennen-loeschen/`), „Erst
+sichern!" der FwDV 1 von 2006, Kapitel 19 (`referenz/verkehrsabsicherung/`).
 
 ## Hausordnung
 
@@ -55,17 +67,18 @@ Code sofort auf.
 ## Bauen, ansehen, prüfen
 
 ```bash
-npm run build       # baut alles nach hub/dist/ (beide Spiele inklusive)
-npm run dev         # alles wie im Netz, Port 8413
-npm run dev:spiel   # nur Einsatzbereit, Port 8412
-npm run dev:brennen # nur Brennen & Löschen, Port 8414
+npm run build         # baut alles nach hub/dist/ (alle drei Lernseiten inklusive)
+npm run dev           # alles wie im Netz, Port 8413
+npm run dev:spiel     # nur Einsatzbereit, Port 8412
+npm run dev:brennen   # nur Brennen & Löschen, Port 8414
+npm run dev:absichern # nur Erst sichern!, Port 8415
 ```
 
-`npm run build` ruft `hub/build.mjs`, und das ruft `build.mjs` im Hauptordner
-und `brennen/build.mjs`. **Ein Befehl baut alles** — so kann man nicht
-versehentlich einen alten Stand eines Spiels veröffentlichen. Die rohen Spiele
-liegen dabei in `bau/`; `hub/dist/` ist das **einzige** `dist/` im Repo und
-muss es bleiben (siehe Fallen).
+`npm run build` ruft `hub/build.mjs`, und das ruft `build.mjs` im Hauptordner,
+`brennen/build.mjs` und `absichern/build.mjs`. **Ein Befehl baut alles** — so
+kann man nicht versehentlich einen alten Stand einer Seite veröffentlichen. Die
+rohen Seiten liegen dabei in `bau/`; `hub/dist/` ist das **einzige** `dist/` im
+Repo und muss es bleiben (siehe Fallen).
 
 Zum Prüfen im Browser: [docs/pruefen.md](docs/pruefen.md). Da stehen die
 Konsolen-Haken, mit denen man ein Level oder eine Fahrt direkt anspringt,
@@ -87,8 +100,8 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
 
 ## Wo die Fallen liegen
 
-- **`src/data/fwdv3.js` und `brennen/src/data/brandlehre.js` sind Inhalt, kein
-  Code.** Änderungen dort ändern, was Kinder lernen. Prüfe gegen `referenz/`,
+- **`src/data/fwdv3.js`, `brennen/src/data/brandlehre.js` und
+  `absichern/src/data/absicherung.js` sind Inhalt, kein Code.** Änderungen dort ändern, was Kinder lernen. Prüfe gegen `referenz/`,
   rate nicht. Zwei Stellen, an denen das Spiel bewusst genauer ist als der
   Alltagssprachgebrauch:
   - **Dreieck mit vier Voraussetzungen.** Die drei Ecken sind brennbarer Stoff,
@@ -201,9 +214,10 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   rohe Einsatzbereit noch in einem zweiten `dist/` in der Wurzel lag, hat ein
   Deploy ohne `--config hub/wrangler.jsonc` genau dieses hochgeladen: die
   Startseite war weg, beide Spiele 404, und der Zurück-Knopf lief im Kreis.
-  Deshalb heißen die Zwischenstände jetzt `bau/fwdv3.html` und
-  `bau/brennen-loeschen.html`. Wer sie nach `dist/` zurückbenennt, holt einen
-  stillen Fehlschlag zurück, den man erst im Netz sieht.
+  Deshalb heißen die Zwischenstände jetzt `bau/fwdv3.html`,
+  `bau/brennen-loeschen.html` und `bau/absichern.html`. Wer sie nach `dist/`
+  zurückbenennt, holt einen stillen Fehlschlag zurück, den man erst im Netz
+  sieht.
 - **Der Nachweiscode haengt am Vornamen — und der Name ist deshalb ab dem
   ersten Abzeichen gesperrt** (`State.nameGesperrt()`). Ohne diese Sperre
   koennte ein fertiges Kind der ganzen Gruppe Codes ausstellen: Name aendern,
@@ -217,3 +231,39 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   bricht der Build absichtlich ab, statt still falsche Urteile zu fällen.
 - **`hub/vorschau/` liegt bewusst neben `hub/dist/`** und nicht darin: was in
   `dist/` liegt, lädt der Worker mit hoch.
+
+### Nur in „Erst sichern!" (`absichern/`)
+
+- **Der Längsmaßstab ist gebrochen, der Querschnitt nicht.** Quer ist ein
+  Meter immer `QUER` Einheiten, längs entscheidet der Plan (`nahProM`,
+  `fernProM` in `welt/plan.js`). Das ist Absicht — eine Einsatzstelle von
+  dreißig Metern und eine Absicherung von achthundert passen nicht gleichzeitig
+  maßstäblich auf einen Handybildschirm, und die FwDV-1-Zeichnung löst es
+  genauso. Folge: **jedes Fahrzeug braucht `plan.symbolSkala`** als fünftes
+  Argument von `stellen()`. Ohne sie ist ein Löschfahrzeug auf dem
+  Übersichtsplan fünfzig Meter lang und deckt die halbe Unfallstelle zu.
+- **Was auf dem Übersichtsplan nah beieinander liegt, liegt auf dem Handy
+  übereinander.** Eine Verjüngung aus vier Kegeln ist dort zwanzig Pixel breit;
+  vier Knöpfe darauf kann man nicht mehr treffen, sondern nur raten. Deshalb
+  wird die Reihenfolge der Kegel **gefragt** statt getippt, und wo wirklich
+  getippt wird (Aufgabe 5), liegen die Marken zweihundert Meter auseinander.
+- **Das Bedienfeld misst sich selbst aus.** `bedienfeld()` rechnet den
+  Bildversatz aus der freien Fläche zwischen Kopfzeile, Auftragskarte und
+  Panel — ein fester Wert lässt den Plan entweder verschwinden oder oben
+  kleben. Der Anteil ist nach unten gedeckelt (`Stage.frei`), sonst schrumpft
+  der Plan bei einer langen Auflösung auf Briefmarkengröße.
+- **Marken dürfen ihr eigenes `transform` nicht anfassen** — dieselbe Falle wie
+  bei `HotSpots` drüben. Die Bühne schreibt es jedes Bild neu; ein `:hover` mit
+  `transform` reißt die Marke in die Bildecke. Rahmen und Schatten animieren.
+- **Blinkende Teile brauchen `fill-opacity`, nicht `opacity`.** Die
+  Blinkanimation in `stil-extra.css` schreibt `opacity`, und CSS sticht das
+  SVG-Präsentationsattribut aus: Aus dem zarten Schein um das Blaulicht würde
+  sonst ein knallblauer Klecks.
+- **Das Sichthindernis muss weiter draußen liegen als der Regelabstand.**
+  In Aufgabe 4 steht die Kurve bei 230 Metern, nicht bei 170 — läge sie näher
+  an der Einsatzstelle, stünde das Warngerät auf 200 Metern längst davor und
+  die ganze Runde hätte keine Aufgabe mehr.
+- **`BELADUNG` ist bewusst knapp** (zwei Warndreiecke, zwei Warnleuchten).
+  Aufgabe 5 braucht vier von jedem, und genau daran merkt man, dass auf der
+  Autobahn ein zweites Fahrzeug dazugehört. Wer die Zahlen großzügiger macht,
+  nimmt der Aufgabe ihren Kern.
