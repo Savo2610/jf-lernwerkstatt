@@ -223,9 +223,9 @@ LEVELS.push({
           { kennung: 'WTrF', trupp: 'wasser' },
           { kennung: 'WTrM', trupp: 'wasser' },
         ];
-        /* Abstand der drei: Ein Namensschild ist gut vierzig Einheiten breit,
-           und zwei davon dürfen sich nicht überlappen – sonst liest man
-           „WTrFWTrM". */
+        /* Abstand der drei: Die Kennung unter einer Figur ist gut dreißig
+           Einheiten breit (`schildBreite`), und zwei davon dürfen sich nicht
+           überlappen – sonst liest man „WTrFWTrM". */
         const ABSTAND_FIGUR = 56;
         const ABSITZ_Y = h.y - 78;
 
@@ -243,9 +243,9 @@ LEVELS.push({
           const gut = welche === 'bankett';
           seiten[welche].node.classList.add(gut ? 'gesetzt' : 'falsch');
           if (!gut) { seiten.bankett.node.classList.add('gesetzt'); fehler++; sauber = false; }
-          /* Weit genug vom Fahrzeug weg, dass die Namensschilder nicht auf
-             dem Aufbau liegen: Ein Schild hängt 25 Einheiten unter seiner
-             Figur, und bei -40 landet es mitten auf dem Löschfahrzeug. */
+          /* Weit genug vom Fahrzeug weg, dass die Kennungen nicht auf dem
+             Aufbau liegen: Eine Kennung steht 22 Einheiten unter ihrer Figur,
+             und bei -40 landet sie mitten auf dem Löschfahrzeug. */
           MANNSCHAFT.forEach((mann, i) => figurSetzen(mLF + (i - 1) * ABSTAND_FIGUR, ABSITZ_Y, mann));
           gut ? Audio3.richtig() : Audio3.falsch();
           unten.hinweis(gut

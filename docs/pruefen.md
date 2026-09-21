@@ -167,6 +167,21 @@ biegt die ganze Straße; alles, was darauf steht, muss dann mit `aufPlan()`
 gesetzt werden statt mit `stellen()`. Sonst steht es dort, wo die Straße ohne
 Bogen gewesen wäre — also neben ihr.
 
+### Wenn der Plan beim „Weiter" zuckt
+
+Der Bildausschnitt kommt aus der gemessenen freien Fläche über dem Bedienfeld.
+Beim Bildschirmwechsel gibt es kurz zwei Felder, und wenn beide melden, springt
+das Bild. So sieht man, wer meldet:
+
+```js
+const echt = __as.Stage.bildVersatz.bind(__as.Stage);
+__as.Stage.bildVersatz = (o, r, f) => { console.log('Versatz', o, f); return echt(o, r, f); };
+```
+
+Pro Bildschirmwechsel darf **eine** Zeile kommen. Kommen zwei oder drei
+unmittelbar hintereinander mit verschiedenen `f`, meldet noch ein altes Feld
+mit — dann fehlt die Abmeldung in `bedienfeld()` (`feldWache`).
+
 ### Wenn die Vorschau versteckt ist
 
 Dasselbe wie bei den 3D-Seiten: In einer versteckten oder gedrosselten

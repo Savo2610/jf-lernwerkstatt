@@ -170,14 +170,27 @@ function planMarke(x, y, inhalt, opt) {
    `Stage.versatz` ist ein Anteil der sichtbaren Welthöhe, und die entspricht
    der Fensterhöhe. Der Weg in Pixeln lässt sich deshalb direkt umrechnen.
    -------------------------------------------------------------------------*/
+
+/* Es darf immer nur **ein** Bedienfeld den Ausschnitt bestimmen.
+
+   Bei einem Bildschirmwechsel bleibt der alte Bildschirm 260 ms lang im Baum,
+   während er ausblendet — sein Feld ist also noch `isConnected` und maß
+   munter weiter. Und weil die Bühne ihre Wachen von hinten nach vorn abläuft,
+   kam die *alte* zuletzt dran und gewann: Der Plan zuckte bei jedem „Weiter"
+   zwischen beiden Ausschnitten hin und her und sprang erst zurecht, wenn der
+   alte Bildschirm verschwand. Deshalb meldet ein neues Feld das vorige gleich
+   ab. Den Rest glättet die Bühne (`ausschnittZiehen` in buehne.js).        */
+let feldWache = null;
+
 function bedienfeld(screen, inhalt, opt) {
   const o = opt || {};
   const feld = el('div', { class: 'bedienfeld panel glas scrollbar' }, inhalt);
   screen.appendChild(el('div', { class: 'feldhuelle' }, feld));
 
+  if (feldWache) Stage.abmelden(feldWache);
+
   let letzte = '';
   const nachfuehren = () => {
-    if (!feld.isConnected) return;
     const hud = $('#hud');
     const oben = hud && !hud.hidden ? hud.getBoundingClientRect().bottom : 0;
     // Auch die Auftragskarte liegt über der Bühne und nimmt ihr Platz weg.
@@ -190,10 +203,22 @@ function bedienfeld(screen, inhalt, opt) {
     Stage.bildVersatz((innerHeight / 2 - (obenEcht + unten) / 2) / innerHeight, 0,
                       (unten - obenEcht) / innerHeight);
   };
-  const fn = Stage.anmelden(nachfuehren);
-  // Die Wache hängt am Bildschirm: Ist er abgeräumt, meldet sie sich selbst ab,
-  // sonst zöge sie dem nächsten Bildschirm den Ausschnitt weg.
-  Stage.anmelden(() => { if (!feld.isConnected) Stage.abmelden(fn); });
-  nachfuehren();
+  /* Die Wache hängt am Bildschirm: Ist er abgeräumt, meldet sie sich selbst
+     ab, sonst zöge sie dem nächsten Bildschirm den Ausschnitt weg.
+
+     Und sie misst **erst im nächsten Bild**, nicht sofort. `bedienfeld` wird
+     mitten im Aufbau eines Bildschirms gerufen; was danach noch an Karten,
+     Reglern und Auflösungen dazukommt, steht jetzt noch nicht drin. Ein Maß
+     von jetzt wäre also das eines halb leeren Feldes — und genau das war der
+     zweite Sprung, den man beim „Weiter" gesehen hat.                      */
+  const fn = Stage.anmelden(() => {
+    if (!feld.isConnected) {
+      Stage.abmelden(fn);
+      if (feldWache === fn) feldWache = null;
+      return;
+    }
+    nachfuehren();
+  });
+  feldWache = fn;
   return feld;
 }

@@ -55,10 +55,43 @@ const Stage = {
      lassen. Wer gerade eine Auflösung liest, schaut ohnehin nicht auf die
      Straße, und die Straße selbst bleibt oben sichtbar.                    */
   frei: 1,
+
+  /* Der Ausschnitt wird **nicht hart gesetzt, sondern nachgezogen.** Das ist
+     die Antwort auf ein Flackern, das man sonst bei jedem „Weiter" sieht:
+
+     Beim Bildschirmwechsel bleibt der alte Bildschirm 260 ms lang im Baum,
+     während er ausblendet. In dieser Zeit misst sich das neue Bedienfeld
+     schon, das alte misst weiter, und beide melden ihr Maß. Innerhalb eines
+     einzigen Bildes kamen so drei verschiedene Werte an — einmal das halb
+     aufgebaute neue Feld, einmal das alte, einmal das fertige neue. Der Plan
+     sprang dabei auf mehr als das Doppelte und wieder zurück.
+
+     Zwei Dinge halten dagegen: Das Bedienfeld meldet die alte Wache ab, sobald
+     eine neue entsteht (siehe bausteine.js), und der Rest wird hier geglättet.
+     Ein Zwischenwert, der nur ein Bild lang gilt, bewegt das Bild dann kaum
+     noch. */
+  versatzZiel: 0, freiZiel: 1,
   bildVersatz(oben, rechts, frei) {
-    this.versatz = oben || 0;
+    this.versatzZiel = oben || 0;
     this.versatzX = rechts || 0;
-    if (frei != null) this.frei = clamp(frei, .42, 1);
+    if (frei != null) this.freiZiel = clamp(frei, .42, 1);
+    // Wer Bewegung abbestellt hat, bekommt den Sprung – aber nur einen.
+    if (RUHIG) this.ausschnittSetzen();
+    this.groesseAnpassen();
+  },
+  ausschnittSetzen() { this.versatz = this.versatzZiel; this.frei = this.freiZiel; },
+  /* Exponentiell nachziehen: nach gut einer Drittelsekunde ist der Rest nicht
+     mehr zu sehen. Unabhängig von der Bildrate, weil dt in den Exponenten
+     geht und nicht in einen festen Anteil. */
+  ausschnittZiehen(dt) {
+    const dv = this.versatzZiel - this.versatz, df = this.freiZiel - this.frei;
+    if (Math.abs(dv) < 1e-4 && Math.abs(df) < 1e-4) {
+      if (dv || df) { this.ausschnittSetzen(); this.groesseAnpassen(); }
+      return;
+    }
+    const k = 1 - Math.pow(.0016, dt);
+    this.versatz += dv * k;
+    this.frei += df * k;
     this.groesseAnpassen();
   },
 
@@ -107,10 +140,20 @@ const Stage = {
   },
 
   /* --- Inhalt ------------------------------------------------------------ */
+  /* Nur die Kulisse wegräumen – Ausschnitt und Wachen bleiben stehen. Das
+     braucht, wer **mitten in einer Aufgabe** die Kulisse austauscht: Aufgabe 4
+     tauscht die gerade Landstraße gegen dieselbe mit Kurve. Ein volles
+     `leeren()` nähme dem laufenden Bildschirm die Wache seines Bedienfelds
+     mit, und der Plan spränge einmal auf die volle Fensterhöhe. */
+  inhaltLeeren() {
+    while (this.welt.firstChild) this.welt.removeChild(this.welt.firstChild);
+  },
+
   leeren() {
     this.updates.length = 0;
     this.bildVersatz(0, 0, 1);
-    while (this.welt.firstChild) this.welt.removeChild(this.welt.firstChild);
+    this.ausschnittSetzen();      // Levelwechsel: hier ist ein Sprung richtig
+    this.inhaltLeeren();
   },
 
   /* SVG aus einer Zeichenkette anhängen und die Gruppe zurückgeben. Kulissen
@@ -134,6 +177,7 @@ const Stage = {
       const dt = this._letzte ? Math.min((jetzt - this._letzte) / 1000, .05) : 0;
       this._letzte = jetzt;
       this._t += dt;
+      this.ausschnittZiehen(dt);
       for (let i = this.updates.length - 1; i >= 0; i--) {
         try { this.updates[i](dt, this._t); }
         catch (e) { this.updates.splice(i, 1); console.warn(e); }

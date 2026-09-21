@@ -183,9 +183,10 @@ const REGELN = [
    „Einsatzbereit" (#35c8ff) verschwindet auf Hellgrau, und ein Name in dieser
    Farbe ist nicht mehr zu lesen.
 
-   Die Warnweste bleibt trotzdem gelb — sie ist das Thema dieser Seite und
-   nicht die Funktion. Die Truppfarbe liegt deshalb als Ring um die Figur und
-   im Namensschild, nicht auf der Weste.
+   Die Truppfarbe ist die **Fläche** der Figur, nicht ein Ring darum. Von der
+   Warnweste bleibt ein schmaler Reflexstreifen über den Schultern. Umgekehrt
+   – gelbe Weste groß, Truppfarbe als Ring – sah jede Figur aus wie in einem
+   gelben Rahmen und war auf dem Plan lauter als alles, worum es geht.
    -------------------------------------------------------------------------*/
 const TRUPPFARBEN = {
   ef:       { name: 'Einheitsführer', farbe: '#b8860b' },

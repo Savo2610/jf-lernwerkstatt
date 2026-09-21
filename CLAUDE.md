@@ -243,6 +243,14 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   `setzen()` — sonst steht das Fahrzeug dort, wo die Straße ohne Bogen gewesen
   wäre, also neben ihr. Flächen auf der Fahrbahn (Sichtschatten) brauchen
   `plan.flaeche(...)` statt eines `rect`.
+- **Ein Bogen lässt sich nicht nachträglich einschalten**, er steckt in der
+  Geometrie jeder Kante. Aufgabe 4 baut die Strecke deshalb zweimal
+  (`streckeBauen`): Runde 1 zeigt eine gerade Landstraße, erst Runde 2 dieselbe
+  mit Kurve. Das ist auch didaktisch so gewollt — wer die Kurve schon sieht,
+  während er die 200 Meter einstellen soll, sucht den Haken, statt die Zahl zu
+  lernen. Zum Austauschen **`Stage.inhaltLeeren()` benutzen, nicht
+  `Stage.leeren()`**: Das volle Leeren nimmt dem laufenden Bildschirm die Wache
+  seines Bedienfelds mit, und der Plan springt einmal auf volle Fensterhöhe.
 - **Der Längsmaßstab ist gebrochen, der Querschnitt nicht.** Quer ist ein
   Meter immer `QUER` Einheiten, längs entscheidet der Plan (`nahProM`,
   `fernProM` in `welt/plan.js`). Das ist Absicht — eine Einsatzstelle von
@@ -261,6 +269,15 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   Panel — ein fester Wert lässt den Plan entweder verschwinden oder oben
   kleben. Der Anteil ist nach unten gedeckelt (`Stage.frei`), sonst schrumpft
   der Plan bei einer langen Auflösung auf Briefmarkengröße.
+- **Nur ein Bedienfeld darf messen, und der Ausschnitt wird nachgezogen.**
+  Beim Bildschirmwechsel bleibt der alte Bildschirm 260 ms im Baum; sein Feld
+  ist noch `isConnected` und misst weiter, und weil die Bühne ihre Wachen von
+  hinten nach vorn abläuft, gewann das *alte*. Der Plan zuckte bei jedem
+  „Weiter" zwischen beiden Ausschnitten. Deshalb meldet ein neues Feld das
+  vorige gleich ab (`feldWache` in `bausteine.js`), misst erst im nächsten Bild
+  (beim Aufruf ist der Bildschirm noch halb leer) und die Bühne zieht
+  `versatz`/`frei` weich nach (`ausschnittZiehen`). Wer einen dieser drei
+  Teile herausnimmt, holt das Flackern zurück.
 - **Marken dürfen ihr eigenes `transform` nicht anfassen** — dieselbe Falle wie
   bei `HotSpots` drüben. Die Bühne schreibt es jedes Bild neu; ein `:hover` mit
   `transform` reißt die Marke in die Bildecke. Rahmen und Schatten animieren.
@@ -283,13 +300,19 @@ Die Startseite ist über eine Übergangsanimation mit **veerka.mp** verbunden
   `data/absicherung.js`): blau Wassertrupp, rot Angriffstrupp, grün
   Schlauchtrupp, Gold Einheitsführer, Stahl Maschinist. Nur dunkler als in
   „Einsatzbereit" — dort liegen sie auf einer Nachtszene, hier auf hellem
-  Asphalt. **Die Warnweste bleibt gelb:** Sie ist das Thema dieser Seite,
-  nicht die Funktion. Die Truppfarbe liegt als Ring um die Figur und im
-  Namensschild.
-- **Namensschilder brauchen Abstand.** Ein Schild ist gut vierzig Einheiten
-  breit; zwei Figuren, die enger stehen, ergeben „WTrFWTrM". `schildBreite()`
-  sagt, wie breit es wird. Und es hängt 25 Einheiten unter der Figur — wer
-  eine Figur dicht neben ein Fahrzeug stellt, legt ihr Schild auf den Aufbau.
+  Asphalt. Die Truppfarbe ist die **Fläche** der Figur; von der Warnweste
+  bleibt ein schmaler Reflexstreifen über den Schultern. Umgekehrt — gelbe
+  Weste groß, Truppfarbe als Ring darum — sah jede Figur aus wie in einem
+  gelben Rahmen und war auf dem Plan lauter als alles, worum es geht. Dass die
+  Mannschaft Warnkleidung trägt, lehrt Aufgabe 2, nicht ein Leuchtpunkt.
+- **Die Kennung unter einer Figur ist Schrift, kein Schild.** Klein, in der
+  Truppfarbe, mit hellem Rand dahinter (`paint-order="stroke"`) — damit sie
+  auch auf dunklem Asphalt lesbar bleibt, ohne dass ein Kasten mit farbiger
+  Kante nötig wäre. Der war die lauteste Sache auf dem ganzen Plan.
+- **Kennungen brauchen Abstand.** Gut dreißig Einheiten breit; zwei Figuren,
+  die enger stehen, ergeben „WTrFWTrM". `schildBreite()` sagt, wie breit es
+  wird. Und sie steht 22 Einheiten unter der Figur — wer eine Figur dicht
+  neben ein Fahrzeug stellt, legt ihre Kennung auf den Aufbau.
 - **`BELADUNG` ist bewusst knapp** (zwei Warndreiecke, zwei Warnleuchten).
   Aufgabe 5 braucht vier von jedem, und genau daran merkt man, dass auf der
   Autobahn ein zweites Fahrzeug dazugehört. Wer die Zahlen großzügiger macht,

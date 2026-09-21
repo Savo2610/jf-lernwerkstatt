@@ -149,50 +149,57 @@ function baueFaltsignal() {
 }
 
 /* --- Einsatzkraft ----------------------------------------------------------
-   Von oben sieht man Helm und Schultern. Die Warnweste ist der ganze Punkt
-   dieser Seite und deshalb die größte Fläche — sie bleibt gelb, egal wer
-   darin steckt.
+   Von oben sieht man Helm und Schultern, und das ist alles, was eine Figur
+   hier sein muss: ein Punkt auf dem Plan, an dem jemand steht.
 
-   Die **Funktion** steckt trotzdem in der Farbe, nur eine Schicht weiter
-   außen: als Ring um die Figur und im Namensschild. Es sind dieselben Farben
-   wie in „Einsatzbereit" und in Löschlos (blau Wassertrupp, rot Angriffstrupp,
-   grün Schlauchtrupp, Gold Einheitsführer, Stahl Maschinist), nur dunkler —
-   siehe TRUPPFARBEN in data/absicherung.js.
+   Die Fläche gehört der **Truppfarbe** – dieselbe Zuordnung wie in
+   „Einsatzbereit" und in Löschlos (blau Wassertrupp, rot Angriffstrupp, grün
+   Schlauchtrupp, Gold Einheitsführer, Stahl Maschinist), siehe TRUPPFARBEN in
+   data/absicherung.js. Von der Warnweste bleibt ein schmaler Reflexstreifen
+   über den Schultern.
 
-   Das Namensschild ist ein Schild und kein nackter Text: Auf Asphalt, Gras
-   und Bankett liegt sonst jede Beschriftung irgendwann auf einem Untergrund,
-   der sie schluckt. Seine Breite richtet sich nach der Länge der Kennung,
-   damit zwei Figuren nebeneinander nicht ineinanderlaufen.
+   Vorher war es andersherum: gelbe Weste als große Fläche, Truppfarbe als
+   Ring darum. Das sah aus wie ein gelber Rahmen um jede Figur und war auf
+   einem ohnehin bunten Plan schlicht zu laut. Dass die Mannschaft Warnkleidung
+   trägt, lernt man in Aufgabe 2 – dafür braucht der Plan keinen Leuchtpunkt.
+
+   Ebenso das Namensschild: Es ist jetzt Schrift mit hellem Rand statt einer
+   Plakette mit farbiger Kante. Eine Kennung soll man lesen können, wenn man
+   hinschaut, und übersehen, wenn nicht. `paint-order="stroke"` legt den
+   hellen Rand *hinter* die Schrift – damit bleibt sie auch auf dunklem
+   Asphalt lesbar, ohne dass ein Kasten darum nötig wäre.
    -------------------------------------------------------------------------*/
 function baueFigur(opt) {
   const o = opt || {};
   const t = o.trupp ? TRUPPFARBEN[o.trupp] : null;
-  const ring = t ? t.farbe : 'var(--txt3)';
-  const schild = o.kennung ? schildchen(o.kennung, ring) : '';
+  const farbe = t ? t.farbe : 'var(--txt3)';
+  const schild = o.kennung ? schildchen(o.kennung, farbe) : '';
+  /* Der Streifen läuft unter dem Helm durch und schaut links und rechts
+     hervor – zwei kurze helle Striche, mehr braucht es bei dieser Größe
+     nicht. Wer `weste: false` setzt, bekommt ihn nicht. */
+  const streifen = o.weste === false ? ''
+    : `<rect x="-9.6" y="-2.6" width="19.2" height="3.2" fill="var(--weste)" opacity=".9"/>`;
   return `<g class="figur">
-    <ellipse rx="12" ry="11" fill="rgba(0,0,0,.2)" transform="translate(1.5,2.5)"/>
-    <ellipse rx="11.5" ry="10" fill="${ring}"/>
-    <ellipse rx="8.5" ry="7.5" fill="${o.weste === false ? 'var(--jacke)' : 'var(--weste)'}"/>
+    <ellipse rx="11" ry="9.6" fill="rgba(0,0,0,.18)" transform="translate(1.2,2.2)"/>
+    <ellipse rx="10.5" ry="9" fill="${farbe}"/>
+    ${streifen}
     <circle r="5" fill="${o.helm || 'var(--helm)'}"/>
     <circle r="5" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1"/>
     ${schild}
   </g>`;
 }
 
-/* Namensschild unter einer Figur. Breite nach Zeichenzahl – „WTrF" braucht
-   mehr als „Ma", und zwei Schilder dürfen sich nicht überlappen.          */
+/* Kennung unter einer Figur. Klein, in der Truppfarbe, mit hellem Rand. */
 function schildchen(text, farbe) {
-  const b = 13 + String(text).length * 8.5;
-  return `<g transform="translate(0,25)">
-    <rect x="${-b / 2}" y="-10" width="${b}" height="20" rx="10"
-      fill="var(--panel)" stroke="${farbe}" stroke-width="1.6" opacity=".96"/>
-    <text class="t-plan" x="0" y="6" text-anchor="middle" font-size="13"
-      fill="${farbe}">${text}</text></g>`;
+  return `<text class="t-plan" x="0" y="22" text-anchor="middle" font-size="12"
+    fill="${farbe}" stroke="var(--bg)" stroke-width="3" paint-order="stroke"
+    opacity=".9">${text}</text>`;
 }
 
-/* Wie breit ein Namensschild wird – die Level brauchen das, um Figuren weit
-   genug auseinanderzustellen. */
-function schildBreite(text) { return 13 + String(text).length * 8.5; }
+/* Wie breit eine Kennung wird – die Level brauchen das, um Figuren weit genug
+   auseinanderzustellen. Zwei Kennungen, die sich überlappen, lesen sich als
+   ein Wort („WTrFWTrM"), und das ist schlimmer als gar keine Beschriftung. */
+function schildBreite(text) { return 6 + String(text).length * 7.2; }
 
 /* --- Verjüngung aus Leitkegeln ---------------------------------------------
    Kegel stehen nie quer über der Fahrbahn, sondern schräg: Sie ziehen den
