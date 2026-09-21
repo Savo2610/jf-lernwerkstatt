@@ -1,7 +1,7 @@
 # Veröffentlichen
 
 Alles hängt an **einem** Cloudflare Worker namens `jf`. Er liefert die
-Startseite, die Spiele, Löschlos und die Umleitung der alten Adresse.
+Startseite, die Spiele und Löschlos.
 
 Löschlos ist dabei der einzige Pfad, unter dem **mehrere** Dateien liegen: als
 PWA braucht es CSS, JS, Manifest und Symbole einzeln. Wenn dort etwas fehlt,
@@ -90,7 +90,6 @@ falsche Seite zu veröffentlichen. Diese Trennung bitte so lassen.
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart (`hub/dist/nachweis/index.html`) |
 | `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` — genauso für die anderen Unterseiten |
 | `jf.veerka.mp/löschlos` | 301 auf `/loeschlos/` — der Umlaut kommt als `%C3%B6` an |
-| `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query und Fragment bleiben |
 
 Der Code dafür ist `hub/src/worker.js` — zwanzig Zeilen, mehr braucht es
 nicht.
@@ -101,13 +100,15 @@ Steht in `hub/wrangler.jsonc`, hier nochmal im Klartext:
 
 - **`jf.veerka.mp` ist eine Custom Domain.** Den DNS-Eintrag hat Cloudflare
   beim ersten Deploy selbst angelegt. Nicht von Hand anfassen.
-- **`fwdv3.veerka.mp` ist eine Worker-Route.** Dort steht noch der alte,
-  proxied DNS-Eintrag aus der GitHub-Pages-Zeit. **Der muss orange bleiben** —
-  wird er grau (nur DNS), greift die Route nicht mehr und die alte Adresse
-  läuft ins Leere.
+- **Einen zweiten Hostnamen gibt es nicht.** Alles liegt als Pfad unter
+  `jf.veerka.mp`. Wer einen weiteren anlegt, braucht dafür eine eigene Route
+  *und* einen proxied DNS-Eintrag — fehlt einer von beiden, läuft die Adresse
+  ins Leere, ohne dass hier irgendetwas kaputtgeht. Genau so ist die alte
+  Spieladresse `fwdv3.veerka.mp` gestorben, und deshalb ist sie im September
+  2026 ganz aus Worker und Config geflogen.
 - **`run_worker_first: true`** ist Pflicht. Ohne das kämen die Dateien vor dem
-  Worker dran, und `fwdv3.veerka.mp/` bekäme die Startseite ausgeliefert statt
-  einer Umleitung.
+  Worker dran, und `jf.veerka.mp/absichern` (ohne Schrägstrich) fiele über
+  `not_found_handling` still in die Startseite, statt umgeleitet zu werden.
 
 ## Warum eine Domain und nicht zwei
 
@@ -120,7 +121,8 @@ Spielstand weg.
 ## Die Vorgänger
 
 - `Savo2610/fwdv3` auf GitHub ist die **alte** Seite: eine `index.html` plus
-  `CNAME`, ausgeliefert über GitHub Pages unter `fwdv3.veerka.mp`. Sie wird
-  nicht mehr gepflegt. Der Stand vom Umzugstag liegt hier in `sicherung/`.
+  `CNAME`, ausgeliefert über GitHub Pages unter einer eigenen Subdomain. Sie
+  wird nicht mehr gepflegt, die Adresse ist abgeschaltet und wird nirgends
+  mehr umgeleitet. Der Stand vom Umzugstag liegt hier in `sicherung/`.
 - `FwDV3-Julian.pptx` im Hauptordner ist die Präsentation, aus der das Ganze
   ursprünglich hervorgegangen ist.

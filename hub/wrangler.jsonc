@@ -6,16 +6,14 @@
   //   jf.veerka.mp/absichern/         Erst sichern!
   //   jf.veerka.mp/loeschlos/         Loeschlos (mehrere Dateien, PWA)
   //   jf.veerka.mp/nachweis/          Pruefseite fuer den Jugendwart
-  //   fwdv3.veerka.mp/*     alte Adresse, leitet dauerhaft um
   //
   // Alle Seiten liegen damit auf derselben Domain – nur so teilen sie sich
   // den Browserspeicher, und ein gemeinsamer Fortschritt ueber mehrere Themen
   // hinweg ist ueberhaupt moeglich.
   //
-  // jf.veerka.mp haengt an einer Custom Domain (den DNS-Eintrag hat Cloudflare
-  // selbst angelegt), fwdv3.veerka.mp an einer Worker-Route: dort steht noch
-  // der alte, proxied Eintrag aus der GitHub-Pages-Zeit. Der muss orange
-  // bleiben, sonst greift die Route nicht.
+  // Eine Route, eine Custom Domain: jf.veerka.mp. Den DNS-Eintrag dafuer hat
+  // Cloudflare beim ersten Deploy selbst angelegt; von Hand anfassen muss man
+  // ihn nicht. Weitere Hostnamen gibt es bewusst nicht mehr.
   "name": "jf",
   "main": "src/worker.js",
   "compatibility_date": "2026-08-01",
@@ -28,11 +26,12 @@
     // deshalb in bau/. Wer das rückgängig macht, holt die Falle zurück.
     "directory": "./dist",
     "binding": "ASSETS",
+    // Pflicht, damit die Umleitungen im Worker (Pfad ohne Schraegstrich,
+    // /löschlos mit Umlaut) vor der Dateiauslieferung greifen.
     "run_worker_first": true,
     "not_found_handling": "single-page-application"
   },
   "routes": [
-    { "pattern": "jf.veerka.mp", "custom_domain": true },
-    { "pattern": "fwdv3.veerka.mp/*", "zone_name": "veerka.mp" }
+    { "pattern": "jf.veerka.mp", "custom_domain": true }
   ]
 }

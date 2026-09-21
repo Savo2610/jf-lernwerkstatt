@@ -75,8 +75,12 @@ eine steht als `mit` in `hub/src/themen.js`, das andere als Fließtext in
 
 ## Die alte Adresse
 
-`fwdv3.veerka.mp` war einmal eine GitHub-Pages-Seite aus dem Repo
-`Savo2610/fwdv3`. Sie leitet heute dauerhaft auf `jf.veerka.mp/fwdv3/` um, und
-zwar im Worker — siehe [deploy.md](deploy.md). Der alte DNS-Eintrag muss dafür
-proxied bleiben. Wer irgendwo eine Adresse `fwdv3.veerka.mp` findet: die
-funktioniert weiter, ist aber nicht mehr die richtige.
+Das Spiel hatte vor dem Umzug eine eigene Subdomain — eine GitHub-Pages-Seite
+aus dem Repo `Savo2610/fwdv3`. Die ist **abgeschaltet**: kein DNS-Eintrag,
+keine Worker-Route, keine Umleitung. Die einzige richtige Adresse ist
+`jf.veerka.mp/fwdv3/`.
+
+Wer sie noch irgendwo findet — auf einem alten Zettel, in einem QR-Code, in
+einem Lesezeichen —, ersetzt sie. Sie wird nicht wiederkommen; eine Umleitung
+für eine Adresse, die niemand mehr aufruft, ist nur eine Stelle mehr, an der
+etwas kaputtgehen kann.

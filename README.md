@@ -11,8 +11,8 @@ läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit
 | `jf.veerka.mp/absichern/` | **Erst sichern!** — Verkehrsabsicherung nach FwDV 1, Draufsicht in 2D | `absichern/src/` |
 | `jf.veerka.mp/loeschlos/` | **Löschlos** — Truppauslosung für den Gruppenabend | `loeschlos/` |
 
-Die alte Adresse `fwdv3.veerka.mp` leitet auf `/fwdv3/` um, `/löschlos` mit
-Umlaut auf `/loeschlos/`.
+`/löschlos` mit Umlaut leitet auf `/loeschlos/` um, und jede Unterseite ohne
+abschließenden Schrägstrich auf die Fassung mit.
 
 **Live:** Startseite https://jf.veerka.mp · Einsatzbereit
 https://jf.veerka.mp/fwdv3/ · Brennen & Löschen
@@ -179,8 +179,12 @@ Mitte überall auf null und es kommt dasselbe heraus wie aus Rechtecken; mit
 `kurve: { vonM, bisM, versatz }` biegt sich alles gemeinsam, samt Pfeilen,
 Leitpfosten und allem, was auf der Straße steht.
 
-In Aufgabe 4 biegt die Landstraße deshalb wirklich ab, und das Waldstück steht
-in der **Innenseite** des Bogens — dort, wo die Sichtlinie von draußen zur
+In Aufgabe 4 biegt die Landstraße deshalb wirklich ab — aber **erst in
+Runde 2**. Runde 1 zeigt eine gerade Straße, damit die Frage nach den 200
+Metern eine Frage nach den 200 Metern bleibt; wer die Kurve schon sieht, sucht
+den Haken statt die Zahl. Ein Bogen lässt sich nicht nachträglich einschalten,
+er steckt in der Geometrie jeder Kante — die Strecke wird deshalb ein zweites
+Mal gebaut. Das Waldstück steht in der **Innenseite** des Bogens — dort, wo die Sichtlinie von draußen zur
 Einsatzstelle die Fahrbahn verlässt. Eine eingezeichnete Sichtlinie gibt es
 trotzdem nicht: Bei diesem Maßstab verlässt sie die Fahrbahn nur um
 Zentimeter und liefe scheinbar parallel zur Straße — sie würde das Gegenteil
@@ -321,8 +325,8 @@ und das Zurücksetzen des Fortschritts findet man im Profil.
 
 Brennen & Löschen fragt nur nach dem Namen: dort steht keine Figur im Bild,
 sondern ein Feuer — eine Helmfarbe wäre nirgends zu sehen. „Erst sichern!"
-genauso: Von oben sieht man vor allem die Warnweste, und die ist bei allen
-gleich.
+genauso: Von oben ist eine Figur ein Punkt von zwanzig Einheiten, auf dem eine
+Helmfarbe nichts mehr unterscheidet.
 
 ## Zwei Modi
 
@@ -480,19 +484,20 @@ Ein einziger Cloudflare Worker (`hub/wrangler.jsonc`, Code in
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen |
 | `jf.veerka.mp/absichern/` | Erst sichern! |
-| `fwdv3.veerka.mp/*` | 301 auf `jf.veerka.mp/fwdv3/`, Query bleibt erhalten |
+| `jf.veerka.mp/loeschlos/` | Löschlos |
+| `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart |
 
 Ein Seitenpfad ohne abschließenden Schrägstrich wird auf die Fassung mit
 Schrägstrich umgeleitet (`UNTERSEITEN` in `hub/src/worker.js`) — sonst landet er in
 der Ersatzseite.
 
 `jf.veerka.mp` hängt an einer **Custom Domain** — den DNS-Eintrag hat
-Cloudflare beim ersten Deploy selbst angelegt. `fwdv3.veerka.mp` hängt an einer
-**Worker-Route**, weil dort noch der alte, proxied Eintrag aus der
-GitHub-Pages-Zeit steht; der muss orange (proxied) bleiben, sonst greift die
-Route nicht. Damit die Umleitung überhaupt zum Zug kommt, läuft der Worker vor
-der Dateiauslieferung (`run_worker_first`) — sonst bekäme `fwdv3.veerka.mp/`
-einfach die Startseite.
+Cloudflare beim ersten Deploy selbst angelegt. Einen zweiten Hostnamen gibt es
+nicht mehr: Die alte Spieladresse aus der GitHub-Pages-Zeit ist im September
+2026 samt Route und Umleitung entfallen. Damit die Umleitungen im Worker
+überhaupt zum Zug kommen, läuft er vor der Dateiauslieferung
+(`run_worker_first`) — sonst fiele `/absichern` ohne Schrägstrich still in die
+Startseite.
 
 Die alte Seite liegt als Sicherung in `sicherung/`. Alles zu Routen, DNS und
 Autodeploy steht ausführlich in [docs/deploy.md](docs/deploy.md).
@@ -732,8 +737,10 @@ In **Erst sichern!**:
   das dasselbe wie `stellen()`, auf einem Plan mit Kurve ist es Pflicht.
 - **Truppfarben:** `TRUPPFARBEN` in `absichern/src/data/absicherung.js` —
   dieselbe Zuordnung wie in „Einsatzbereit" und Löschlos, nur dunkler für den
-  hellen Grund. `baueFigur({ trupp: 'wasser', kennung: 'WTrF' })` malt Ring
-  und Namensschild damit; die Warnweste bleibt gelb.
+  hellen Grund. `baueFigur({ trupp: 'wasser', kennung: 'WTrF' })` färbt damit
+  die Fläche der Figur und die Kennung darunter. Von der Warnweste bleibt ein
+  schmaler Reflexstreifen: Eine große gelbe Fläche mit farbigem Ring darum sah
+  aus wie ein Rahmen und war lauter als alles, worum es geht.
 - **Der Maßstab für Fahrzeuge:** `plan.symbolSkala`, als fünftes Argument an
   `stellen()` bzw. `aufPlan()`. Ohne sie ist ein Löschfahrzeug auf dem Übersichtsplan fünfzig
   Meter lang. Menschen und Geräte bekommen sie **nicht** — die wären dann

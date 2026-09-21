@@ -1,16 +1,12 @@
-/* Ein Worker fuer beide Adressen.
+/* Ein Worker fuer die ganze Domain.
 
-   jf.veerka.mp    liefert die Startseite und darunter die Lernseiten
-                   /fwdv3/, /brennen-loeschen/ und /absichern/, die
-                   Truppauslosung /loeschlos/ sowie /nachweis/ – die
-                   Pruefseite fuer den Jugendwart, nirgends verlinkt.
-   fwdv3.veerka.mp ist die alte Adresse des Spiels und leitet dauerhaft um.
+   jf.veerka.mp liefert die Startseite und darunter die Lernseiten /fwdv3/,
+   /brennen-loeschen/ und /absichern/, die Truppauslosung /loeschlos/ sowie
+   /nachweis/ – die Pruefseite fuer den Jugendwart, nirgends verlinkt.
 
-   Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`), sonst
-   bekaeme fwdv3.veerka.mp/ die Startseite ausgeliefert, statt umgeleitet zu
-   werden.                                                                    */
-const ALT = 'fwdv3.veerka.mp';
-const NEU = 'https://jf.veerka.mp/fwdv3/';
+   Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`). Sonst
+   kaemen die Dateien zuerst dran, und ein Pfad ohne Schraegstrich fiele ueber
+   `not_found_handling` still in die Startseite, statt umgeleitet zu werden.  */
 const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/absichern', '/nachweis', '/loeschlos'];
 
 /* Loeschlos heisst mit Umlaut, die Adresse nicht. Ein oe im Pfad kommt als
@@ -18,15 +14,11 @@ const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/absichern', '/nachweis', '
    Kanonisch ist deshalb /loeschlos/; wer /löschlos tippt, wird dorthin
    geschickt. Gross- und Kleinschreibung der Prozentzeichen wechselt je nach
    Browser, darum beide Formen.                                              */
-const MIT_UMLAUT = /^\/l(?:\u00f6|%C3%B6|%c3%b6)schlos\/?$/;
+const MIT_UMLAUT = /^\/l(?:ö|%C3%B6|%c3%b6)schlos\/?$/;
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname === ALT) {
-      // Query mitnehmen: ?level=uebung und ?modus=beamer sollen weiter gehen.
-      return Response.redirect(NEU + url.search + url.hash, 301);
-    }
     if (MIT_UMLAUT.test(url.pathname)) {
       return Response.redirect(url.origin + '/loeschlos/' + url.search + url.hash, 301);
     }
