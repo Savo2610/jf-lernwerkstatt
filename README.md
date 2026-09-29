@@ -283,12 +283,13 @@ sonst blitzt beim Ankommen die halbe Seite auf. Dafür gibt es `--heimfarbe`
 (gesetzt in `brennen/src/farben.css`, benutzt von `.heimfahrt` in
 `gemeinsam/stil.css`).
 
-Dieselbe Einfahrt spielt auch, wer von **veerka.mp** kommt: dort steht in der
-verschneiten 3D-Szene ein Feuerwehrauto, und das Schild daran führt hierher.
+Dieselbe Einfahrt spielt auch, wer von **veerka.mp** kommt: dort steht im
+verschneiten 3D-Skital ein Feuerwehrauto, und „Ausrücken“ führt hierher.
 Es fährt dabei wirklich los und übergibt mit `?einfahrt=1` — die Startseite
 kann nicht unterscheiden, aus welcher Richtung jemand ankommt, und muss es
-auch nicht. Der Code dafür liegt drüben in `public/scene.js` des Repos
-`Savo2610/Julians-Website`; die Absprache zwischen beiden Repos steht in
+auch nicht. Der Code dafür liegt drüben in `src/stations/stations.js`
+(`ausruecken()`) des Repos `Savo2610/Julians-Website`; die Absprache
+zwischen beiden Repos, auch zur Farbe der Blende, steht in
 [docs/verwandte-projekte.md](docs/verwandte-projekte.md).
 
 Nach draußen führen drei Wege, alle bewusst am Rand:

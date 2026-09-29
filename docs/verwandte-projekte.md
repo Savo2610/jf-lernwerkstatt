@@ -5,12 +5,16 @@ einem anderen Repo, und die sieht man dem Code hier nicht an.
 
 ## veerka.mp — die Ausfahrt hierher
 
-**Repo:** `Savo2610/Julians-Website` · **Datei:** `public/scene.js`
+**Repo:** `Savo2610/Julians-Website` · **Dateien:** `src/stations/stations.js`
+(`ausruecken()`), `src/world/props/firetruck.js` (die Fahrt), `src/style.css`
+(`.ausfahrt`, die Blende), Adresse in `src/stations/links.js`
 
-Auf Julians Startseite steht in einer verschneiten 3D-Nachtszene ein
-Feuerwehrauto. Wer es anklickt, schickt es auf eine Runde durch den Talkessel
-und bekommt ein Schild mit dem Link hierher. Ein Klick auf das Schild lässt das
-Auto geradeaus davonfahren, blendet auf `#080b14` ab und ruft auf:
+Auf Julians Startseite steht in einem verschneiten 3D-Skital am Waldrand ein
+Feuerwehrauto, der „Löschzug“. Wer davor Enter drückt oder es antippt, zoomt
+heran, und es schaltet Blaulicht und Scheinwerfer an. Die Auswahl darunter hat
+ein Ziel, „Ausrücken“: das Auto setzt zurück und biegt in eine Lücke zwischen
+den Tannen, dabei schließt eine Blende, und nach 1,9 s ruft dieselbe Seite
+(kein neuer Tab) auf:
 
 ```
 https://jf.veerka.mp/?einfahrt=1
@@ -18,6 +22,15 @@ https://jf.veerka.mp/?einfahrt=1
 
 Drüben rollt dasselbe Fahrzeug — jetzt in 2D — vor der Feuerwache aus. Zwei
 Seiten, ein Fahrzeug.
+
+Die Farbe der Blende richtet sich nach dem ersten Bild, das diese Startseite
+mit `?einfahrt=1` zeigt, und das hängt vom Farbschema ab (gemessen am
+30.09.2026 mit den ersten Bildern der Einfahrt): dunkel ist es `#080b14`,
+hell schon die unscharfe Straße am Tag. Das Tal blendet deshalb dunkel auf
+`#080b14` und hell auf einen Verlauf aus genau diesem Bild (Himmel, Häuser,
+Straße, Wiese). Beide Seiten folgen nur `prefers-color-scheme`. **Ändert sich
+hier, wie die Einfahrt im hellen Schema beginnt, muss `.ausfahrt` drüben
+mitziehen** — sonst gibt es beim Ankommen einen harten Farbsprung.
 
 ## Das Spiel — der Rückweg von hier
 
@@ -32,7 +45,7 @@ Es gibt genau **einen** Berührungspunkt, und beide Seiten kennen ihn:
 | | |
 |---|---|
 | Anhang | `?einfahrt=1` |
-| Wer schickt | veerka.mp (`scene.js`) und das Spiel (`src/main.js`) |
+| Wer schickt | veerka.mp (`src/stations/stations.js`) und das Spiel (`src/main.js`) |
 | Wer empfängt | die Startseite, `einfahrtStarten()` in `hub/src/main.js` |
 | Was passiert | Seite beginnt dunkel, Fahrzeug rollt vor der Wache aus |
 | Danach | `history.replaceState` nimmt den Anhang aus der Adresszeile |
@@ -45,8 +58,8 @@ Wer den Anhang umbenennt, muss **drei** Dateien in **zwei** Repos anfassen.
 Wer ihn nur auf einer Seite ändert, bekommt keinen Fehler — nur einen harten
 Schnitt statt einer Einfahrt, und das fällt beim Testen leicht nicht auf.
 
-Dasselbe gilt für `LERNWERKSTATT` in `src/main.js` und in `scene.js` drüben:
-beides sind fest eingetragene Adressen auf `jf.veerka.mp`. Zieht die Seite
+Dasselbe gilt für `LERNWERKSTATT` in `src/main.js` und `jugendfeuerwehr` in
+`src/stations/links.js` drüben: beides sind fest eingetragene Adressen auf `jf.veerka.mp`. Zieht die Seite
 jemals um, sind das die Stellen.
 
 ## Instagram
