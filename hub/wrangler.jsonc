@@ -6,6 +6,7 @@
   //   jf.veerka.mp/absichern/         Erst sichern!
   //   jf.veerka.mp/loeschlos/         Loeschlos (mehrere Dateien, PWA)
   //   jf.veerka.mp/nachweis/          Pruefseite fuer den Jugendwart
+  //   jf.veerka.mp/check/             Materialcheck (eigener Worker, s. services)
   //
   // Alle Seiten liegen damit auf derselben Domain – nur so teilen sie sich
   // den Browserspeicher, und ein gemeinsamer Fortschritt ueber mehrere Themen
@@ -31,6 +32,9 @@
     "run_worker_first": true,
     "not_found_handling": "single-page-application"
   },
+  // Der Materialcheck ist ein eigener Worker ohne eigene Adresse (Repo
+  // jf-material). Er muss deployt sein, bevor dieser Worker deployt wird.
+  "services": [{ "binding": "CHECK", "service": "jf-material" }],
   "routes": [
     { "pattern": "jf.veerka.mp", "custom_domain": true }
   ]

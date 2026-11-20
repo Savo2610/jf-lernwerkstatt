@@ -4,6 +4,11 @@
    /brennen-loeschen/ und /absichern/, die Truppauslosung /loeschlos/ sowie
    /nachweis/ – die Pruefseite fuer den Jugendwart, nirgends verlinkt.
 
+   /check gehoert nicht zu diesem Repo: Der Materialcheck ist ein eigener
+   Worker (`jf-material`, Repo jf-material) mit eigenem Speicher. Er hat keine
+   eigene Adresse, sondern wird hier ueber das Service Binding CHECK
+   durchgereicht – Pfad unveraendert, er erwartet selbst /check/...
+
    Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`). Sonst
    kaemen die Dateien zuerst dran, und ein Pfad ohne Schraegstrich fiele ueber
    `not_found_handling` still in die Startseite, statt umgeleitet zu werden.  */
@@ -19,6 +24,9 @@ const MIT_UMLAUT = /^\/l(?:ö|%C3%B6|%c3%b6)schlos\/?$/;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === '/check' || url.pathname.startsWith('/check/')) {
+      return env.CHECK.fetch(request);
+    }
     if (MIT_UMLAUT.test(url.pathname)) {
       return Response.redirect(url.origin + '/loeschlos/' + url.search + url.hash, 301);
     }
