@@ -14,6 +14,7 @@ Vier Seiten, ein Worker, eine Domain:
 | `jf.veerka.mp/fwdv3/` | das Spiel „Einsatzbereit" (FwDV 3), 3D mit Three.js | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | das Spiel „Brennen & Löschen" (Brandlehre), 3D | `brennen/src/` |
 | `jf.veerka.mp/absichern/` | „Erst sichern!", Verkehrsabsicherung nach FwDV 1, 2D-Draufsicht | `absichern/src/` |
+| `jf.veerka.mp/hochwasser/` | „Hochwasser-Einsatz", vier kleine Spiele, fertig geliefert und unverändert kopiert | `hochwasser/` |
 | `jf.veerka.mp/loeschlos/` | „Löschlos", Truppauslosung für den Gruppenabend, PWA | `loeschlos/` |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart, nirgends verlinkt | `hub/src/nachweis.*` |
 

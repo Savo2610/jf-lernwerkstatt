@@ -82,6 +82,18 @@ async function spielUebernehmen(quelle, roh, unter) {
 // Dateien vorab einsammelt und beim ersten Fehlschlag ganz aufgibt.
 const LOESCHLOS_AUSSEN = ['README.md', 'LICENSE', 'tools'];
 
+// --- Hochwasser-Einsatz: fertig geliefert, nur durchgereicht ---------------
+// Vier kleine Lernspiele rund ums Hochwasser, als eine fertige HTML-Datei
+// geliefert. Sie steht nicht auf gemeinsam/ und hat keinen Build; sie wird
+// unveraendert nach dist/hochwasser/ gelegt.
+function hochwasserUebernehmen() {
+  const von = join(ROOT, '..', 'hochwasser', 'index.html');
+  if (!existsSync(von)) throw new Error('hochwasser/index.html fehlt');
+  mkdirSync(join(ROOT, 'dist', 'hochwasser'), { recursive: true });
+  cpSync(von, join(ROOT, 'dist', 'hochwasser', 'index.html'));
+  console.log('hub/dist/hochwasser/index.html übernommen');
+}
+
 function loeschlosUebernehmen() {
   const von = join(ROOT, '..', 'loeschlos');
   if (!existsSync(join(von, 'index.html'))) throw new Error('loeschlos/index.html fehlt');
@@ -103,6 +115,7 @@ if (!alsArtifact) {
   await spielUebernehmen('../absichern/build.mjs', '../bau/absichern.html', 'absichern');
   nachweisseiteBauen();
   loeschlosUebernehmen();
+  hochwasserUebernehmen();
 }
 
 // --- Nachweisseite fuer den Jugendwart -------------------------------------

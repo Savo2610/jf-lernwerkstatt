@@ -9,6 +9,7 @@ läuft ohne Anmeldung im Browser, ohne Server, ohne Abhängigkeiten zur Laufzeit
 | `jf.veerka.mp/fwdv3/` | **Einsatzbereit** — FwDV 3, Ausgabe Februar 2008, 3D | `src/` |
 | `jf.veerka.mp/brennen-loeschen/` | **Brennen & Löschen** — Brandlehre, 3D | `brennen/src/` |
 | `jf.veerka.mp/absichern/` | **Erst sichern!** — Verkehrsabsicherung nach FwDV 1, Draufsicht in 2D | `absichern/src/` |
+| `jf.veerka.mp/hochwasser/` | **Hochwasser-Einsatz** — vier kleine Spiele rund ums Hochwasser, fertige Datei | `hochwasser/` |
 | `jf.veerka.mp/loeschlos/` | **Löschlos** — Truppauslosung für den Gruppenabend | `loeschlos/` |
 
 `/löschlos` mit Umlaut leitet auf `/loeschlos/` um, und jede Unterseite ohne
@@ -485,6 +486,7 @@ Ein einziger Cloudflare Worker (`hub/wrangler.jsonc`, Code in
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen |
 | `jf.veerka.mp/absichern/` | Erst sichern! |
+| `jf.veerka.mp/hochwasser/` | Hochwasser-Einsatz |
 | `jf.veerka.mp/loeschlos/` | Löschlos |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart |
 

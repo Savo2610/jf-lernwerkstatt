@@ -86,6 +86,7 @@ falsche Seite zu veröffentlichen. Diese Trennung bitte so lassen.
 | `jf.veerka.mp/fwdv3/` | Einsatzbereit (`hub/dist/fwdv3/index.html`) |
 | `jf.veerka.mp/brennen-loeschen/` | Brennen & Löschen (`hub/dist/brennen-loeschen/index.html`) |
 | `jf.veerka.mp/absichern/` | Erst sichern! (`hub/dist/absichern/index.html`) |
+| `jf.veerka.mp/hochwasser/` | Hochwasser-Einsatz (`hub/dist/hochwasser/index.html`, unverändert kopiert) |
 | `jf.veerka.mp/loeschlos/` | Löschlos (`hub/dist/loeschlos/`, mehrere Dateien) |
 | `jf.veerka.mp/nachweis/` | Prüfseite für den Jugendwart (`hub/dist/nachweis/index.html`) |
 | `jf.veerka.mp/fwdv3` | 301 auf `/fwdv3/` — genauso für die anderen Unterseiten |

@@ -1,7 +1,8 @@
 /* Ein Worker fuer die ganze Domain.
 
    jf.veerka.mp liefert die Startseite und darunter die Lernseiten /fwdv3/,
-   /brennen-loeschen/ und /absichern/, die Truppauslosung /loeschlos/ sowie
+   /brennen-loeschen/ und /absichern/, die Hochwasser-Spiele /hochwasser/, die Truppauslosung
+   /loeschlos/ sowie
    /nachweis/ – die Pruefseite fuer den Jugendwart, nirgends verlinkt.
 
    /check gehoert nicht zu diesem Repo: Der Materialcheck ist ein eigener
@@ -12,7 +13,7 @@
    Der Worker laeuft vor der Dateiauslieferung (`run_worker_first`). Sonst
    kaemen die Dateien zuerst dran, und ein Pfad ohne Schraegstrich fiele ueber
    `not_found_handling` still in die Startseite, statt umgeleitet zu werden.  */
-const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/absichern', '/nachweis', '/loeschlos'];
+const UNTERSEITEN = ['/fwdv3', '/brennen-loeschen', '/absichern', '/nachweis', '/loeschlos', '/hochwasser'];
 
 /* Loeschlos heisst mit Umlaut, die Adresse nicht. Ein oe im Pfad kommt als
    %C3%B6 an und ueberlebt weder QR-Code noch Zettel an der Pinnwand zuverlaessig.

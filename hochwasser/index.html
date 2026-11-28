@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hochwasser-Einsatz: Lernspiele</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: lebendig und spielerisch für Jugendliche 10–16, ernstes Thema, Mut machend
+   IDEA: Einsatzzentrale mit vier Einsätzen – Regen-Labor, Gefahren-Check, Fluchtweg, Sandsack-Challenge
+   PICTURE: jedes Spiel ist selbst das Bild: Stadtplan im Regen, Hochwasser-Straße, Fluchtkarte, Deich am Fluss
+   COLOUR and TYPE: Flussblau dominant, Sandsack-Beige als Stütze, Feuerwehrrot als Akzent; Barlow Condensed + Barlow
+   LAYOUT: eine zentrale Spalte bis 980px, Spielfeld oben, Bedienung darunter; Menü als 2×2-Kacheln */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0b1a22);--ink:light-dark(#10232d,#e8f0f3);--soft:light-dark(#4b5f69,#a9bcc5);
+--card:light-dark(#ffffff,#112631);--line:light-dark(#d3dde2,#27424f);--deep:light-dark(#0f3f5a,#072433);
+--river:#1f74a3;--fire:#d32a2a;--sel:light-dark(#e6f2f8,#143447);--sand:#dcbf7f;
+--ok:light-dark(#177245,#4cc98a);--okbg:light-dark(#e5f5ec,#123a29);--bad:light-dark(#b3261e,#ff8a80);--badbg:light-dark(#fdeceb,#3d1a18)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+header{background:var(--deep);color:#fff;padding:12px max(4vw,16px);display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
+header h1{font-size:32px}
+header small{display:block;font-size:14px;opacity:.82;font-weight:500}
+.hr{display:flex;gap:14px;align-items:center}
+.tot{font:700 22px "Barlow Condensed";color:#f0d28f;white-space:nowrap}
+#menuBtn{min-height:44px;padding:6px 16px;border:2px solid #ffffff55;border-radius:10px;background:transparent;color:#fff;font:700 18px "Barlow Condensed";cursor:pointer}
+main{max-width:980px;margin:0 auto;padding:clamp(16px,3vw,32px) max(4vw,16px) 48px}
+h2{font-size:clamp(30px,4vw,46px)}
+.lead{margin:10px 0 0;max-width:62ch}
+.tag{display:block;font-size:14px;font-weight:600;color:var(--soft)}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+.gcard{display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 16px;align-items:start;text-align:left;padding:18px;border:2px solid var(--line);border-radius:16px;background:var(--card);color:inherit;font:inherit;cursor:pointer;transition:border-color .2s,transform .2s}
+.gcard:hover{border-color:var(--river);transform:translateY(-2px)}
+.gcard svg{grid-row:span 4;width:72px;height:72px}
+.gcard b{font:700 26px/1.05 "Barlow Condensed"}
+.gcard .d{font-size:15px;color:var(--soft);line-height:1.4}
+.stars{font-size:22px;letter-spacing:2px;color:#e0a100;line-height:1}
+.stars .o{color:var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+.btn{min-height:48px;padding:10px 22px;border:0;border-radius:12px;background:var(--fire);color:#fff;font:700 20px "Barlow Condensed";letter-spacing:.02em;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:3px solid #f5b400;outline-offset:2px}
+.how{margin:16px 0 0;padding:16px 18px 16px 38px;background:var(--sel);border-radius:14px}
+.how li{margin:4px 0}
+.hud{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;margin:0 0 10px;font-size:15px;font-weight:600;color:var(--soft)}
+.hud b{font:700 26px "Barlow Condensed";color:var(--ink);white-space:nowrap}
+.hud .hearts b{color:var(--fire);letter-spacing:2px}
+.field{border-radius:16px;overflow:hidden;background:#bfe0f0;box-shadow:0 12px 30px -20px #0f3f5a;touch-action:manipulation}
+.field svg{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+.say{margin:12px 0 0;padding:12px 16px;border-radius:12px;border-left:6px solid var(--river);background:var(--sel);min-height:52px}
+.say.ok{border-color:var(--ok);background:var(--okbg)}.say.bad{border-color:var(--bad);background:var(--badbg)}
+.say strong{font:700 21px/1.1 "Barlow Condensed";display:block}
+.legend{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px 18px;font-size:15px}
+.legend li{display:grid;grid-template-columns:18px 7.5em minmax(0,1fr) 3em;gap:8px;align-items:center}
+.legend i{width:18px;height:18px;border-radius:4px}
+.legend .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.legend s{display:block;height:100%;background:var(--river)}
+.legend em{font-style:normal;text-align:right;font-weight:600}
+.pad{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,52px);gap:6px;justify-content:center;margin-top:12px}
+.pad button{border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:700 24px Barlow;cursor:pointer}
+.pad .u{grid-column:2}.pad .l{grid-column:1;grid-row:2}.pad .d{grid-column:2;grid-row:2}.pad .r{grid-column:3;grid-row:2}
+.choice{display:grid;gap:8px;margin-top:12px}
+.choice button{min-height:52px;text-align:left;padding:10px 16px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:inherit;font:600 17px Barlow;cursor:pointer}
+.choice button:hover{border-color:var(--river)}
+.meter{position:relative;height:34px;border-radius:10px;margin-top:14px;background:linear-gradient(90deg,#e7867d 0 35%,#f2d36b 35% 50%,#69c08d 50% 70%,#f2d36b 70% 85%,#e7867d 85%)}
+.needle{position:absolute;top:-5px;bottom:-5px;width:6px;margin-left:-3px;border-radius:3px;background:var(--ink);left:0}
+.mlab{display:flex;justify-content:space-between;font-size:14px;color:var(--soft);margin-top:4px}
+.hold{flex:1 1 260px;min-height:72px;font-size:24px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.hold.on{background:#a51d1d}
+#plug{background:#f5b400;color:#10232d;min-height:72px}
+.found{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.found li{padding:10px 14px;border-radius:10px;background:var(--sel)}
+.found b{display:block}
+.big{font:700 clamp(40px,6vw,60px)/1 "Barlow Condensed";color:#e0a100;letter-spacing:4px;margin:14px 0 4px}
+.big .o{color:var(--line)}
+.lesson{margin:16px 0 0;padding:14px 18px;border:2px solid var(--fire);border-radius:14px;font-weight:600}
+.rules{margin:18px 0 0;padding:18px 20px 18px 40px;border:2px solid var(--fire);border-radius:16px}
+.rules li{margin:6px 0}
+.motto{font-weight:700;margin:14px 0 0 -20px}
+.wave{animation:wave 3s linear infinite}@keyframes wave{to{transform:translateX(24px)}}
+.rain{animation:fall .45s linear infinite}@keyframes fall{to{transform:translate(-6px,30px)}}
+.pulse{animation:pulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes pulse{50%{transform:scale(1.25);opacity:.5}}
+.pop{animation:pop .5s ease-out both;transform-box:fill-box}@keyframes pop{from{transform:translateY(-14px);opacity:0}}
+.lift{transition:transform 1.2s cubic-bezier(.3,.7,.3,1)}
+@media(prefers-reduced-motion:reduce){.wave,.rain,.pulse,.pop{animation:none}.lift{transition:none}}
+@media(max-width:640px){.games{grid-template-columns:minmax(0,1fr)}.gcard{grid-template-columns:56px minmax(0,1fr)}.gcard svg{width:56px;height:56px}header h1{font-size:28px}.legend li{grid-template-columns:18px 7.5em minmax(0,1fr) 3em}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Hochwasser-Einsatz</h1><small>Lernspiele · Jugendfeuerwehr Harheim</small></div>
+  <div class="hr"><span class="tot" id="tot"></span><button id="menuBtn" hidden>Übersicht</button></div>
+</header>
+<main id="app"></main>
+<script>
+{
+const $=id=>document.getElementById(id),app=$('app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const starStr=n=>'★'.repeat(n)+'<span class="o">'+'★'.repeat(3-n)+'</span>';
+let timers=[],raf=0,keyH=null,keyUpH=null;
+function clear(){timers.forEach(t=>{clearInterval(t);clearTimeout(t)});timers=[];cancelAnimationFrame(raf);keyH=null;keyUpH=null}
+document.addEventListener('keydown',e=>{if(keyH)keyH(e)});
+document.addEventListener('keyup',e=>{if(keyUpH)keyUpH(e)});
+const best={};try{Object.assign(best,JSON.parse(localStorage.getItem('hw-best')||'{}'))}catch(e){}
+function setBest(k,s){if(s>(best[k]||0))best[k]=s;try{localStorage.setItem('hw-best',JSON.stringify(best))}catch(e){}top()}
+function top(inMenu){$('tot').textContent='★ '+Object.values(best).reduce((a,b)=>a+b,0)+' / 12';$('menuBtn').hidden=!!inMenu}
+$('menuBtn').onclick=()=>menu();
+const RAINLINES=(n,w,h)=>{let s='';for(let k=0;k<n;k++){const x=Math.random()*(w+30),y=Math.random()*h-30;s+=`<line x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${(x-3).toFixed(1)}" y2="${(y+9).toFixed(1)}"/>`}return s};
+const say=(html,cls)=>{const el=$('say');if(el){el.className='say'+(cls?' '+cls:'');el.innerHTML=html}};
+
+const ICON={
+regen:`<svg viewBox="0 0 72 72"><rect width="72" height="72" rx="16" fill="#e1f0f8"/><ellipse cx="36" cy="26" rx="20" ry="10" fill="#7d8e99"/><ellipse cx="26" cy="24" rx="10" ry="8" fill="#7d8e99"/><g stroke="#1f74a3" stroke-width="3" stroke-linecap="round"><path d="M24 40l-3 8M36 40l-3 8M48 40l-3 8"/></g><rect x="14" y="54" width="20" height="8" rx="2" fill="#8fc66f"/><rect x="38" y="54" width="20" height="8" rx="2" fill="#9aa0a6"/></svg>`,
+gefahr:`<svg viewBox="0 0 72 72"><rect width="72" height="72" rx="16" fill="#fbeaea"/><path d="M36 12 L62 58 H10Z" fill="#f5b400" stroke="#10232d" stroke-width="3" stroke-linejoin="round"/><rect x="33" y="28" width="6" height="16" rx="3" fill="#10232d"/><circle cx="36" cy="50" r="3.5" fill="#10232d"/></svg>`,
+flucht:`<svg viewBox="0 0 72 72"><rect width="72" height="72" rx="16" fill="#e8f3e2"/><path d="M0 56 H72 V72 H0Z" fill="#3a7fb0"/><path d="M16 50 V36 H30 V20 H52" fill="none" stroke="#d32a2a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 8"/><path d="M48 12 L60 20 L48 28Z" fill="#d32a2a"/><circle cx="16" cy="50" r="6" fill="#10232d"/></svg>`,
+sand:`<svg viewBox="0 0 72 72"><rect width="72" height="72" rx="16" fill="#f6efdd"/><g fill="#dcbf7f" stroke="#9c8048" stroke-width="2"><rect x="10" y="48" width="18" height="10" rx="4"/><rect x="28" y="48" width="18" height="10" rx="4"/><rect x="46" y="48" width="18" height="10" rx="4"/><rect x="19" y="38" width="18" height="10" rx="4"/><rect x="37" y="38" width="18" height="10" rx="4"/><rect x="28" y="28" width="18" height="10" rx="4"/></g><path d="M0 44 q6 -3 12 0 t12 0" stroke="#1f74a3" stroke-width="3" fill="none"/></svg>`};
+
+const GAMES=[
+ {k:'regen',n:'Regen-Labor',t:'Ursachen',d:'Baut die Stadt um, damit Regen versickert statt in den Fluss zu rauschen.',start:()=>intro(0)},
+ {k:'gefahr',n:'Gefahren-Check',t:'Gefahren',d:'Findet alle versteckten Gefahren in der überfluteten Straße, bevor die Zeit abläuft.',start:()=>intro(1)},
+ {k:'flucht',n:'Fluchtweg',t:'Verhalten',d:'Die Warnung kommt! Findet einen sicheren Weg zur Sammelstelle, bevor das Wasser steigt.',start:()=>intro(2)},
+ {k:'sand',n:'Sandsack-Challenge',t:'Vorsorge',d:'Füllt Sandsäcke richtig und dichtet Lecks ab. Hält euer Deich gegen den Pegel?',start:()=>intro(3)}];
+const HOW=[
+ ['Tippt auf eine Fläche, um sie umzubauen: Parkplatz, Rasengitter, Wiese, Wald oder Rückhaltebecken. Dächer werden zu Gründächern.','Ihr habt 6 Umbauten. Straßen bleiben, wie sie sind.','Dann kommen drei Regen: Landregen, Dauerregen und Starkregen. Bleibt der Fluss im Ufer?'],
+ ['In der überfluteten Straße verstecken sich 8 Gefahren.','Tippt sie an. Falsch getippt kostet 3 Sekunden.','Hängt ihr fest, gibt es einen Tipp für 10 Sekunden.'],
+ ['Auf dem Handy kommt eine Hochwasserwarnung. Ihr müsst zur Sammelstelle am Feuerwehrhaus.','Bewegt euch mit den Pfeilen, den Pfeiltasten oder durch Tippen auf ein Nachbarfeld.','Alle 3 Züge steigt das Wasser. Tiefe Straßen laufen zuerst voll, Wiesen und Hügel bleiben trocken.','Sterne gibt es fürs Ankommen, fürs Notgepäck und fürs Warnen der Nachbarin.'],
+ ['Haltet den roten Knopf gedrückt, um einen Sandsack zu füllen, und lasst im grünen Bereich los (etwa zwei Drittel voll).','Zu leer rutscht weg, randvoll platzt oder ist zu schwer.','Taucht ein Leck auf, sofort abdichten, sonst spült es Säcke weg.','Nach 45 Sekunden muss der Deich höher sein als der Pegel.']];
+const STORY=['Die Stadt hat zu viel zugepflastert. Bei Regen schießt das Wasser direkt in die Nidda.','Die Nidda ist über die Ufer getreten. Was sieht harmlos aus, ist aber gefährlich?','Es ist Nachmittag, du bist allein zu Hause. Plötzlich piept dein Handy.','Der Pegel steigt. Die Feuerwehr baut einen Sandsackdeich vor dem Dorf, und ihr helft mit.'];
+
+function menu(){clear();top(true);
+ app.innerHTML=`<h2>Wählt euren Einsatz</h2>
+ <p class="lead">Vier Spiele rund ums Hochwasser, in beliebiger Reihenfolge. Spielt allein, im Team oder alle zusammen am Beamer und sammelt bis zu 12 Sterne.</p>
+ <div class="games">${GAMES.map((g,k)=>`<button class="gcard" data-k="${k}">${ICON[g.k]}<span class="tag">${g.t}</span><b>${g.n}</b><span class="d">${g.d}</span><span class="stars">${starStr(best[g.k]||0)}</span></button>`).join('')}</div>
+ <div class="row"><button class="btn ghost" id="merk">Merkkarte Hochwasser</button></div>`;
+ app.querySelectorAll('.gcard').forEach(b=>b.onclick=()=>GAMES[+b.dataset.k].start());
+ $('merk').onclick=merk;window.scrollTo(0,0);
+}
+function intro(k){clear();top();const g=GAMES[k];
+ app.innerHTML=`<span class="tag">Einsatz ${k+1} · ${g.t}</span><h2>${g.n}</h2><p class="lead">${STORY[k]}</p>
+ <ol class="how">${HOW[k].map(h=>`<li>${h}</li>`).join('')}</ol>
+ <div class="row"><button class="btn" id="go">Los geht's</button><button class="btn ghost" id="back">Zurück</button></div>`;
+ $('go').onclick=[regenStart,gefahrStart,fluchtStart,sandStart][k];$('back').onclick=menu;$('go').focus({preventScroll:true});window.scrollTo(0,0);
+}
+function result(k,stars,head,text,lesson,extra){clear();setBest(GAMES[k].k,stars);
+ app.innerHTML=`<span class="tag">Einsatz ${k+1} · ${GAMES[k].n}</span><h2>${head}</h2><div class="big" aria-label="${stars} von 3 Sternen">${starStr(stars)}</div>
+ <p class="lead">${text}</p>${extra||''}<p class="lesson">${lesson}</p>
+ <div class="row"><button class="btn" id="again">Nochmal spielen</button><button class="btn ghost" id="back">Zur Übersicht</button></div>`;
+ $('again').onclick=GAMES[k].start;$('back').onclick=menu;$('back').focus({preventScroll:true});window.scrollTo(0,0);
+}
+function merk(){clear();top();
+ app.innerHTML=`<h2>Merkkarte Hochwasser</h2><ol class="rules">
+ <li>Warnungen ernst nehmen: Warn-App wie NINA, Radio, Durchsagen.</li>
+ <li>Nie in überflutete Keller, Unterführungen oder Tiefgaragen.</li>
+ <li>Nicht durch fließendes Wasser laufen oder fahren, schon etwa 15 cm können umreißen.</li>
+ <li>Abstand von Ufern und Deichen halten, nicht zum Filmen hingehen.</li>
+ <li>Notgepäck bereithalten, Nachbarn warnen und den Anweisungen von Feuerwehr und Polizei folgen.</li></ol>
+ <p class="lead"><b>Wir sind gewarnt, wir wissen, was zu tun ist, und die Feuerwehr hilft.</b></p>
+ <div class="row"><button class="btn ghost" id="back">Zur Übersicht</button></div>`;$('back').onclick=menu;
+}
+
+/* ================= 1 · Regen-Labor ================= */
+const TT={asph:{n:'Parkplatz',a:.05,c:'#9aa0a6'},gitter:{n:'Rasengitter',a:.45,c:'#a9bd92'},wiese:{n:'Wiese',a:.6,c:'#8fc66f'},wald:{n:'Wald',a:.85,c:'#4f8f4f'},becken:{n:'Rückhaltebecken',a:1,c:'#79b8dc'},haus:{n:'Dach',a:.1,c:'#c4553f'},gruen:{n:'Gründach',a:.5,c:'#7fae5f'},str:{n:'Straße',a:.05,c:'#747a80'}};
+const CYC={asph:['asph','gitter','wiese','wald','becken'],wiese:['wiese','wald','becken','asph'],haus:['haus','gruen'],str:['str']};
+const BASE=['asph','wiese','asph','haus','haus','asph','asph','str','asph','haus','str','asph'];
+const RAINS=[{n:'Landregen',r:1,f:1,d:'leichter, gleichmäßiger Regen'},{n:'Dauerregen',r:2,f:1,d:'es regnet seit Tagen'},{n:'Starkregen',r:3,f:.8,d:'Gewitter, der Boden kommt nicht hinterher'}];
+const CAP=21,BUDGET=6,BSTORE=5;
+let rg;
+const absorb=(t,f)=>t==='becken'?1:TT[t].a*f;
+const runoff=(tiles,rain)=>{let s=tiles.reduce((a,t)=>a+(1-absorb(t,rain.f))*rain.r,0);if(tiles.includes('becken'))s=Math.max(0,s-BSTORE);return s};
+const changed=()=>rg.tiles.filter((t,k)=>t!==BASE[k]).length;
+function tileSVG(t,k,x,y,info){
+ const c=TT[t].c,w=88,h=64;let s=`<g data-i="${k}" style="cursor:pointer"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${c}"/>`;
+ if(t==='asph'){for(let j=1;j<4;j++)s+=`<path d="M${x+j*22} ${y+6}v22" stroke="#fff" stroke-width="1.5"/>`;s+=`<rect x="${x+26}" y="${y+10}" width="14" height="22" rx="4" fill="#3b6ea5"/><rect x="${x+28}" y="${y+14}" width="10" height="6" rx="1" fill="#bcd3e0"/>`}
+ if(t==='gitter'){for(let j=0;j<5;j++)s+=`<path d="M${x+8+j*18} ${y+4}v40M${x+4} ${y+8+j*9}h80" stroke="#7f8a78" stroke-width="2" opacity=".6"/>`}
+ if(t==='wiese'){for(let j=0;j<7;j++){const gx=x+10+(j*29)%70,gy=y+10+(j*17)%30;s+=`<path d="M${gx} ${gy+6}l3 -6l3 6" stroke="#5f9a46" stroke-width="1.6" fill="none"/>`}s+=`<circle cx="${x+60}" cy="${y+16}" r="2.5" fill="#fff"/><circle cx="${x+24}" cy="${y+34}" r="2.5" fill="#f5d04a"/>`}
+ if(t==='wald'){[[20,16],[46,12],[70,20],[32,34],[60,36]].forEach(([a,b])=>{s+=`<circle cx="${x+a}" cy="${y+b}" r="11" fill="#2f6b3a"/><circle cx="${x+a-3}" cy="${y+b-3}" r="5" fill="#5aa05c"/>`})}
+ if(t==='becken'){s+=`<rect x="${x+8}" y="${y+6}" width="72" height="38" rx="10" fill="#2f7fb3" stroke="#b9c2c7" stroke-width="3"/><path d="M${x+18} ${y+24}q8-5 16 0t16 0t16 0" stroke="#bfe3f5" stroke-width="2" fill="none"/>`}
+ if(t==='haus'||t==='gruen'){s+=`<rect x="${x+10}" y="${y+6}" width="68" height="38" rx="3" fill="${t==='haus'?'#a8402f':'#5d9a48'}"/><path d="M${x+10} ${y+25}h68" stroke="#00000044" stroke-width="2"/>`;if(t==='gruen')for(let j=0;j<8;j++)s+=`<circle cx="${x+16+j*8}" cy="${y+(j%2?14:34)}" r="3" fill="#9fd27a"/>`}
+ if(t==='str'){s+=`<path d="M${x} ${y+26}h88" stroke="#fff" stroke-width="2.5" stroke-dasharray="10 8"/>`}
+ if(rg.tiles[k]!==BASE[k])s+=`<rect x="${x+1.5}" y="${y+1.5}" width="${w-3}" height="${h-3}" rx="5" fill="none" stroke="#f5b400" stroke-width="3"/>`;
+ const lab=info?`${Math.round(info*100)} % versickert`:TT[t].n;
+ if(info!==undefined){const fr=1-info;s+=`<rect x="${x}" y="${y+h-fr*30}" width="${w}" height="${fr*30}" fill="#1f74a3" opacity=".75" class="pop"/>`}
+ s+=`<text x="${x+44}" y="${y+58}" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" stroke="#10232d" stroke-width="3" paint-order="stroke" font-family="Barlow,sans-serif">${lab}</text></g>`;
+ return s;
+}
+function regenSVG(rain,v,wet){
+ let s=`<svg viewBox="0 0 400 300" id="rsvg"><rect width="400" height="300" fill="#dfe9d6"/>`;
+ rg.tiles.forEach((t,k)=>{const x=20+(k%4)*90,y=10+Math.floor(k/4)*68;s+=tileSVG(t,k,x,y,rain?absorb(t,rain.f):undefined)});
+ s+=`<rect x="0" y="216" width="400" height="22" fill="#7fb56c"/><rect x="0" y="238" width="400" height="62" fill="#6b4f33"/>
+ <g id="rw" class="lift" style="transform:translateY(${rg.lastY||290}px)"><rect x="0" y="0" width="400" height="120" fill="#2b6f9c"/><path class="wave" d="M-30 0${' q6 -4 12 0 t12 0'.repeat(19)} V5 H-30Z" fill="#6bb6df"/></g>
+ <path d="M0 238H400" stroke="#fff" stroke-width="1.5" stroke-dasharray="6 5"/><text x="394" y="233" text-anchor="end" font-size="10" font-weight="700" fill="#10232d" font-family="Barlow,sans-serif">Uferkante</text>
+ <text x="10" y="290" font-size="11" font-weight="700" fill="#d5ecf8" font-family="Barlow,sans-serif">Nidda</text>`;
+ if(v>CAP)s+=`<rect x="0" y="150" width="400" height="88" fill="#2b6f9c" opacity=".55" class="pop"/>`;
+ if(rain&&!wet)s+=`<g id="rainG" stroke="#1f5f8a" stroke-width="1.4" stroke-linecap="round" opacity=".8"><g class="rain">${RAINLINES(rain.r*45,400,300)}</g></g>`;
+ return s+'</svg>';
+}
+function regenStart(){clear();top();rg={tiles:BASE.slice(),ri:0,res:[],lastY:290};regenBuild('Tippt auf Flächen und baut die Stadt um. Gelb umrandet heißt: umgebaut.')}
+function regenBuild(msg,cls){
+ app.innerHTML=`<div class="hud"><span>Umbauten <b id="rb">${changed()} / ${BUDGET}</b></span><span>Fluss fasst <b>${CAP}</b> Einheiten</span></div>
+ <div class="field" id="rf">${regenSVG()}</div><p class="say${cls?' '+cls:''}" id="say">${msg}</p>
+ <ul class="legend">${['asph','gitter','wiese','wald','becken','haus','gruen'].map(t=>`<li><i style="background:${TT[t].c}"></i>${TT[t].n}<span class="bar"><s style="width:${TT[t].a*100}%"></s></span><em>${Math.round(TT[t].a*100)} %</em></li>`).join('')}</ul>
+ <p class="tag">Balken: wie viel Regen die Fläche aufnimmt. Das Rückhaltebecken fängt zusätzlich Wasser von anderen Flächen auf (nur eins möglich).</p>
+ <div class="row"><button class="btn" id="go">Regen 1: ${RAINS[0].n} starten</button><button class="btn ghost" id="reset">Alles zurücksetzen</button></div>`;
+ $('rf').onclick=e=>{const g=e.target.closest('[data-i]');if(g)regenTap(+g.dataset.i)};
+ $('go').onclick=regenRain;$('reset').onclick=()=>{rg.tiles=BASE.slice();regenBuild('Alles wieder wie vorher.')};
+}
+function regenTap(k){
+ const base=BASE[k],cyc=CYC[base];
+ if(cyc.length<2){regenBuild('Die Straße wird gebraucht, die bleibt.');return}
+ let idx=cyc.indexOf(rg.tiles[k]),nt=rg.tiles[k];
+ for(let n=0;n<cyc.length;n++){idx=(idx+1)%cyc.length;nt=cyc[idx];if(nt==='becken'&&rg.tiles.some((t,j)=>t==='becken'&&j!==k))continue;break}
+ if(rg.tiles[k]===base&&nt!==base&&changed()>=BUDGET){regenBuild('Alle 6 Umbauten sind verbraucht. Tippt eine umgebaute Fläche so lange an, bis sie wieder im Original ist.','bad');return}
+ rg.tiles[k]=nt;regenBuild(`${TT[nt].n}: nimmt ${Math.round(TT[nt].a*100)} % des Regens auf.`+(nt==='becken'?' Fängt außerdem Wasser von anderen Flächen auf.':''));
+}
+function regenRain(){
+ const rain=RAINS[rg.ri],v=runoff(rg.tiles,rain);
+ $('rf').innerHTML=regenSVG(rain);$('rf').onclick=null;const rs=$('reset');if(rs)rs.remove();$('go').disabled=true;$('go').textContent='Es regnet …';
+ say(`<strong>${rain.n}</strong>${rain.d}.`);
+ timers.push(setTimeout(()=>{
+  const ratio=v/CAP;
+  const ty=Math.round(292-Math.min(1.3,ratio)*54);
+  $('rf').innerHTML=regenSVG(rain,v,1);const rw=$('rw');requestAnimationFrame(()=>requestAnimationFrame(()=>{rw.style.transform=`translateY(${ty}px)`}));
+  rg.lastY=290;
+  const okk=v<=CAP;rg.res.push(okk);
+  say(okk?`<strong>Der Fluss bleibt im Ufer.</strong>Abfluss: ${v.toFixed(1)} von ${CAP} Einheiten (${Math.round(ratio*100)} % voll).`
+         :`<strong>Über die Ufer!</strong>Abfluss: ${v.toFixed(1)} von ${CAP} Einheiten. Zu viel Wasser rauscht von versiegelten Flächen direkt in den Fluss.`,okk?'ok':'bad');
+  rg.ri++;const b=$('go');b.disabled=false;
+  if(rg.ri<RAINS.length){b.textContent=`Regen ${rg.ri+1}: ${RAINS[rg.ri].n}`;b.onclick=regenRain}else{b.textContent='Auswertung';b.onclick=regenEnd}
+  b.focus({preventScroll:true});
+ },1600));
+}
+function regenEnd(){const p=rg.res.filter(Boolean).length;
+ result(0,p,p===3?'Die Stadt bleibt trocken!':p===2?'Fast geschafft!':'Der Fluss ist übergelaufen.',
+ `${p} von 3 Regen hat der Fluss geschafft. ${p<3?'Probiert andere Umbauten: Welche Flächen nehmen am meisten Wasser auf?':'Ihr habt verstanden, wie Flächen Wasser zurückhalten.'}`,
+ 'Versiegelte Flächen wie Asphalt und Dächer lassen Regen sofort abfließen. Wiesen, Wälder, Gründächer und Rückhaltebecken halten Wasser zurück. Bei Starkregen schafft aber selbst der beste Boden nicht alles.');
+}
+
+/* ================= 2 · Gefahren-Check ================= */
+const HZ=[
+ {x:95,y:222,r:24,n:'Offener Gully',t:'Der Wasserdruck kann Gullydeckel anheben. Darunter geht es metertief nach unten, der Strudel zieht dich mit.'},
+ {x:131,y:146,r:22,n:'Stromkasten im Wasser',t:'Strom und Wasser sind lebensgefährlich. Abstand halten und die Feuerwehr informieren.'},
+ {x:305,y:136,r:30,n:'Volle Unterführung',t:'Tiefe und Strömung sind nicht zu erkennen. Niemals durchfahren oder durchlaufen.'},
+ {x:250,y:198,r:30,n:'Treibendes Auto',t:'Schon etwa 30 cm fließendes Wasser können Autos wegtragen. Nie durch überflutete Straßen fahren.'},
+ {x:38,y:205,r:28,n:'Treibgut',t:'Baumstämme und Möbel werden mit großer Kraft mitgerissen und können dich treffen oder einklemmen.'},
+ {x:72,y:150,r:20,n:'Wasser läuft in den Keller',t:'Nie in einen volllaufenden Keller gehen: Stromschlag-Gefahr, und die Tür lässt sich gegen den Wasserdruck kaum öffnen.'},
+ {x:380,y:112,r:22,n:'Gaffer am Ufer',t:'Zum Filmen ans Wasser? Ufermauern können unterspült werden und abbrechen. Abstand halten.'},
+ {x:300,y:236,r:28,n:'Ölfilm',t:'Hochwasser ist mit Heizöl, Abwasser und Chemikalien verschmutzt. Nicht darin spielen, danach Hände waschen.'}];
+const GSCENE=`<svg viewBox="0 0 400 260" id="gsvg">
+<defs><linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93a6b4"/><stop offset="1" stop-color="#dbe3e8"/></linearGradient>
+<linearGradient id="mud" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f8b69"/><stop offset="1" stop-color="#4b5747"/></linearGradient>
+<linearGradient id="oil" x1="0" x2="1"><stop offset="0" stop-color="#b07bd6"/><stop offset=".5" stop-color="#5fc4c0"/><stop offset="1" stop-color="#e8d35a"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#gsky)"/>
+<g fill="#6f7f8a" opacity=".6"><ellipse cx="80" cy="24" rx="60" ry="14"/><ellipse cx="300" cy="18" rx="80" ry="14"/></g>
+<rect x="8" y="58" width="84" height="100" fill="#e6d8c3"/><path d="M2 62 L50 26 L98 62Z" fill="#9b4a3a"/>
+<rect x="20" y="74" width="18" height="20" fill="#6d8798"/><rect x="62" y="74" width="18" height="20" fill="#6d8798"/><rect x="22" y="112" width="18" height="38" fill="#7a5034"/>
+<rect x="64" y="144" width="16" height="11" fill="#26323a"/>
+<rect x="104" y="74" width="70" height="84" fill="#d6e0e6"/><rect x="100" y="68" width="78" height="8" fill="#4f5d66"/>
+<rect x="114" y="86" width="14" height="16" fill="#6d8798"/><rect x="148" y="86" width="14" height="16" fill="#6d8798"/>
+<rect x="120" y="132" width="22" height="28" rx="2" fill="#9aa3a8" stroke="#6b7479"/><path d="M131 136 l7 12 h-14z" fill="#f5b400" stroke="#10232d" stroke-width="1"/><path d="M132 139 l-3 5 h3 l-2 4" stroke="#10232d" stroke-width="1.2" fill="none"/>
+<rect x="186" y="40" width="60" height="118" fill="#efe6d6"/>${[0,1,2,3].map(r=>[0,1,2].map(c=>`<rect x="${194+c*17}" y="${50+r*24}" width="10" height="14" fill="#6d8798"/>`).join('')).join('')}
+<path d="M256 96 H348 V160 H256Z" fill="#8d7b68"/><rect x="252" y="88" width="100" height="8" fill="#5b4d40"/><path d="M252 90h100M252 94h100" stroke="#c9c2b8" stroke-width="1"/>
+<path d="M276 160 V126 Q305 98 334 126 V160Z" fill="#1f2a30"/><path d="M276 160 V118 H334 V160Z" fill="url(#mud)" clip-path="none" opacity="0"/>
+<path d="M277 160 V122 Q280 117 285 114 H325 Q330 117 333 122 V160Z" fill="#6f7a5c"/>
+<rect x="352" y="128" width="48" height="32" fill="#a8a8a0"/><path d="M352 128h48" stroke="#8a8a82" stroke-width="3"/>
+<circle cx="378" cy="100" r="5" fill="#f1c6a0"/><rect x="373" y="105" width="10" height="15" rx="3" fill="#d97a2b"/><path d="M375 120v8M381 120v8" stroke="#2c3a44" stroke-width="2.5"/><path d="M383 109l6 -5" stroke="#d97a2b" stroke-width="3"/><rect x="388" y="98" width="4" height="7" fill="#222"/>
+<rect x="0" y="150" width="400" height="110" fill="url(#mud)"/>
+<g stroke="#b7b49a" stroke-width="1.2" fill="none" opacity=".7"><path class="wave" d="M-30 158${' q6 -3 12 0 t12 0'.repeat(19)}"/><path d="M10 182 q10 -3 20 0M150 176 q10 -3 20 0M330 186 q10 -3 20 0M190 236 q10 -3 20 0"/></g>
+<path d="M58 152 q4 -2 8 3 M84 150 q-4 0 -6 5" stroke="#cfe3ea" stroke-width="2" fill="none"/>
+<g transform="rotate(-10 250 205)"><path d="M218 206 v-14 q4 -12 16 -13 h26 q12 1 16 13 v14z" fill="#3b6ea5"/><path d="M230 191 q3 -8 10 -8 h20 q7 0 10 8z" fill="#bcd3e0"/></g>
+<g transform="rotate(-14 38 205)"><rect x="8" y="199" width="62" height="12" rx="6" fill="#7a5536"/><circle cx="66" cy="205" r="6" fill="#b98e5c"/><path d="M30 199 l-6 -10 M48 199 l4 -9" stroke="#7a5536" stroke-width="3"/></g>
+<g><ellipse cx="196" cy="196" rx="10" ry="6" fill="#f2c94c"/><circle cx="203" cy="189" r="4.5" fill="#f2c94c"/><path d="M207 189 l4 1 l-4 1z" fill="#e8892b"/></g>
+<path d="M166 150 v30" stroke="#5c6870" stroke-width="2.5"/><rect x="158" y="128" width="16" height="16" rx="2" fill="#2b62b0"/><text x="166" y="141" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Barlow,sans-serif">P</text>
+<rect x="0" y="207" width="400" height="53" fill="#4b5747" opacity=".35"/>
+<path d="M81 222 a14 6 0 1 1 28 0 a11 5 0 1 1 -22 0 a8 3.5 0 1 1 16 0 a4 2 0 1 1 -8 0" stroke="#cfd4ba" stroke-width="2" fill="none"/>
+<ellipse cx="300" cy="236" rx="34" ry="9" fill="url(#oil)" opacity=".55"/><path d="M276 236 q12 -6 24 0 t22 0" stroke="#e5d7ff" stroke-width="1" fill="none" opacity=".7"/>
+<g id="gmarks"></g></svg>`;
+let gf;
+function gefahrStart(){clear();top();gf={found:new Set(),time:90,miss:0};
+ app.innerHTML=`<div class="hud"><span>Zeit <b id="gt">90 s</b></span><span>Gefunden <b id="gc">0 / 8</b></span></div>
+ <div class="field">${GSCENE}</div><p class="say" id="say">Tippt auf alles, was bei Hochwasser gefährlich ist. Nicht alles im Bild ist eine Gefahr.</p>
+ <div class="row"><button class="btn ghost" id="hint">Tipp (−10 s)</button><button class="btn ghost" id="stop">Aufgeben</button></div>`;
+ const svg=$('gsvg');
+ svg.addEventListener('click',e=>{const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
+  let hit=-1,bd=1e9;HZ.forEach((h,k)=>{const d=Math.hypot(h.x-q.x,h.y-q.y);if(d<=h.r&&d<bd){bd=d;hit=k}});
+  if(hit<0){gf.time=Math.max(0,gf.time-3);gf.miss++;mark(q.x,q.y);say('Hier ist keine Gefahr. Minus 3 Sekunden.','bad');gTick(0);return}
+  const h=HZ[hit];if(!gf.found.has(hit)){gf.found.add(hit);gDraw()}
+  say(`<strong>${h.n}</strong>${h.t}`,'ok');$('gc').textContent=gf.found.size+' / 8';if(gf.found.size===HZ.length)timers.push(setTimeout(gefahrEnd,1800))});
+ $('hint').onclick=()=>{const left=HZ.map((h,k)=>k).filter(k=>!gf.found.has(k));if(!left.length)return;const k=left[Math.floor(Math.random()*left.length)],h=HZ[k];
+  gf.time=Math.max(0,gf.time-10);gTick(0);const g=$('gmarks');g.insertAdjacentHTML('beforeend',`<circle id="hintc" cx="${h.x}" cy="${h.y}" r="${h.r}" fill="none" stroke="#f5b400" stroke-width="3" stroke-dasharray="5 4" class="pulse"/>`);
+  timers.push(setTimeout(()=>{const c=$('hintc');if(c)c.remove()},1800));say('Schaut mal in den gelben Kreis.')};
+ $('stop').onclick=gefahrEnd;
+ timers.push(setInterval(()=>gTick(1),1000));
+}
+function mark(x,y){const g=$('gmarks');const id='m'+Date.now();g.insertAdjacentHTML('beforeend',`<g id="${id}" stroke="#d32a2a" stroke-width="3" stroke-linecap="round"><path d="M${x-6} ${y-6}l12 12M${x+6} ${y-6}l-12 12"/></g>`);timers.push(setTimeout(()=>{const m=$(id);if(m)m.remove()},700))}
+function gDraw(){$('gmarks').innerHTML=[...gf.found].map(k=>{const h=HZ[k];return `<circle cx="${h.x}" cy="${h.y}" r="${h.r}" fill="#4cc98a33" stroke="#4cc98a" stroke-width="3" class="pop"/>`}).join('')}
+function gTick(d){gf.time=Math.max(0,gf.time-d);const t=$('gt');if(t)t.textContent=gf.time+' s';if(gf.time<=0)gefahrEnd()}
+function gefahrEnd(){const n=gf.found.size,st=n===8?3:n>=6?2:n>=3?1:0;
+ const miss=HZ.filter((h,k)=>!gf.found.has(k));
+ result(1,st,n===8?'Alle Gefahren erkannt!':`${n} von 8 Gefahren gefunden`,
+ n===8?'Ihr habt einen scharfen Blick. Genau so erkennt man Gefahren, bevor etwas passiert.':'Diese Gefahren habt ihr übersehen:',
+ 'Hochwasser sieht oft harmlos aus. Die größten Gefahren sieht man nicht: Strömung, Strom, offene Gullys und Schmutz. Deshalb gilt: Abstand halten.',
+ miss.length?`<ul class="found">${miss.map(h=>`<li><b>${h.n}</b>${h.t}</li>`).join('')}</ul>`:'');
+}
+
+/* ================= 3 · Fluchtweg ================= */
+const MAP=[",,,^^^^,,,",",^S^,#,,^,","=F==U=====","N,...#...,",",,.#..H#..","...#..#...","RRRRRBRRRR"];
+const ELV={'.':0,'H':0,'N':0,',':1,'^':2,'F':2,'S':2};
+const TICK=3;let fl;
+const key=(r,c)=>r+','+c;
+function fluchtStart(){clear();top();
+ let pos;MAP.forEach((row,r)=>[...row].forEach((ch,c)=>{if(ch==='H')pos={r,c}}));
+ fl={pos,moves:0,hearts:3,pack:false,nb:false,water:new Set(),ready:false,done:false};
+ MAP.forEach((row,r)=>[...row].forEach((ch,c)=>{if(ch==='R')fl.water.add(key(r,c))}));
+ app.innerHTML=`<div class="hud"><span class="hearts">Leben <b id="fh"></b></span><span>Züge <b id="fm">0</b></span><span>Wasser steigt in <b id="fw"></b></span></div>
+ <div class="field" id="ff"></div>
+ <div class="say" id="say"><strong>Hochwasserwarnung für Harheim!</strong>Begib dich zur Sammelstelle am Feuerwehrhaus. Was machst du zuerst?</div>
+ <div class="choice" id="fc"><button data-c="pack">Notgepäck schnappen (kostet 1 Zug)</button><button data-c="go">Sofort losrennen</button><button data-c="film">Erst noch den Fluss filmen (kostet 2 Züge)</button></div>
+ <div class="pad" id="pad" hidden><button class="u" data-d="-1,0" aria-label="hoch">↑</button><button class="l" data-d="0,-1" aria-label="links">←</button><button class="d" data-d="1,0" aria-label="runter">↓</button><button class="r" data-d="0,1" aria-label="rechts">→</button></div>`;
+ fDraw();
+ $('fc').querySelectorAll('button').forEach(b=>b.onclick=()=>{const c=b.dataset.c;$('fc').remove();$('pad').hidden=false;fl.ready=true;
+  if(c==='pack'){fl.pack=true;say('<strong>Notgepäck geschnappt.</strong>Taschenlampe, Medikamente, Dokumente und Powerbank sind dabei. Jetzt los, nimm den sichersten Weg!','ok');advance(1)}
+  else if(c==='film'){say('<strong>Wertvolle Zeit verloren!</strong>Filmen am Fluss ist gefährlich und kostet Zeit. Jetzt aber los!','bad');advance(2)}
+  else say('Los geht’s! Tipp: Tiefe Straßen laufen zuerst voll.');
+  fDraw()});
+ $('pad').querySelectorAll('button').forEach(b=>b.onclick=()=>{const [dr,dc]=b.dataset.d.split(',').map(Number);fMove(dr,dc)});
+ $('ff').onclick=e=>{if(!fl.ready)return;const svg=$('fsvg'),p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
+  const r=Math.floor(q.y/40),c=Math.floor(q.x/40),dr=r-fl.pos.r,dc=c-fl.pos.c;if(Math.abs(dr)+Math.abs(dc)===1)fMove(dr,dc)};
+ keyH=e=>{const m={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1],w:[-1,0],s:[1,0],a:[0,-1],d:[0,1]}[e.key];if(m&&fl.ready){e.preventDefault();fMove(m[0],m[1])}};
+}
+function tileF(ch,x,y){
+ const T=(t,dy)=>`<text x="${x+20}" y="${y+(dy||36)}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#fff" stroke="#10232d" stroke-width="2.6" paint-order="stroke" font-family="Barlow,sans-serif">${t}</text>`;
+ const base={'.':'#c9cdd0','H':'#c9cdd0','N':'#c9cdd0',',':'#a8d48c','^':'#86c06b','S':'#86c06b','#':'#c9cdd0','=':'#8d7b68','F':'#8d7b68','U':'#8d7b68','R':'#3a7fb0','B':'#3a7fb0'}[ch];
+ let s=`<rect x="${x}" y="${y}" width="40" height="40" fill="${base}"/>`;
+ if(ch===',')s+=`<path d="M${x+8} ${y+14}l3 -5l3 5M${x+24} ${y+28}l3 -5l3 5" stroke="#6fa357" stroke-width="1.5" fill="none"/>`;
+ if(ch==='^'||ch==='S')s+=`<path d="M${x+4} ${y+30}q16 -14 32 0M${x+10} ${y+22}q10 -8 20 0" stroke="#5f9a46" stroke-width="1.5" fill="none"/>`;
+ if(ch==='.'||ch==='H'||ch==='N')s+=`<rect x="${x}" y="${y}" width="40" height="40" fill="none" stroke="#b5babe"/>`;
+ if(ch==='#')s+=`<rect x="${x+4}" y="${y+4}" width="32" height="32" rx="2" fill="#b98f6e"/><path d="M${x+4} ${y+20}h32" stroke="#8e6a4f" stroke-width="2"/>`;
+ if(ch==='='||ch==='F'||ch==='U')s+=`<path d="M${x} ${y+15}h40M${x} ${y+25}h40" stroke="#4d4036" stroke-width="2"/>${[6,16,26,36].map(o=>`<path d="M${x+o} ${y+12}v16" stroke="#5e4c3c" stroke-width="2.5"/>`).join('')}`;
+ if(ch==='F')s+=`<rect x="${x+8}" y="${y-2}" width="24" height="44" fill="#c99a5c" stroke="#8a6534"/><path d="M${x+8} ${y+8}h24M${x+8} ${y+18}h24M${x+8} ${y+28}h24" stroke="#8a6534"/>`+T('Steg',24);
+ if(ch==='U')s+=`<rect x="${x+4}" y="${y}" width="32" height="40" fill="#2b5d7a"/><path class="wave" d="M${x-8} ${y+14}q4 -3 8 0t8 0t8 0t8 0t8 0t8 0" stroke="#9fd0ec" stroke-width="1.5" fill="none"/>`+T('Unterführ.',10);
+ if(ch==='R')s+=`<path d="M${x+4} ${y+20}q8 -5 16 0t16 0" stroke="#7cc0e6" stroke-width="2" fill="none"/>`;
+ if(ch==='B')s+=`<rect x="${x+6}" y="${y}" width="28" height="40" fill="#a57c4c"/><path d="M${x+4} ${y+6}h32" stroke="#d32a2a" stroke-width="5" stroke-dasharray="5 5"/>`;
+ if(ch==='H')s+=`<rect x="${x+6}" y="${y+6}" width="28" height="22" rx="2" fill="#c4553f"/>`+T('Zuhause',37);
+ if(ch==='N')s+=`<rect x="${x+6}" y="${y+6}" width="28" height="22" rx="2" fill="${fl.nb?'#4cc98a':'#a6784f'}"/>`+T('Nachbarin',37);
+ if(ch==='S')s+=`<rect x="${x+5}" y="${y+8}" width="30" height="20" fill="#ebe4d8"/><rect x="${x+5}" y="${y+5}" width="30" height="6" fill="#d32a2a"/><rect x="${x+10}" y="${y+16}" width="9" height="12" fill="#c62828"/><rect x="${x+21}" y="${y+16}" width="9" height="12" fill="#c62828"/>`+T('Ziel',38);
+ return s;
+}
+function fDraw(){
+ let s=`<svg viewBox="0 0 400 280" id="fsvg">`;
+ MAP.forEach((row,r)=>[...row].forEach((ch,c)=>{const x=c*40,y=r*40;s+=tileF(ch,x,y);
+  if(fl.water.has(key(r,c))&&ch!=='R')s+=`<rect x="${x}" y="${y}" width="40" height="40" fill="#2f78ad" opacity=".82"/><path d="M${x+5} ${y+20}q7 -4 15 0t15 0" stroke="#9fd0ec" stroke-width="2" fill="none"/>`}));
+ if(fl.ready&&!fl.done)[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{const r=fl.pos.r+dr,c=fl.pos.c+dc;if(r>=0&&r<7&&c>=0&&c<10&&'.,^HNFS'.includes(MAP[r][c])&&!fl.water.has(key(r,c)))s+=`<rect x="${c*40+2}" y="${r*40+2}" width="36" height="36" rx="5" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 4" opacity=".9"/>`});
+ const cx=fl.pos.c*40+20,cy=fl.pos.r*40+20;
+ s+=`<circle cx="${cx}" cy="${cy}" r="13" fill="#d32a2a" stroke="#fff" stroke-width="3"/><text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="Barlow,sans-serif">Du</text>`;
+ if(fl.pack)s+=`<rect x="${cx+8}" y="${cy-14}" width="10" height="12" rx="2" fill="#f5b400" stroke="#10232d"/>`;
+ $('ff').innerHTML=s+'</svg>';
+ $('fh').textContent='♥'.repeat(fl.hearts)+'♡'.repeat(3-fl.hearts);$('fm').textContent=fl.moves;const w=TICK-fl.moves%TICK;$('fw').textContent=w+(w===1?' Zug':' Zügen');
+}
+function spread(){const add=[];fl.water.forEach(k=>{const [r,c]=k.split(',').map(Number);[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{const rr=r+dr,cc=c+dc;if(rr<0||rr>6||cc<0||cc>9)return;const ch=MAP[rr][cc];if((ch==='.'||ch==='H'||ch==='N')&&!fl.water.has(key(rr,cc)))add.push(key(rr,cc))})});add.forEach(k=>fl.water.add(k))}
+function advance(n){for(let k=0;k<n;k++){fl.moves++;if(fl.moves%TICK===0){spread();if(fl.water.has(key(fl.pos.r,fl.pos.c))){fl.hearts--;say('<strong>Das Wasser hat dich eingeholt!</strong>Schnell auf höheres Gelände: Wiesen und Hügel bleiben trocken.','bad')}}}}
+function fMove(dr,dc){if(fl.done)return;const r=fl.pos.r+dr,c=fl.pos.c+dc;if(r<0||r>6||c<0||c>9)return;const ch=MAP[r][c];
+ if(ch==='#'){say('Da steht ein Haus im Weg.');return}
+ if(ch==='='){say('Der Bahndamm ist zu steil. Sucht einen Übergang.');return}
+ if(ch==='R'){say('Das ist die Nidda. Weg vom Wasser!','bad');return}
+ if(ch==='B'){say('<strong>Brücke gesperrt.</strong>Hochwasser kann Brücken unterspülen. Gesperrt heißt gesperrt.','bad');return}
+ if(ch==='U'){fl.hearts--;say('<strong>Die Unterführung ist voll Wasser!</strong>Viel zu gefährlich, die Tiefe ist nicht zu erkennen. Umweg suchen, am besten über den Steg.','bad');advance(1)}
+ else if(fl.water.has(key(r,c))){fl.hearts--;say('<strong>Fließendes Wasser!</strong>Schon etwa 15 cm können dich umreißen. Such dir einen trockenen Weg.','bad');advance(1)}
+ else{fl.pos={r,c};if(ch==='N'&&!fl.nb){fl.nb=true;say('<strong>Nachbarin gewarnt!</strong>Frau Weber hatte die Warnung nicht gesehen. Sie kommt mit zur Sammelstelle.','ok')}
+  else if(ch==='F')say('Über den Steg sicher über die Bahn. Gut gemacht!','ok');advance(1)}
+ fDraw();
+ if(fl.hearts<=0){fl.done=true;timers.push(setTimeout(()=>result(2,0,'Die Feuerwehr musste dich retten.','Du bist zu oft ins Wasser geraten. Zum Glück ist das hier nur ein Spiel. Probier einen höher gelegenen Weg.',LESSON3),900))}
+ else if(MAP[fl.pos.r][fl.pos.c]==='S'){fl.done=true;const st=1+(fl.pack?1:0)+(fl.nb?1:0);
+  timers.push(setTimeout(()=>result(2,st,'Sicher an der Sammelstelle!',`Du hast ${fl.moves} Züge gebraucht und ${3-fl.hearts} Leben verloren.`+(fl.pack?' Notgepäck dabei.':' Ohne Notgepäck.')+(fl.nb?' Und du hast die Nachbarin gewarnt.':' Die Nachbarin hat nichts mitbekommen.'),LESSON3),700))}
+}
+const LESSON3='Bei einer Warnung: Ruhe bewahren, Notgepäck nehmen, Nachbarn warnen und über höher gelegene Wege zur Sammelstelle. Niemals durch Unterführungen oder fließendes Wasser.';
+
+/* ================= 4 · Sandsack-Challenge ================= */
+const DUR=45,G=220,YS=1.5,W0=12,WEND=66,D0=12;
+const SSCENE=`<svg viewBox="0 0 400 260" id="ssvg">
+<defs><linearGradient id="ssky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f97a6"/><stop offset="1" stop-color="#d6e4ec"/></linearGradient>
+<linearGradient id="swat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b8fbf"/><stop offset="1" stop-color="#123f5c"/></linearGradient><clipPath id="svc"><rect x="231" y="0" width="169" height="260"/></clipPath></defs>
+<rect width="400" height="260" fill="url(#ssky)"/>
+<g fill="#5c6b76" opacity=".8"><ellipse cx="70" cy="26" rx="60" ry="18"/><ellipse cx="170" cy="20" rx="50" ry="16"/><ellipse cx="280" cy="26" rx="70" ry="20"/></g>
+<g stroke="#e0edf5" stroke-width="1.2" stroke-linecap="round" opacity=".7"><g class="rain">${RAINLINES(60,400,240)}</g></g>
+<path d="M0 160 Q70 118 150 146 T300 132 T400 140 V260 H0Z" fill="#9cc98a"/>
+<rect x="176" y="220" width="224" height="40" fill="#6aa35a"/><rect x="176" y="228" width="224" height="32" fill="#7a5a3a"/>
+<rect x="240" y="188" width="34" height="32" fill="#f1e6d2"/><path d="M236 190 L257 170 L278 190Z" fill="#a4483a"/><rect x="246" y="196" width="8" height="8" fill="#5d7f93"/>
+<rect x="288" y="180" width="62" height="40" fill="#ebe4d8"/><rect x="288" y="176" width="62" height="8" fill="#d32a2a"/><rect x="294" y="194" width="22" height="26" fill="#c62828"/><rect x="322" y="194" width="22" height="26" fill="#c62828"/>
+<rect x="352" y="152" width="14" height="68" fill="#ebe4d8"/><path d="M350 154 L359 142 L368 154Z" fill="#d32a2a"/>
+<rect x="372" y="192" width="26" height="28" fill="#f3dfc0"/><path d="M369 194 L385 178 L401 194Z" fill="#8d3b2f"/>
+<g id="sflood" class="lift" clip-path="url(#svc)" opacity=".82" style="transform:translateY(230px)"><rect x="176" y="0" width="230" height="200" fill="url(#swat)"/></g>
+<path d="M0 236 H178 V260 H0Z" fill="#5e452d"/>
+<g id="swater" style="transform:translateY(${G-W0*YS}px)"><rect x="-10" y="0" width="190" height="200" fill="url(#swat)"/><path class="wave" d="M-40 2${' q6 -4 12 0 t12 0'.repeat(10)} V6 H-40Z" fill="#6bb6df"/></g>
+<g id="sdike"></g><g id="sleak"></g>
+<rect x="8" y="70" width="11" height="166" fill="#fff" stroke="#2b3a44" stroke-width=".8"/>${[0,1,2,3,4,5,6,7,8,9,10].map(k=>`<rect x="8" y="${70+k*15}" width="11" height="7.5" fill="#d32a2a"/>`).join('')}
+<text x="110" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#d5ecf8" font-family="Barlow,sans-serif">Nidda</text></svg>`;
+let sd;
+function sandStart(){clear();top();
+ sd={t:-3,last:performance.now(),W:W0,D:D0,fill:0,hold:false,lock:false,leak:null,nextLeak:7,rows:-1,bags:0,perfect:0,leakKey:''};
+ app.innerHTML=`<div class="hud"><span>Zeit <b id="sT">45 s</b></span><span>Pegel <b id="sW"></b></span><span>Deich <b id="sD"></b></span><span>Säcke <b id="sB">0</b></span></div>
+ <div class="field">${SSCENE}</div>
+ <div class="meter" aria-hidden="true"><i class="needle" id="needle"></i></div><div class="mlab"><span>zu leer</span><span>⅔ voll</span><span>randvoll</span></div>
+ <p class="say" id="say"><strong>Gleich geht’s los …</strong>Halte den Knopf gedrückt und lass im grünen Bereich los.</p>
+ <div class="row"><button class="btn hold" id="hold">Gedrückt halten: Sack füllen</button><button class="btn" id="plug" hidden>Leck abdichten!</button></div>
+ <p class="tag">Tastatur: Leertaste halten zum Füllen, L zum Abdichten.</p>`;
+ const hold=$('hold');
+ const down=e=>{e.preventDefault();if(sd.t<0)return;sd.hold=true;hold.classList.add('on');try{hold.setPointerCapture(e.pointerId)}catch(x){}};
+ const up=()=>{if(!sd.hold)return;sd.hold=false;hold.classList.remove('on');release()};
+ hold.addEventListener('pointerdown',down);hold.addEventListener('pointerup',up);hold.addEventListener('pointercancel',up);hold.addEventListener('lostpointercapture',up);
+ hold.addEventListener('contextmenu',e=>e.preventDefault());
+ $('plug').onclick=plug;$('sleak').addEventListener('click',plug);
+ keyH=e=>{if(e.code==='Space'){e.preventDefault();if(!e.repeat&&sd.t>=0){sd.hold=true;hold.classList.add('on')}}else if(e.key==='l'||e.key==='L')plug()};
+ keyUpH=e=>{if(e.code==='Space'){e.preventDefault();up()}};
+ sDraw();raf=requestAnimationFrame(sStep);
+}
+function release(){
+ if(sd.lock){sd.lock=false;sd.fill=0;return}
+ const f=sd.fill;sd.fill=0;if(f<4)return;sd.bags++;let g=0,m;
+ if(f>=50&&f<=70){g=2.6;sd.perfect++;m=['<strong>Perfekt!</strong>Zwei Drittel voll, lässt sich gut verlegen.','<strong>Sitzt!</strong>Genau richtig gefüllt.','<strong>Top-Sack!</strong>Versetzt drauf und festgetreten.'][sd.bags%3];say(m,'ok')}
+ else if(f>=35&&f<=85){g=1.3;say(f<50?'<strong>Etwas zu leer.</strong>Hält, aber dichtet nicht so gut.':'<strong>Etwas zu voll.</strong>Schwer zu tragen und schlecht anzupassen.')}
+ else{say(f<35?'<strong>Viel zu leer!</strong>Der Sack rutscht weg und hält kein Wasser.':'<strong>Viel zu voll!</strong>Zu schwer, lässt sich nicht verlegen und dichtet schlecht ab.','bad')}
+ sd.D+=g;$('sB').textContent=sd.bags;
+}
+function plug(){if(!sd.leak)return;sd.leak=null;$('plug').hidden=true;say('<strong>Leck abgedichtet!</strong>Mit Folie und Säcken gestopft.','ok');sDraw()}
+function sStep(now){
+ const dt=Math.min(.1,(now-sd.last)/1000);sd.last=now;const before=sd.t;sd.t+=dt;
+ if(sd.t<0){if(Math.ceil(before)!==Math.ceil(sd.t)||before===-3)say(`<strong>${Math.ceil(-sd.t)} …</strong>Halte den Knopf gedrückt und lass im grünen Bereich los.`)}
+ else{if(before<0)say('<strong>Los!</strong>Füllen, loslassen, nächster Sack!');
+  sd.W=W0+(WEND-W0)*Math.min(1,sd.t/DUR);
+  if(sd.hold&&!sd.lock){sd.fill+=dt*100/1.3;if(sd.fill>=100){sd.fill=0;sd.lock=true;say('<strong>Geplatzt!</strong>Randvoll ist zu viel, früher loslassen.','bad')}}
+  if(sd.t>=sd.nextLeak&&!sd.leak&&sd.D>18){const top=G-sd.D*YS;sd.leak={t0:sd.t,y:Math.round(top+6+Math.random()*Math.max(4,G-top-14))};sd.nextLeak+=7+Math.random()*3;$('plug').hidden=false;say('<strong>Leck im Deich!</strong>Schnell abdichten!','bad')}
+  if(sd.leak&&sd.t-sd.leak.t0>4){sd.leak=null;sd.D=Math.max(D0,sd.D-5);$('plug').hidden=true;say('<strong>Das Leck hat Säcke weggespült!</strong>Lecks immer sofort abdichten.','bad')}
+ }
+ sDraw();
+ if(sd.t>=DUR){sandEnd();return}
+ raf=requestAnimationFrame(sStep);
+}
+function sDraw(){
+ const wy=G-sd.W*YS;$('swater').style.transform=`translateY(${wy}px)`;
+ $('sflood').style.transform=sd.W>sd.D?`translateY(${wy}px)`:'translateY(230px)';
+ const nr=Math.max(1,Math.round(sd.D*YS/7));
+ if(nr!==sd.rows){let s='';for(let r=0;r<nr;r++){const y=G-(r+1)*7,x0=r%2?182:178;s+=`<g${r>=sd.rows&&sd.rows>0?' class="pop"':''}>`;for(let b=0;b<3;b++)s+=`<rect x="${x0+b*16}" y="${y}" width="15" height="7" rx="3" fill="#dcbf7f" stroke="#9c8048" stroke-width=".8"/>`;s+='</g>'}$('sdike').innerHTML=s;sd.rows=nr}
+ const lk=sd.leak?sd.leak.y:'';if(String(lk)!==sd.leakKey){sd.leakKey=String(lk);$('sleak').innerHTML=sd.leak?`<g style="cursor:pointer"><path d="M228 ${lk} q14 -2 22 16" stroke="#6bb6df" stroke-width="3.5" fill="none"/><path d="M228 ${lk+2} q10 0 16 12" stroke="#bfe3f5" stroke-width="2" fill="none"/><circle cx="230" cy="${lk}" r="13" fill="#f5b40033" stroke="#f5b400" stroke-width="3" stroke-dasharray="4 3" class="pulse"/></g>`:''}
+ $('needle').style.left=sd.fill+'%';
+ $('sT').textContent=(sd.t<0?DUR:Math.max(0,Math.ceil(DUR-sd.t)))+' s';$('sW').textContent=Math.round(sd.W*4)+' cm';$('sD').textContent=Math.round(sd.D*4)+' cm';
+}
+function sandEnd(){const m=sd.D-sd.W,st=m>=8?3:m>=0?2:m>=-8?1:0;
+ result(3,st,m>=0?'Der Deich hält!':'Land unter!',
+ `Deich ${Math.round(sd.D*4)} cm, Pegel ${Math.round(sd.W*4)} cm. ${sd.bags} Säcke gefüllt, davon ${sd.perfect} perfekt.`+(m<0?' Mehr Säcke im grünen Bereich und Lecks schneller abdichten, dann klappt es.':''),
+ 'Sandsäcke halb bis zwei Drittel füllen, versetzt wie Mauersteine legen und festtreten. Lecks sofort mit Folie abdichten. Ein Deich ist nur so stark wie seine schwächste Stelle.');
+}
+
+menu();
+}
+</script>
+</body>
+</html>
